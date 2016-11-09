@@ -4,6 +4,56 @@
 		<div class="panel panel-default panel-table">
 			<div class="panel-heading">
 				<h3 class="panel-title"><?php echo lang('text_list'); ?></h3>
+				<div class="panel-body">
+					<div class="col-xs-12 col-sm-3">
+						<label for="input-assign-staff" class="control-label"><?php echo lang('label_assign_staff'); ?></label>
+						<div class="">
+							<input type="hidden" name="old_assignee_id" value="<?php echo $assignee_id; ?>" />
+							<input type="hidden" name="old_status_id" value="<?php echo $status_id; ?>" />
+							<select name="assignee_id" class="form-control">
+								<option value=""><?php echo lang('text_please_select'); ?></option>
+								<?php foreach ($staffs as $staff) { ?>
+									<?php if ($staff['staff_id'] === $assignee_id) { ?>
+										<option value="<?php echo $staff['staff_id']; ?>" <?php echo set_select('assignee_id', $staff['staff_id'], TRUE); ?> ><?php echo $staff['staff_name']; ?></option>
+									<?php } else { ?>
+										<option value="<?php echo $staff['staff_id']; ?>" <?php echo set_select('assignee_id', $staff['staff_id']); ?> ><?php echo $staff['staff_name']; ?></option>
+									<?php } ?>
+								<?php } ?>
+							</select>
+							<?php echo form_error('assignee_id', '<span class="text-danger">', '</span>'); ?>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-2">
+						<label for="input-name" class="control-label"><?php echo lang('label_status'); ?></label>
+						<div class="">
+							<select name="order_status" id="" class="form-control" onChange="getStatusComment();">
+								<?php foreach ($statuses as $status) { ?>
+									<?php if ($status['status_id'] === $status_id) { ?>
+										<option value="<?php echo $status['status_id']; ?>" <?php echo set_select('order_status', $status['status_id'], TRUE); ?> ><?php echo $status['status_name']; ?></option>
+									<?php } else { ?>
+										<option value="<?php echo $status['status_id']; ?>" <?php echo set_select('order_status', $status['status_id']); ?> ><?php echo $status['status_name']; ?></option>
+									<?php } ?>
+								<?php } ?>
+							</select>
+							<?php echo form_error('order_status', '<span class="text-danger">', '</span>'); ?>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-5">
+						<label for="input-name" class="control-label"><?php echo lang('label_comment'); ?></label>
+						<div class="">
+							<textarea name="status_comment" id="" class="form-control" rows="3"><?php echo set_value('status_comment'); ?></textarea>
+							<?php echo form_error('status_comment', '<span class="text-danger">', '</span>'); ?>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-2">
+					<a class="btn btn-success" style="background-color" onclick="Confirmsubmit();"><i class="fa fa-paper-plane"></i> Submit</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default panel-table">
+			<div class="panel-heading">
+				<h3 class="panel-title"><?php echo lang('text_list'); ?></h3>
 				<div class="pull-right">
 					<button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
 				</div>
