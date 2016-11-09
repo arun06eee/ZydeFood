@@ -752,16 +752,22 @@ class Location {
 
         $temp_query = (is_array($temp_query)) ? implode(', ', $temp_query) : $temp_query;
 
-        $url  = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($temp_query) .'&sensor=false'; //encode $postcode string and construct the url query
-		$ch = curl_init();
+		try {
+			$url  = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($temp_query) .'&sensor=false'); //encode $postcode string and construct the url query			
+		}
+		catch (Exception $e) {
+			redirect('location');
+		}
+		
+		/*$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->CI->agent->agent_string());
 		$geocode_data = curl_exec($ch);
-		curl_close($ch);
+		curl_close($ch);*/
 
-		$output = json_decode($geocode_data);											// decode the geocode data
+		$output = json_decode($url);											// decode the geocode data
 
 		if ($output) {
             if ($output->status === 'OK') {														// create variable for geocode data status

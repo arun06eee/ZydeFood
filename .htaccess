@@ -13,7 +13,7 @@ Options -Indexes
 	# RewriteBase /mypage
 
     RewriteBase /
-    RewriteBase /ZydeFood/TastyIgniter-2.1.1
+    RewriteBase /ZydeFood
     RewriteRule ^assets/downloads/(.*) not_found [L]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
