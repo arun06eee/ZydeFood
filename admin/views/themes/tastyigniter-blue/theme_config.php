@@ -40,6 +40,7 @@ $theme['nav_menu'] = array(
 			'orders' => array('class' => 'orders', 'href' => site_url('orders'), 'title' => lang('menu_order'), 'permission' => 'Admin.Orders'),
 			'reservations' => array('class' => 'reservations', 'href' => site_url('reservations'), 'title' => lang('menu_reservation'), 'permission' => 'Admin.Reservations'),
 			'coupons' => array('class' => 'coupons', 'href' => site_url('coupons'), 'title' => lang('menu_coupon'), 'permission' => 'Admin.Coupons'),
+			'loyalty' => array('class' => 'loyalty', 'href' => site_url('loyalty'), 'title' => lang('menu_loyalty'), 'permission' => 'Admin.Loyalty'),
 		)
 	),
 	'marketing' => array(

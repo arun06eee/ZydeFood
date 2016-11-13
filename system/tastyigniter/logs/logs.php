@@ -1,4 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<<<<<<< HEAD
 
 ERROR - 2016-11-09 13:52:51 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp\www\ZydeFood\admin\views\themes\tastyigniter-blue\orders.php 15
 ERROR - 2016-11-09 13:58:34 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp\www\ZydeFood\admin\views\themes\tastyigniter-blue\orders.php 15
@@ -534,3 +535,5 @@ ERROR - 2016-11-13 13:47:52 --> Severity: Warning --> Invalid argument supplied 
 ERROR - 2016-11-13 13:47:53 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp64\www\ZydeFood\admin\views\themes\tastyigniter-blue\orders.php 15
 ERROR - 2016-11-13 13:48:03 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp64\www\ZydeFood\admin\views\themes\tastyigniter-blue\orders.php 15
 ERROR - 2016-11-13 13:48:03 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp64\www\ZydeFood\admin\views\themes\tastyigniter-blue\orders.php 15
+=======
+>>>>>>> origin/master
