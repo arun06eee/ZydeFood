@@ -340,6 +340,26 @@ class Orders_model extends TI_Model {
 
         return $query;
     }
+	
+	public function Selected_updateOrder($update_selected_order) {
+		$checkbox_status = $update_selected_order['checkbox_status'];
+		$query = TRUE;
+		if(empty($checkbox_status)) return FALSE;
+		
+		foreach ($checkbox_status as $string) {
+			$this->db->where('order_id',$string);
+			$this->db->set('status_id', $update_selected_order['status_id']);
+			$this->db->set('assignee_id', $update_selected_order['assignee_id']);
+			$this->db->set('comment', $update_selected_order['status_comment']);
+			$this->db->set('date_modified', mdate('%Y-%m-%d', time()));
+			$query = $this->db->update('orders');	
+		}
+
+		if ($query === TRUE) {
+			return TRUE;
+		}
+		return FALSE;
+	}
 
     public function createInvoiceNo($order_id = NULL) {
 

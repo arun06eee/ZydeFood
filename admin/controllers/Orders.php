@@ -192,6 +192,12 @@ class Orders extends Admin_Controller {
 		$this->template->render('orders', $data);
 	}
 
+	public function orderStatusChange() {	
+		$update_selected_order = $_POST['selected_order'];
+		$updateSelectOrder = $this->Orders_model->Selected_updateOrder($update_selected_order);
+		redirect('orders');
+	}
+
 	public function edit() {
 		$order_info = $this->Orders_model->getOrder((int) $this->input->get('id'));
 

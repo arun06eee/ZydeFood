@@ -26,7 +26,7 @@
 					<div class="col-xs-12 col-sm-2">
 						<label for="input-name" class="control-label"><?php echo lang('label_status'); ?></label>
 						<div class="">
-							<select name="order_status" id="" class="form-control" onChange="getStatusComment();">
+							<select name="order_status" id="" class="form-control">
 								<?php foreach ($statuses as $status) { ?>
 									<?php if ($status['status_id'] === $status_id) { ?>
 										<option value="<?php echo $status['status_id']; ?>" <?php echo set_select('order_status', $status['status_id'], TRUE); ?> ><?php echo $status['status_name']; ?></option>
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-2">
-					<a class="btn btn-success" style="background-color" onclick="Confirmsubmit();"><i class="fa fa-paper-plane"></i> Submit</a>
+					<a class="btn btn-success" style="background-color:green" onclick="Confirmsubmit()"><i class="fa fa-paper-plane"></i> Submit</a>
 					</div>
 				</div>
 			</div>
@@ -199,5 +199,27 @@
 function filterList() {
 	$('#filter-form').submit();
 }
+function Confirmsubmit() {
+	var checkbox_status = [];
+	$('input[name*=\'delete\']:checked').each(function() {
+		checkbox_status.push($(this).val());
+	});
+	var data = {
+		"checkbox_status"	: checkbox_status,
+		"status_id"			: $('select[name="order_status"]').val(),
+		"assignee_id"		: $('select[name="assignee_id"]').val(),
+		"status_comment"	: $('textarea[name="status_comment"]').val()
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "Orders/orderStatusChange?",
+		data: {"selected_order":data},
+		success: function() {
+			window.location.href = ['orders'];
+		}
+	});
+}
+
 //--></script>
 <?php echo get_footer(); ?>
