@@ -74,6 +74,7 @@ $lang['menu_category'] 		                = 'Categories';
 $lang['menu_table'] 		                = 'Tables';
 $lang['menu_sale'] 		                    = 'Sales';
 $lang['menu_order'] 		                = 'Orders';
+$lang['menu_loyalty'] 		                = 'Loyalty';
 $lang['menu_reservation'] 		            = 'Reservations';
 $lang['menu_coupon'] 		                = 'Coupons';
 $lang['menu_review'] 		                = 'Reviews';
