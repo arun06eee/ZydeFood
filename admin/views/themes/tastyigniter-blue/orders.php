@@ -12,12 +12,15 @@
 							<input type="hidden" name="old_status_id" value="<?php echo $status_id; ?>" />
 							<select name="assignee_id" class="form-control">
 								<option value=""><?php echo lang('text_please_select'); ?></option>
-								<?php foreach ($staffs as $staff) { ?>
+								<?php
+									if($staffs){
+									foreach ($staffs as $staff) { ?>
 									<?php if ($staff['staff_id'] === $assignee_id) { ?>
 										<option value="<?php echo $staff['staff_id']; ?>" <?php echo set_select('assignee_id', $staff['staff_id'], TRUE); ?> ><?php echo $staff['staff_name']; ?></option>
 									<?php } else { ?>
 										<option value="<?php echo $staff['staff_id']; ?>" <?php echo set_select('assignee_id', $staff['staff_id']); ?> ><?php echo $staff['staff_name']; ?></option>
 									<?php } ?>
+								<?php } ?>
 								<?php } ?>
 							</select>
 							<?php echo form_error('assignee_id', '<span class="text-danger">', '</span>'); ?>
@@ -48,6 +51,9 @@
 					<div class="col-xs-12 col-sm-2">
 					<a class="btn btn-success" style="background-color:green" onclick="Confirmsubmit()"><i class="fa fa-paper-plane"></i> Submit</a>
 					</div>
+				</div>
+				<div id="local-alert" class="alert alert-danger alert-dismissable hidden" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>Couldn't Update!! please select Orders.</p>
 				</div>
 			</div>
 		</div>
@@ -147,6 +153,9 @@
 			</div>
 
 			<form role="form" id="list-form" accept-charset="utf-8" method="POST" action="<?php echo current_url(); ?>">
+				<div id="local" class="alert alert-warning alert-dismissable hidden" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>An error occurred, nothing generated.</p>
+				</div>
 				<div class="table-responsive">
 				<table border="0" class="table table-striped table-border">
 					<thead>
@@ -160,6 +169,7 @@
 							<th><a class="sort" href="<?php echo $sort_payment; ?>"><?php echo lang('column_payment'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'payment') ? $order_by_active : $order_by; ?>"></i></a></th>
 							<th><a class="sort" href="<?php echo $sort_total; ?>"><?php echo lang('column_total'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'order_total') ? $order_by_active : $order_by; ?>"></i></a></th>
 							<th class="text-center"><a class="sort" href="<?php echo $sort_date; ?>"><?php echo lang('column_time_date'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'date_added') ? $order_by_active : $order_by; ?>"></i></a></th>
+							<th class="download_invoice">Invoice</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -176,6 +186,7 @@
 							<td><?php echo $order['payment']; ?></td>
 							<td><?php echo $order['order_total']; ?></td>
 							<td class="text-center"><?php echo $order['order_time']; ?> - <?php echo $order['order_date']; ?></td>
+							<td><a onclick="fndownload(<?php echo $order['order_id']?> , '<?php echo $order['order_status'] ?>' )" class="show_invoice btn btn-success btn-xs" title="<?php echo lang('button_download_invoice'); ?>"><i class="fa fa-download"></i></a></td>
 						</tr>
 						<?php } ?>
 						<?php } else { ?>
@@ -199,7 +210,22 @@
 function filterList() {
 	$('#filter-form').submit();
 }
+
+function fndownload(id, status) {
+	console.log(id, status)
+		$("#local").addClass('hidden');
+		var Multiple_status = status;
+	if (Multiple_status == "Completed") {
+		console.log(id)
+		$(".show_invoice").attr('href','orders/invoice/view/'+id);
+		$(".show_invoice").attr('target','_blank');
+	}else{
+		$("#local").removeClass('hidden')
+	}
+}
+
 function Confirmsubmit() {
+	$('#local-alert').addClass('hidden');
 	var checkbox_status = [];
 	$('input[name*=\'delete\']:checked').each(function() {
 		checkbox_status.push($(this).val());
@@ -210,15 +236,18 @@ function Confirmsubmit() {
 		"assignee_id"		: $('select[name="assignee_id"]').val(),
 		"status_comment"	: $('textarea[name="status_comment"]').val()
 	};
-
-	$.ajax({
-		type: "POST",
-		url: "Orders/orderStatusChange?",
-		data: {"selected_order":data},
-		success: function() {
-			window.location.href = ['orders'];
-		}
-	});
+	if  (checkbox_status != '') {
+		$.ajax({
+			type: "POST",
+			url: "Orders/orderStatusChange?",
+			data: {"selected_order":data},
+			success: function() {
+				window.location.href = ['orders'];
+			}
+		});
+	}else{
+		$('#local-alert').removeClass('hidden');
+	}
 }
 
 //--></script>

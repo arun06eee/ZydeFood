@@ -78,6 +78,7 @@ class Statuses_model extends TI_Model {
 	}
 
 	public function getStatusHistories($for, $order_id) {
+		
 		$this->db->select('status_history_id, status_history.date_added, staffs.staff_name, status_history.assignee_id, statuses.status_name, statuses.status_color, status_history.notify, status_history.comment');
 		$this->db->from('status_history');
 		$this->db->join('statuses', 'statuses.status_id = status_history.status_id', 'left');
@@ -87,6 +88,7 @@ class Statuses_model extends TI_Model {
 		$this->db->order_by('status_history.date_added', 'DESC');
 
 		$query = $this->db->get();
+		
 		$result = array();
 
 		if ($query->num_rows() > 0) {
@@ -245,6 +247,27 @@ class Statuses_model extends TI_Model {
 
 		return $query;
 	}
+	
+	public function MultipleStatusHistory($update_selected_order) {
+		$checkbox_status = $update_selected_order['checkbox_status'];
+		$query = TRUE;
+		if(empty($checkbox_status)) return FALSE;
+		
+		foreach ($checkbox_status as $string) {
+			$this->db->set('object_id',$string);
+			$this->db->set('status_id', $update_selected_order['status_id']);
+			$this->db->set('assignee_id', $update_selected_order['assignee_id']);
+			$this->db->set('comment', $update_selected_order['status_comment']);
+			$this->db->set('status_for', 'order');
+			$this->db->set('date_added', mdate('%Y-%m-%d', time()));
+			$query = $this->db->insert('status_history');
+		}
+
+		if ($query === TRUE) {
+			return TRUE;
+		}
+		return FALSE;
+	} 
 
 	public function deleteStatus($status_id) {
 		if (is_numeric($status_id)) $status_id = array($status_id);

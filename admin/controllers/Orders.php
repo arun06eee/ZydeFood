@@ -195,6 +195,7 @@ class Orders extends Admin_Controller {
 	public function orderStatusChange() {	
 		$update_selected_order = $_POST['selected_order'];
 		$updateSelectOrder = $this->Orders_model->Selected_updateOrder($update_selected_order);
+		$updateOrderstatusHistory =  $this->Statuses_model->MultipleStatusHistory($update_selected_order);
 		redirect('orders');
 	}
 
@@ -383,6 +384,7 @@ class Orders extends Admin_Controller {
 			}
 
 			$json['redirect'] = site_url('orders/edit?id='.$this->input->post('order_id'));
+			$json['id'] = $this->input->post('order_id');
 		}
 
 		$this->output->set_output(json_encode($json));
@@ -489,6 +491,8 @@ class Orders extends Admin_Controller {
 
 		if ($action === 'view') {
 			$this->load->view($this->config->item(ADMINDIR, 'default_themes').'orders_invoice', $data);
+			
+			echo "<script>window.print();</script>";
 		}
 	}
 

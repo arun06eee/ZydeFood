@@ -364,7 +364,7 @@ class Orders_model extends TI_Model {
     public function createInvoiceNo($order_id = NULL) {
 
         $order_status_exists = $this->Statuses_model->statusExists('order', $order_id, $this->config->item('completed_order_status'));
-        if ($order_status_exists !== TRUE) return TRUE;
+		if ($order_status_exists !== TRUE) return TRUE;
 
         $order_info = $this->getOrder($order_id);
 
