@@ -198,6 +198,11 @@ class Orders extends Admin_Controller {
 		$updateOrderstatusHistory =  $this->Statuses_model->MultipleStatusHistory($update_selected_order);
 		redirect('orders');
 	}
+	
+	public function Status_count(){
+		$status_count = $this->Orders_model->Select_status_count();
+		echo  $status_count;
+	}
 
 	public function edit() {
 		$order_info = $this->Orders_model->getOrder((int) $this->input->get('id'));

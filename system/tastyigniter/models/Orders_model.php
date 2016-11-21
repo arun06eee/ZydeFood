@@ -360,6 +360,15 @@ class Orders_model extends TI_Model {
 		}
 		return FALSE;
 	}
+	
+	public function Select_status_count() {
+		$this->db->select('status_id, count(*) as count');
+		$this->db->from('orders');
+		$this->db->group_by('status_id');
+		$query = $this->db->get();
+		$result = json_encode($query->result_array());
+		return $result;
+	}
 
     public function createInvoiceNo($order_id = NULL) {
 

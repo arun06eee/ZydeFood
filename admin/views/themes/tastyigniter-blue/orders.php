@@ -1,6 +1,70 @@
 <?php echo get_header(); ?>
 <div class="row content">
 	<div class="col-md-12">
+	
+	<div class="row mini-statistics">
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-4 stat-icon">
+                                <span class="bg-blue"><i class="stat-icon fa fa-cart-arrow-down fa-2x"></i></span>
+                            </div>
+                            <div class="col-xs-8 stat-content">
+                                <span class="stat-text text-blue Recived_orders"></span>
+                                <span class="stat-heading text-blue">Recived Orders</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-4 stat-icon">
+                                <span class="bg-primary"><i class="stat-icon fa fa-spoon fa-2x"></i></span>
+                            </div>
+                            <div class="col-xs-8 stat-content">
+                                <span class="stat-text text-primary pre_pen_orders"></span>
+                                <span class="stat-heading text-primary">Prepration & Pending Orders</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-4 stat-icon">
+                                <span class="bg-green"><i class="fa fa-truck fa-2x"></i></span>
+                            </div>
+                            <div class="col-xs-8 stat-content">
+                                <span class="stat-text text-green sales comp_delivr_orders"></span>
+                                <span class="stat-heading text-green ">Completed & Delivered Orders</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-4 stat-icon">
+                                <span class="bg-red"><i class="stat-icon fa fa-times fa-2x"></i></span>
+                            </div>
+                            <div class="col-xs-8 stat-content">
+                                <span class="stat-text text-red tables_reserved canceled_orders"></span>
+                                <span class="stat-heading text-red">Canceled Orders</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+	
 		<div class="panel panel-default panel-table">
 			<div class="panel-heading">
 				<h3 class="panel-title"><?php echo lang('text_list'); ?></h3>
@@ -157,7 +221,7 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>An error occurred, nothing generated.</p>
 				</div>
 				<div class="table-responsive">
-				<table border="0" class="table table-striped table-border">
+				<table id="OrderTable" border="0" class="table table-striped table-border">
 					<thead>
 						<tr>
 							<th class="action"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
@@ -207,16 +271,63 @@
 	</div>
 </div>
 <script type="text/javascript"><!--
+$(document).ready(function () {
+	
+	requestURL("orders/Status_count", dataUpdateOrder);
+	setInterval(function(){
+		requestURL("orders/Status_count", dataUpdateOrder);
+	},1000);
+	
+	function dataUpdateOrder(data) {
+		$(".pre_pen_orders").empty();
+		$(".comp_delivr_orders").empty();
+		for(var i=0; i<data.length; i++){
+			if(data[i].status_id == 11){
+				$(".Recived_orders").empty();
+				$(".Recived_orders").append(data[i].count);
+			}
+			else 
+				if(data[i].status_id == 12 || data[i].status_id == 13){
+				var y = parseInt(data[i].count,10);
+				x = parseInt($(".pre_pen_orders").html()) || 0;
+				$(".pre_pen_orders").empty();
+				$(".pre_pen_orders").append(x+y);
+			}
+			else 
+				if(data[i].status_id == 14 || data[i].status_id == 15){
+				var p = parseInt(data[i].count,10);
+				q = parseInt($(".comp_delivr_orders").html()) || 0;
+				$(".comp_delivr_orders").empty();
+				$(".comp_delivr_orders").append(p+q);
+			}
+			else 
+				if(data[i].status_id == 19){
+				$(".canceled_orders").empty();
+				$(".canceled_orders").append(data[i].count);
+			}
+		}
+	}
+	
+	function requestURL(url, callback){
+		$.ajax ({
+			type: "GET",
+			url: "orders/Status_count",
+			dataType: "json",
+			success: function(data) {
+				callback(data);
+			}
+		})
+	}
+});
+
 function filterList() {
 	$('#filter-form').submit();
 }
 
 function fndownload(id, status) {
-	console.log(id, status)
 		$("#local").addClass('hidden');
 		var Multiple_status = status;
 	if (Multiple_status == "Completed") {
-		console.log(id)
 		$(".show_invoice").attr('href','orders/invoice/view/'+id);
 		$(".show_invoice").attr('target','_blank');
 	}else{
