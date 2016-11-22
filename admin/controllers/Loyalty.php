@@ -7,7 +7,7 @@ class Loyalty extends Admin_Controller {
 
         $this->user->restrict('Admin.Loyalty');
 
-      //  $this->load->model('Loyalty_model');
+		$this->load->model('Loyalty_model');
 
         $this->load->library('pagination');
 
@@ -43,7 +43,7 @@ class Loyalty extends Admin_Controller {
 		$this->template->setStyleTag(assets_url('js/datepicker/bootstrap-timepicker.css'), 'bootstrap-timepicker-css');
 		$this->template->setScriptTag(assets_url("js/datepicker/bootstrap-timepicker.js"), 'bootstrap-timepicker-js');
 
-		if ($this->input->post() AND $coupon_id = $this->_saveCoupon()) {
+		if ($this->input->post() AND $coupon_id = $this->_saveLoyalty()) {
 			if ($this->input->post('save_close') === '1') {
 				redirect('loyalty');
 			}
@@ -52,6 +52,10 @@ class Loyalty extends Admin_Controller {
 		}
 
 		$this->template->render('loyalty_edit', $data);
+	}
+	
+	public function _saveLoyalty() {
+		$new_Loyalty = $this->Loyalty_model->Save_Loyalty($this->input->post());
 	}
 	
 }

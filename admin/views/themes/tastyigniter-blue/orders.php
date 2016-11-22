@@ -11,7 +11,7 @@
                                 <span class="bg-blue"><i class="stat-icon fa fa-cart-arrow-down fa-2x"></i></span>
                             </div>
                             <div class="col-xs-8 stat-content">
-                                <span class="stat-text text-blue Recived_orders"></span>
+                                <span class="stat-text text-blue Recived_orders">0</span>
                                 <span class="stat-heading text-blue">Recived Orders</span>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                 <span class="bg-red"><i class="stat-icon fa fa-times fa-2x"></i></span>
                             </div>
                             <div class="col-xs-8 stat-content">
-                                <span class="stat-text text-red tables_reserved canceled_orders"></span>
+                                <span class="stat-text text-red tables_reserved canceled_orders">0</span>
                                 <span class="stat-heading text-red">Canceled Orders</span>
                             </div>
                         </div>
@@ -274,13 +274,15 @@
 $(document).ready(function () {
 	
 	requestURL("orders/Status_count", dataUpdateOrder);
-	setInterval(function(){
+	//setInterval(function(){
 		requestURL("orders/Status_count", dataUpdateOrder);
-	},1000);
+	//},1000);
 	
 	function dataUpdateOrder(data) {
 		$(".pre_pen_orders").empty();
 		$(".comp_delivr_orders").empty();
+		$(".pre_pen_orders").append("0");
+		$(".comp_delivr_orders").append("0");
 		for(var i=0; i<data.length; i++){
 			if(data[i].status_id == 11){
 				$(".Recived_orders").empty();
