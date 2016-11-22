@@ -11,7 +11,7 @@ class Loyalty extends Admin_Controller {
 
         $this->load->library('pagination');
 
-        $this->lang->load('loyalty');
+        $this->lang->load('loyalty_lang');
 	}
 
 	public function index() {
@@ -22,14 +22,26 @@ class Loyalty extends Admin_Controller {
 		$this->template->setButton($this->lang->line('button_delete'), array('class' => 'btn btn-danger', 'onclick' => 'confirmDelete();'));
 		
 		$url = '?';
-		$data['loyalty'] = array();
+		
+		$data['loyalties'] = array();
+		$results = $this->Loyalty_model->getLoyalty();
+		foreach ($results as $result) {
+			$data['loyalties'][] = array(
+				'loyalty_id'	=> $result['loyalty_id'],
+				'name'			=> $result['name'],
+				'min_range'		=> $result['min_range'],
+				'max_range'		=> $result['max_range'],
+				'status'		=> ($result['status'] === '1') ? $this->lang->line('text_enabled') : $this->lang->line('text_disabled'),
+				'edit' 			=> site_url('coupons/edit?id=' . $result['loyalty_id'])
+			);
+		}
 		
 		$this->template->render('loyalty', $data);
 	}
 
 	public function edit() {
-		//$loyalty_info = $this->loyalty_model->getCoupon((int) $this->input->get('id'));
-		$loyalty_info  ="";
+		//$loyalty_info = $this->loyalty_model->getEditLoyalty((int) $this->input->get('id'));
+		
 		$title = (isset($loyalty_info['name'])) ? $loyalty_info['name'] : $this->lang->line('text_new');
         $this->template->setTitle(sprintf($this->lang->line('text_edit_heading'), $title));
         $this->template->setHeading(sprintf($this->lang->line('text_edit_heading'), $title));
@@ -50,8 +62,21 @@ class Loyalty extends Admin_Controller {
 
 			redirect('loyalty/edit?id='. $coupon_id);
 		}
+		
+		/* $data['loyalty_histories'] = array();
+		$loyalty_histories = $this->Coupons_model->getCouponHistories($coupon_id);
+		foreach ($loyalty_histories as $loyalty_history) {
+			$data['loyalty_histories'][] = array(
+				'coupon_history_id'	=> $loyalty_history['loyalty_history_id'],
+				'order_id'			=> $loyalty_history['order_id'],
+				'customer_name'		=> $loyalty_history['first_name'] .' '. $loyalty_history['last_name'],
+				'date_used'			=> mdate('%d %M %y', strtotime($loyalty_history['date_used'])),
+				'view'				=> site_url('orders/edit?id='. $loyalty_history['order_id'])
+			);
+		} */
 
-		$this->template->render('loyalty_edit', $data);
+		$this->template->render('Loyalty_edit', $data);
+		
 	}
 	
 	public function _saveLoyalty() {

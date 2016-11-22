@@ -80,6 +80,7 @@ class Coupons extends Admin_Controller {
 
 		$data['coupons'] = array();
 		$results = $this->Coupons_model->getList($filter);
+
 		foreach ($results as $result) {
 			$data['coupons'][] = array(
 				'coupon_id'		=> $result['coupon_id'],

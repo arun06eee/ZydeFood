@@ -23,6 +23,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
  
 class Loyalty_model extends TI_Model {
 	
+	public function getLoyalty() {
+		$this->db->select('*');
+		$this->db->from('loyalty');
+
+		$query = $this->db->get();
+		$result = array();
+
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+		}
+
+		return $result;
+	}
+
 	public function Save_Loyalty($new_Loyalty) {
 
 		if(empty ($new_Loyalty)) return FALSE;

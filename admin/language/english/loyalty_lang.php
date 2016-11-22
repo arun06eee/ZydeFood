@@ -17,10 +17,12 @@ $lang['text_percentage'] 		        = 'Percentage';
 $lang['text_24_hour'] 		            = '24 Hours';
 $lang['text_custom'] 		            = 'custom';
 $lang['text_leading_zeros'] 		    = '.00';
+$lang['text_enabled']					= 'Enable';
+$lang['text_disabled']					= 'Disable';
 
 $lang['column_name'] 		            = 'Name';
-$lang['column_code'] 		            = 'Code';
-$lang['column_type'] 		            = 'Type';
+$lang['column_min_range'] 		        = 'Minimum Range';
+$lang['column_max_range'] 		        = 'Maximum Range';
 $lang['column_discount'] 		        = 'Discount';
 $lang['column_validity'] 		        = 'Validity';
 $lang['column_status'] 		            = 'Status';

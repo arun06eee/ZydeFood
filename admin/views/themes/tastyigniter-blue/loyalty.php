@@ -62,39 +62,35 @@
 
 			<form role="form" id="list-form" accept-charset="utf-8" method="POST" action="<?php echo current_url(); ?>">
 				<div class="table-responsive">
-				<table class="table table-striped table-border">
-					<thead>
-						<tr>
-							<th class="action"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
-							<th><a class="sort" href="<?php echo $sort_name; ?>"><?php echo lang('column_name'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'name') ? $order_by_active : $order_by; ?>"></i></a></th>
-							<th><a class="sort" href="<?php echo $sort_code; ?>"><?php echo lang('column_code'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'code') ? $order_by_active : $order_by; ?>"></i></a></th>
-							<th><a class="sort" href="<?php echo $sort_type; ?>"><?php echo lang('column_type'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'type') ? $order_by_active : $order_by; ?>"></i></a></th>
-							<th><a class="sort" href="<?php echo $sort_discount; ?>"><?php echo lang('column_discount'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'discount') ? $order_by_active : $order_by; ?>"></i></a></th>
-							<th><a class="sort" href="<?php echo $sort_validity; ?>"><?php echo lang('column_validity'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'validity') ? $order_by_active : $order_by; ?>"></i></a></th>
-							<th class="text-center"><?php echo lang('column_status'); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php if ($coupons) {?>
-						<?php foreach ($coupons as $coupon) { ?>
-						<tr>
-							<td class="action"><input type="checkbox" value="<?php echo $coupon['coupon_id']; ?>" name="delete[]" />&nbsp;&nbsp;&nbsp;
-								<a class="btn btn-edit" title="<?php echo lang('text_edit'); ?>" href="<?php echo $coupon['edit']; ?>"><i class="fa fa-pencil"></i></a></td>
-							<td><?php echo $coupon['name']; ?></td>
-							<td><?php echo $coupon['code']; ?></td>
-							<td><?php echo $coupon['type']; ?></td>
-							<td><?php echo $coupon['discount']; ?></td>
-							<td><?php echo $coupon['validity']; ?></td>
-							<td class="text-center"><?php echo $coupon['status']; ?></td>
-						</tr>
-						<?php } ?>
-						<?php } else { ?>
-						<tr>
-							<td colspan="6"><?php echo lang('text_empty'); ?></td>
-						</tr>
-						<?php } ?>
-					</tbody>
-				</table>
+					<table class="table table-striped table-border">
+						<thead>
+							<tr>
+								<th class="action"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
+								<th><a class="sort" href="<?php echo $sort_name; ?>"><?php echo lang('column_name'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'name') ? $order_by_active : $order_by; ?>"></i></a></th>
+								<th><a class="sort" href="<?php echo $sort_code; ?>"><?php echo lang('column_min_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'code') ? $order_by_active : $order_by; ?>"></i></a></th>
+								<th><a class="sort" href="<?php echo $sort_type; ?>"><?php echo lang('column_max_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'type') ? $order_by_active : $order_by; ?>"></i></a></th>
+								<th class="text-center"><?php echo lang('column_status'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if ($loyalties) {?>
+							<?php foreach ($loyalties as $loyalty) { ?>
+							<tr>
+								<td class="action"><input type="checkbox" value="<?php echo $loyalty['loyalty']; ?>" name="delete[]" />&nbsp;&nbsp;&nbsp;
+									<a class="btn btn-edit" title="<?php echo lang('text_edit'); ?>" href="<?php echo $loyalty['edit']; ?>"><i class="fa fa-pencil"></i></a></td>
+								<td><?php echo $loyalty['name']; ?></td>
+								<td><?php echo $loyalty['min_range']; ?></td>
+								<td><?php echo $loyalty['max_range']; ?></td>
+								<td class="text-center"><?php echo $loyalty['status']; ?></td>
+							</tr>
+							<?php } ?>
+							<?php } else { ?>
+							<tr>
+								<td colspan="6"><?php echo lang('text_empty'); ?></td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
 				</div>
 			</form>
 
