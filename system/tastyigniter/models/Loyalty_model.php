@@ -36,8 +36,19 @@ class Loyalty_model extends TI_Model {
 
 		return $result;
 	}
+	
+	public function getEditLoyalty($loyalty_id) {
+		$this->db->from('loyalty');
+		$this->db->where('loyalty_id', $loyalty_id);
 
-	public function Save_Loyalty($new_Loyalty) {
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		}
+	}
+
+	public function Save_Loyalty($loyalty_id, $new_Loyalty) {
 
 		if(empty ($new_Loyalty)) return FALSE;
 		
@@ -114,11 +125,25 @@ class Loyalty_model extends TI_Model {
 				}
 			}
 		}
-		
-		if (isset($new_Loyalty)) {
+		if (is_numeric($loyalty_id)) {
+			$this->db->where('loyalty_id', $loyalty_id);
+			$query = $this->db->update('loyalty');
+		} else {
 			$this->db->set('date_added', mdate('%Y-%m-%d', time()));
-			$this->db->insert('loyalty');
-			redirect ('loyalty');
+			$query = $this->db->insert('loyalty');
+			$coupon_id = $this->db->insert_id();
+		}
+		return $loyalty_id;
+	}
+	
+	public function deleteLoyalty($Loyalty_id) {
+		if (is_numeric($Loyalty_id)) $loyalty_id = array($Loyalty_id);
+
+		if ( ! empty($Loyalty_id) ) {
+			$this->db->where('loyalty_id', $Loyalty_id);
+			$this->db->delete('loyalty');
+
+			return $this->db->affected_rows();
 		}
 	}
 }
