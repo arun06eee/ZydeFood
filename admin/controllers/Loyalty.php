@@ -14,17 +14,62 @@ class Loyalty extends Admin_Controller {
         $this->lang->load('loyalty_lang');
 	}
 
-	public function index() {									//loyalty frame
+	public function index() {
+		
+		$url = '?';
+		$filter = array();
+		if ($this->input->get('page')) {
+			$filter['page'] = (int) $this->input->get('page');
+		} else {
+			$filter['page'] = '';
+		}
+
+		if ($this->config->item('page_limit')) {
+			$filter['limit'] = $this->config->item('page_limit');
+		}
+
+		if ($this->input->get('filter_search')) {
+			$filter['filter_search'] = $data['filter_search'] = $this->input->get('filter_search');
+			$url .= 'filter_search='.$filter['filter_search'].'&';
+		} else {
+			$data['filter_search'] = '';
+		}
+
+		if (is_numeric($this->input->get('filter_status'))) {
+			$filter['filter_status'] = $data['filter_status'] = $this->input->get('filter_status');
+			$url .= 'filter_status='.$filter['filter_status'].'&';
+		} else {
+			$filter['filter_status'] = $data['filter_status'] = '';
+		}
+
+		if ($this->input->get('sort_by')) {
+			$filter['sort_by'] = $data['sort_by'] = $this->input->get('sort_by');
+		} else {
+			$filter['sort_by'] = $data['sort_by'] = 'loyalty_id';
+		}
+
+		if ($this->input->get('order_by')) {
+			$filter['order_by'] = $data['order_by'] = $this->input->get('order_by');
+			$data['order_by_active'] = $this->input->get('order_by') .' active';
+		} else {
+			$filter['order_by'] = $data['order_by'] = 'DESC';
+			$data['order_by_active'] = 'DESC';
+		}
 
 		$this->template->setTitle($this->lang->line('text_title'));
 		$this->template->setHeading($this->lang->line('text_heading'));
 		$this->template->setButton($this->lang->line('button_new'), array('class' => 'btn btn-primary', 'href' => page_url() .'/edit'));
 		$this->template->setButton($this->lang->line('button_delete'), array('class' => 'btn btn-danger', 'onclick' => 'confirmDelete();'));
 		
-		$url = '?';
-		
+		$order_by = (isset($filter['order_by']) AND $filter['order_by'] == 'ASC') ? 'DESC' : 'ASC';
+		$data['sort_name'] 				= site_url('loyalty'.$url.'sort_by=name&order_by='.$order_by);
+		$data['sort_min_range'] 		= site_url('loyalty'.$url.'sort_by=min_range&order_by='.$order_by);
+		$data['sort_max_range'] 		= site_url('loyalty'.$url.'sort_by=max_range&order_by='.$order_by);
+		$data['sort_status'] 			= site_url('loyalty'.$url.'sort_by=status&order_by='.$order_by);
+
 		$data['loyalties'] = array();
-		$results = $this->Loyalty_model->getLoyalty();
+		$results = $this->Loyalty_model->getList($filter);
+		
 		foreach ($results as $result) {
 			$data['loyalties'][] = array(
 				'loyalty_id'	=> $result['loyalty_id'],
@@ -35,6 +80,22 @@ class Loyalty extends Admin_Controller {
 				'edit' 			=> site_url('loyalty/edit?id=' . $result['loyalty_id'])
 			);
 		}
+
+		if ($this->input->get('sort_by') AND $this->input->get('order_by')) {
+			$url .= 'sort_by='.$filter['sort_by'].'&';
+			$url .= 'order_by='.$filter['order_by'].'&';
+		}
+
+		$config['base_url'] 		= site_url('loyalty'.$url);
+		$config['total_rows'] 		= $this->Loyalty_model->getCount($filter);
+		$config['per_page'] 		= $filter['limit'];
+
+		$this->pagination->initialize($config);
+
+		$data['pagination'] = array(
+			'info'		=> $this->pagination->create_infos(),
+			'links'		=> $this->pagination->create_links()
+		);
 		
 		$this->template->render('loyalty', $data);
 	}

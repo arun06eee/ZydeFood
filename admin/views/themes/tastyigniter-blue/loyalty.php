@@ -23,17 +23,17 @@
 								<div class="col-md-8 pull-left">
 									<div class="form-group">
 										<select name="filter_type" class="form-control input-sm">
-											<option value=""><?php echo lang('text_filter_type'); ?></option>
-										<?php if ($filter_type === 'F') { ?>
-											<option value="F" <?php echo set_select('filter_type', 'F', TRUE); ?> ><?php echo lang('text_fixed_amount'); ?></option>
-											<option value="P" <?php echo set_select('filter_type', 'P'); ?> ><?php echo lang('text_percentage'); ?></option>
-										<?php } else if ($filter_type === 'P') { ?>
-											<option value="F" <?php echo set_select('filter_type', 'F'); ?> ><?php echo lang('text_fixed_amount'); ?></option>
-											<option value="P" <?php echo set_select('filter_type', 'P', TRUE); ?> ><?php echo lang('text_percentage'); ?></option>
-										<?php } else { ?>
-											<option value="F" <?php echo set_select('filter_type', 'F'); ?> ><?php echo lang('text_fixed_amount'); ?></option>
-											<option value="P" <?php echo set_select('filter_type', 'P'); ?> ><?php echo lang('text_percentage'); ?></option>
-										<?php } ?>
+												<option value=""><?php echo lang('text_filter_type'); ?></option>
+											<?php if ($filter_type === 'min_range') { ?>
+												<option value="F" <?php echo set_select('filter_type', 'min_range', TRUE); ?> ><?php echo lang('column_min_range'); ?></option>
+												<option value="P" <?php echo set_select('filter_type', 'max_range'); ?> ><?php echo lang('column_max_range'); ?></option>
+											<?php } else if ($filter_type === 'max_range') { ?>
+												<option value="F" <?php echo set_select('filter_type', 'min_range'); ?> ><?php echo lang('column_min_range'); ?></option>
+												<option value="P" <?php echo set_select('filter_type', 'max_range', TRUE); ?> ><?php echo lang('column_max_range'); ?></option>
+											<?php } else { ?>
+												<option value="F" <?php echo set_select('filter_type', 'min_range'); ?> ><?php echo lang('column_min_range'); ?></option>
+												<option value="P" <?php echo set_select('filter_type', 'max_range'); ?> ><?php echo lang('column_max_range'); ?></option>
+											<?php } ?>
 										</select>&nbsp;
 									</div>
 									<div class="form-group">
@@ -67,8 +67,8 @@
 							<tr>
 								<th class="action"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
 								<th><a class="sort" href="<?php echo $sort_name; ?>"><?php echo lang('column_name'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'name') ? $order_by_active : $order_by; ?>"></i></a></th>
-								<th><a class="sort" href="<?php echo $sort_code; ?>"><?php echo lang('column_min_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'code') ? $order_by_active : $order_by; ?>"></i></a></th>
-								<th><a class="sort" href="<?php echo $sort_type; ?>"><?php echo lang('column_max_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'type') ? $order_by_active : $order_by; ?>"></i></a></th>
+								<th><a class="sort" href="<?php echo $sort_min_range; ?>"><?php echo lang('column_min_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'min_range') ? $order_by_active : $order_by; ?>"></i></a></th>
+								<th><a class="sort" href="<?php echo $sort_max_range; ?>"><?php echo lang('column_max_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'max_range') ? $order_by_active : $order_by; ?>"></i></a></th>
 								<th class="text-center"><?php echo lang('column_status'); ?></th>
 							</tr>
 						</thead>

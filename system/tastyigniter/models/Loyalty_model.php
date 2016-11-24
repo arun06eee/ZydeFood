@@ -23,6 +23,58 @@ defined('BASEPATH') or exit('No direct script access allowed');
  
 class Loyalty_model extends TI_Model {
 	
+	public function getCount($filter = array()) {
+		if ( ! empty($filter['filter_search'])) {
+			$this->db->like('name', $filter['filter_search']);
+			$this->db->or_like('min_range', $filter['filter_search']);
+		}
+
+		if ( ! empty($filter['filter_search'])) {
+			$this->db->where('max_range', $filter['filter_search']);
+		}
+
+		if ( ! empty($filter['filter_status']) AND is_numeric($filter['filter_status'])) {
+			$this->db->where('status', $filter['filter_status']);
+		}
+
+		$this->db->from('loyalty');
+
+		return $this->db->count_all_results();
+	}
+
+		public function getList($filter = array()) {
+		if ( ! empty($filter['page']) AND $filter['page'] !== 0) {
+			$filter['page'] = ($filter['page'] - 1) * $filter['limit'];
+		}
+
+		if ($this->db->limit($filter['limit'], $filter['page'])) {
+			$this->db->from('loyalty');
+
+			if ( ! empty($filter['sort_by']) AND ! empty($filter['order_by'])) {
+				$this->db->order_by($filter['sort_by'], $filter['order_by']);
+			}
+
+			if ( ! empty($filter['filter_search'])) {
+				$this->db->like('name', $filter['filter_search']);
+				$this->db->or_like('min_range', $filter['filter_search']);
+				$this->db->or_like('max_range', $filter['filter_search']);
+			}
+
+			if (isset($filter['filter_status']) AND is_numeric($filter['filter_status'])) {
+				$this->db->where('status', $filter['filter_status']);
+			}
+
+			$query = $this->db->get();
+			$result = array();
+
+			if ($query->num_rows() > 0) {
+				$result = $query->result_array();
+			}
+
+			return $result;
+		}
+	}
+	
 	public function getLoyalty() {
 		$this->db->select('*');
 		$this->db->from('loyalty');
