@@ -76,7 +76,7 @@
 							<?php if ($loyalties) {?>
 							<?php foreach ($loyalties as $loyalty) { ?>
 							<tr>
-								<td class="action"><input type="checkbox" value="<?php echo $loyalty['loyalty']; ?>" name="delete[]" />&nbsp;&nbsp;&nbsp;
+								<td class="action"><input type="checkbox" value="<?php echo $loyalty['loyalty_id']; ?>" name="delete[]" />&nbsp;&nbsp;&nbsp;
 									<a class="btn btn-edit" title="<?php echo lang('text_edit'); ?>" href="<?php echo $loyalty['edit']; ?>"><i class="fa fa-pencil"></i></a></td>
 								<td><?php echo $loyalty['name']; ?></td>
 								<td><?php echo $loyalty['min_range']; ?></td>

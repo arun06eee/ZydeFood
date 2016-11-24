@@ -61,6 +61,10 @@ class Loyalty extends Admin_Controller {
 		$this->template->setButton($this->lang->line('button_new'), array('class' => 'btn btn-primary', 'href' => page_url() .'/edit'));
 		$this->template->setButton($this->lang->line('button_delete'), array('class' => 'btn btn-danger', 'onclick' => 'confirmDelete();'));
 		
+		if ($this->input->post('delete') AND $this->_deleteLoyalty() === TRUE) {
+			redirect('loyalty');
+		}
+		
 		$order_by = (isset($filter['order_by']) AND $filter['order_by'] == 'ASC') ? 'DESC' : 'ASC';
 		$data['sort_name'] 				= site_url('loyalty'.$url.'sort_by=name&order_by='.$order_by);
 		$data['sort_min_range'] 		= site_url('loyalty'.$url.'sort_by=min_range&order_by='.$order_by);
@@ -102,7 +106,6 @@ class Loyalty extends Admin_Controller {
 
 	public function edit() {																//edit loyalty method
 		$loyalty_info = $this->Loyalty_model->getEditLoyalty((int) $this->input->get('id'));
-		
 		if ($loyalty_info) {
 			$loyalty_id = $loyalty_info['loyalty_id'];
 			$data['_action']	= site_url('loyalty/edit?id='. $loyalty_id);
@@ -188,15 +191,15 @@ class Loyalty extends Admin_Controller {
 		}
 	}
 	
-	private function _deleteLoyalty() {																//loyalty delete method
-        if ($this->input->post('delete')) {
+	public function _deleteLoyalty() {																//loyalty delete method
+		if ($this->input->post('delete')) {
             $deleted_rows = $this->Loyalty_model->deleteLoyalty($this->input->post('delete'));		//goes to delete loyalty model method deleteLoyalty
 
             if ($deleted_rows > 0) {
-                $prefix = ($deleted_rows > 1) ? '['.$deleted_rows.'] Loyalty': 'Loyalty';
-                $this->alert->set('success', sprintf($this->lang->line('alert_success'), $prefix.' '.$this->lang->line('text_deleted')));
+				$prefix = ($deleted_rows > 1) ? '['.$deleted_rows.'] Loyalties': 'loyalty';
+				$this->alert->set('success', sprintf($this->lang->line('alert_success'), $prefix.' '.$this->lang->line('text_deleted')));
             } else {
-                $this->alert->set('warning', sprintf($this->lang->line('alert_error_nothing'), $this->lang->line('text_deleted')));
+				$this->alert->set('warning', sprintf($this->lang->line('alert_error_nothing'), $this->lang->line('text_deleted')));
             }
 
             return TRUE;

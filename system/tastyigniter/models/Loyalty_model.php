@@ -188,11 +188,12 @@ class Loyalty_model extends TI_Model {
 		return $loyalty_id;
 	}
 	
-	public function deleteLoyalty($Loyalty_id) {
-		if (is_numeric($Loyalty_id)) $loyalty_id = array($Loyalty_id);
+	public function deleteLoyalty($loyalty_id) {
+		print_r("hi");
+		if (is_numeric($loyalty_id)) $loyalty_id = array($loyalty_id);
 
-		if ( ! empty($Loyalty_id) ) {
-			$this->db->where('loyalty_id', $Loyalty_id);
+		if ( ! empty($loyalty_id) AND ctype_digit(implode('', $loyalty_id))) {
+			$this->db->where_in('loyalty_id', $loyalty_id);
 			$this->db->delete('loyalty');
 
 			return $this->db->affected_rows();
