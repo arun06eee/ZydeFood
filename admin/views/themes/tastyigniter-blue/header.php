@@ -21,8 +21,7 @@
 	$this->template->setScriptTag('js/jquery.raty.js', 'jquery-raty-js', '13');
 	$this->template->setScriptTag('js/common.js', 'common-js');
 
-	$tastyigniter_logo  = base_url('views/themes/tastyigniter-blue/images/tastyigniter-logo.png');
-	$site_logo          = base_url('views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png');
+	$site_logo          = base_url('views/themes/tastyigniter-blue/images/smart_menu.png');
     $system_name 		= lang('tastyigniter_system_name');
     $site_name 		    = config_item('site_name');
     $site_url 			= rtrim(site_url(), '/').'/';
@@ -92,9 +91,6 @@
 		<nav class="navbar navbar-static-top navbar-top" role="navigation" style="margin-bottom: 0">
 			<div class="navbar-header">
 				<div class="navbar-brand">
-					<div class="navbar-logo col-xs-3">
-						<img class="logo-image" alt="<?php echo $system_name; ?>" title="<?php echo $system_name; ?>" src="<?php echo $tastyigniter_logo; ?>"/>
-					</div>
 					<div class="navbar-logo col-xs-9">
 						<img class="logo-text" alt="<?php echo $system_name; ?>" title="<?php echo $system_name; ?>" src="<?php echo $site_logo; ?>"/>
 <!--						<a class="logo-text" href="--><?php //echo site_url('dashboard'); ?><!--">--><?php //echo $site_name; ?><!--</a>-->
@@ -185,9 +181,9 @@
 							<li><a href="<?php echo $staff_edit; ?>"><i class="fa fa-user fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_edit_details'); ?></a></li>
 							<li><a class="list-group-item-danger" href="<?php echo $logout; ?>"><i class="fa fa-power-off fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_logout'); ?></a></li>
 							<li class="divider"></li>
-							<li><a href="http://tastyigniter.com/about/" target="_blank"><i class="fa fa-info-circle fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_about_tastyigniter'); ?></a></li>
-							<li><a href="http://docs.tastyigniter.com" target="_blank"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_documentation'); ?></a></li>
-							<li><a href="http://forum.tastyigniter.com" target="_blank"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_community_support'); ?></a></li>
+							<li><a href="" target="_blank"><i class="fa fa-info-circle fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_about_smart_menu'); ?></a></li>
+							<li><a href="" target="_blank"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_documentation'); ?></a></li>
+							<li><a href="" target="_blank"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;<?php echo lang('text_community_support'); ?></a></li>
 							<li class="menu-footer"></li>
 						</ul>
 					</li>

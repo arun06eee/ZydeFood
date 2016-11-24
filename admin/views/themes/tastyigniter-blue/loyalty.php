@@ -25,14 +25,17 @@
 										<select name="filter_type" class="form-control input-sm">
 												<option value=""><?php echo lang('text_filter_type'); ?></option>
 											<?php if ($filter_type === 'min_range') { ?>
-												<option value="F" <?php echo set_select('filter_type', 'min_range', TRUE); ?> ><?php echo lang('column_min_range'); ?></option>
-												<option value="P" <?php echo set_select('filter_type', 'max_range'); ?> ><?php echo lang('column_max_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'min_range', TRUE); ?> ><?php echo lang('column_min_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'max_range'); ?> ><?php echo lang('column_max_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'points'); ?> ><?php echo lang('label_points'); ?></option>
 											<?php } else if ($filter_type === 'max_range') { ?>
-												<option value="F" <?php echo set_select('filter_type', 'min_range'); ?> ><?php echo lang('column_min_range'); ?></option>
-												<option value="P" <?php echo set_select('filter_type', 'max_range', TRUE); ?> ><?php echo lang('column_max_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'min_range'); ?> ><?php echo lang('column_min_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'max_range', TRUE); ?> ><?php echo lang('column_max_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'points', TRUE); ?> ><?php echo lang('label_points'); ?></option>
 											<?php } else { ?>
-												<option value="F" <?php echo set_select('filter_type', 'min_range'); ?> ><?php echo lang('column_min_range'); ?></option>
-												<option value="P" <?php echo set_select('filter_type', 'max_range'); ?> ><?php echo lang('column_max_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'min_range'); ?> ><?php echo lang('column_min_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'max_range'); ?> ><?php echo lang('column_max_range'); ?></option>
+												<option <?php echo set_select('filter_type', 'points'); ?> ><?php echo lang('label_points'); ?></option>
 											<?php } ?>
 										</select>&nbsp;
 									</div>
@@ -69,6 +72,7 @@
 								<th><a class="sort" href="<?php echo $sort_name; ?>"><?php echo lang('column_name'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'name') ? $order_by_active : $order_by; ?>"></i></a></th>
 								<th><a class="sort" href="<?php echo $sort_min_range; ?>"><?php echo lang('column_min_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'min_range') ? $order_by_active : $order_by; ?>"></i></a></th>
 								<th><a class="sort" href="<?php echo $sort_max_range; ?>"><?php echo lang('column_max_range'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'max_range') ? $order_by_active : $order_by; ?>"></i></a></th>
+								<th><a class="sort" href="<?php echo $sort_points; ?>"><?php echo lang('label_points'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'points') ? $order_by_active : $order_by; ?>"></i></a></th>
 								<th class="text-center"><?php echo lang('column_status'); ?></th>
 							</tr>
 						</thead>
@@ -81,6 +85,7 @@
 								<td><?php echo $loyalty['name']; ?></td>
 								<td><?php echo $loyalty['min_range']; ?></td>
 								<td><?php echo $loyalty['max_range']; ?></td>
+								<td><?php echo $loyalty['points']; ?></td>
 								<td class="text-center"><?php echo $loyalty['status']; ?></td>
 							</tr>
 							<?php } ?>

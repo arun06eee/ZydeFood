@@ -33,6 +33,14 @@
 							<?php echo form_error('max_range', '<span class="text-danger">', '</span>'); ?>
 						</div>
 					</div>
+					
+					<div class="form-group">
+						<label for="input-points" class="col-sm-3 control-label"><?php echo lang('label_points'); ?></label>
+						<div class="col-sm-5">
+							<input type="text" name="points" id="input-points" class="form-control" value="<?php echo set_value('points', $points); ?>" />
+							<?php echo form_error('points', '<span class="text-danger">', '</span>'); ?>
+						</div>
+					</div>
 
 					<div class="form-group">
 						<label for="input-validity" class="col-sm-3 control-label"><?php echo lang('label_validity'); ?></label>

@@ -19,6 +19,7 @@ $lang['text_custom'] 		            = 'custom';
 $lang['text_leading_zeros'] 		    = '.00';
 $lang['text_enabled']					= 'Enable';
 $lang['text_disabled']					= 'Disable';
+$lang['label_points']					= 'Points';
 
 $lang['column_name'] 		            = 'Name';
 $lang['column_min_range'] 		        = 'Minimum Range';

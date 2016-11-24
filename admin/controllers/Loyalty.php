@@ -70,6 +70,7 @@ class Loyalty extends Admin_Controller {
 		$data['sort_min_range'] 		= site_url('loyalty'.$url.'sort_by=min_range&order_by='.$order_by);
 		$data['sort_max_range'] 		= site_url('loyalty'.$url.'sort_by=max_range&order_by='.$order_by);
 		$data['sort_status'] 			= site_url('loyalty'.$url.'sort_by=status&order_by='.$order_by);
+		$data['sort_points']			= site_url('loyalty'.$url.'sort_by=status&order_by='.$order_by);
 
 		$data['loyalties'] = array();
 		$results = $this->Loyalty_model->getList($filter);
@@ -80,6 +81,7 @@ class Loyalty extends Admin_Controller {
 				'name'			=> $result['name'],
 				'min_range'		=> $result['min_range'],
 				'max_range'		=> $result['max_range'],
+				'points'		=> $result['points'],
 				'status'		=> ($result['status'] === '1') ? $this->lang->line('text_enabled') : $this->lang->line('text_disabled'),
 				'edit' 			=> site_url('loyalty/edit?id=' . $result['loyalty_id'])
 			);
@@ -150,6 +152,7 @@ class Loyalty extends Admin_Controller {
 		$data['min_range'] 			= $loyalty_info['min_range'];
 		$data['max_range'] 			= $loyalty_info['max_range'];
 		$data['description'] 		= $loyalty_info['description'];
+		$data['points']				= $loyalty_info['points'];
 		$data['validity'] 			= $validity;
 		$data['fixed_date'] 		= (empty($loyalty_info['fixed_date']) OR $loyalty_info['fixed_date'] === '0000-00-00') ? '' : mdate('%d-%m-%Y', strtotime($loyalty_info['fixed_date']));
 		$data['fixed_from_time'] 	= (empty($loyalty_info['fixed_from_time']) OR $loyalty_info['fixed_from_time'] === '00:00:00') ? '' : mdate('%h:%i %a', strtotime($loyalty_info['fixed_from_time']));
@@ -178,6 +181,7 @@ class Loyalty extends Admin_Controller {
 	}
 	
 	public function _saveLoyalty() {																					//save loyalty method
+		print_r($this->input->post());
 		if ($this->validateForm() === TRUE) {
             
 			$save_type = ( ! is_numeric($this->input->get('id'))) ? $this->lang->line('text_added') : $this->lang->line('text_updated');

@@ -27,6 +27,7 @@ class Loyalty_model extends TI_Model {
 		if ( ! empty($filter['filter_search'])) {
 			$this->db->like('name', $filter['filter_search']);
 			$this->db->or_like('min_range', $filter['filter_search']);
+			$this->db->or_like('points', $filter['filter_search']);
 		}
 
 		if ( ! empty($filter['filter_search'])) {
@@ -58,6 +59,7 @@ class Loyalty_model extends TI_Model {
 				$this->db->like('name', $filter['filter_search']);
 				$this->db->or_like('min_range', $filter['filter_search']);
 				$this->db->or_like('max_range', $filter['filter_search']);
+				$this->db->or_like('points', $filter['filter_search']);
 			}
 
 			if (isset($filter['filter_status']) AND is_numeric($filter['filter_status'])) {
@@ -114,6 +116,10 @@ class Loyalty_model extends TI_Model {
 		
 		if (isset($new_Loyalty['max_range'])) {
 			$this->db->set('max_range',$new_Loyalty['max_range']);
+		}
+		
+		if (isset($new_Loyalty['points'])) {
+			$this->db->set('points',$new_Loyalty['points']);
 		}
 		
 		if (isset($new_Loyalty['description'])) {
