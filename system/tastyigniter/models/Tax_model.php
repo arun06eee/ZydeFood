@@ -51,11 +51,7 @@ class tax_model extends TI_Model {
 	public function Save_Tax($tax_id, $new_Tax) {
 
 		if(empty ($new_Tax)) return FALSE;
-		
-		if (isset($new_Tax['id'])) {
-			$this->db->set('id', $new_Tax['id']);
-		}
-		
+
 		if (isset($new_Tax['name'])) {
 			$this->db->set('name', $new_Tax['name']);
 		}
@@ -63,6 +59,11 @@ class tax_model extends TI_Model {
 		if (isset($new_Tax['percentage'])) {
 			$this->db->set('percentage',$new_Tax['percentage']);
 		}
+		
+		if (isset($new_Tax['status'])) {
+			$this->db->set('status',$new_Tax['status']);
+		}
+
 		if (is_numeric($tax_id)) {
 			$this->db->where('id', $tax_id);
 			$query = $this->db->update('tax');
@@ -73,7 +74,7 @@ class tax_model extends TI_Model {
 		return $tax_id;
 	}
 	
-	public function deleteLoyaltyPrice($tax_id) {
+	public function deleteTax($tax_id) {
 
 		if (is_numeric($tax_id)) $tax_id = array($tax_id);
 

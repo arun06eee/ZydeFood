@@ -20,9 +20,10 @@ class tax extends Admin_Controller {
 
 		$this->template->setTitle($this->lang->line('text_title'));
 		$this->template->setHeading($this->lang->line('text_heading'));
+		$this->template->setButton($this->lang->line('button_new'), array('class' => 'btn btn-primary', 'href' => page_url() .'/edit'));
 		$this->template->setButton($this->lang->line('button_delete'), array('class' => 'btn btn-danger', 'onclick' => 'confirmDelete();'));
 		
-		if ($this->input->post('delete') AND $this->_deleteLoyaltyPrice() === TRUE) {
+		if ($this->input->post('delete') AND $this->_deleteTax() === TRUE) {
 			redirect('tax');
 		}
 
@@ -34,7 +35,7 @@ class tax extends Admin_Controller {
 				'id'				=> $result['id'],
 				'name'				=> $result['name'],
 				'percentage'		=> $result['percentage'],
-				'status'			=> $result['status'],
+				'status'			=> ($result['status'] === '1') ? $this->lang->line('text_enabled') : $this->lang->line('text_disabled'),
 				'edit' 				=> site_url('tax/edit?id=' . $result['id'])
 			);
 		}
@@ -84,7 +85,7 @@ class tax extends Admin_Controller {
 		}
 		
 		$data['id'] 				= $tax_info['id'];
-		$data['name'] 				= $tax_info['Name'];
+		$data['name'] 				= $tax_info['name'];
 		$data['percentage'] 		= $tax_info['percentage'];
 		$data['status'] 			= $tax_info['status'];
 		
@@ -98,7 +99,7 @@ class tax extends Admin_Controller {
 			$save_type = ( ! is_numeric($this->input->get('id'))) ? $this->lang->line('text_added') : $this->lang->line('text_updated');
 
 			if ($new_Tax = $this->Tax_model->Save_Tax($this->input->get('id'), $this->input->post())) {
-                $this->alert->set('success', sprintf($this->lang->line('alert_success'), 'tax'.$save_type));
+                $this->alert->set('success', sprintf($this->lang->line('alert_success'), 'tax '.$save_type));
             } else {
 			  redirect('tax');
             }
