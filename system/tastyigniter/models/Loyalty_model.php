@@ -195,7 +195,7 @@ class Loyalty_model extends TI_Model {
 	}
 	
 	public function deleteLoyalty($loyalty_id) {
-		print_r("hi");
+
 		if (is_numeric($loyalty_id)) $loyalty_id = array($loyalty_id);
 
 		if ( ! empty($loyalty_id) AND ctype_digit(implode('', $loyalty_id))) {

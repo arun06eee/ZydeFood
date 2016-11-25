@@ -181,7 +181,6 @@ class Loyalty extends Admin_Controller {
 	}
 	
 	public function _saveLoyalty() {																					//save loyalty method
-		print_r($this->input->post());
 		if ($this->validateForm() === TRUE) {
             
 			$save_type = ( ! is_numeric($this->input->get('id'))) ? $this->lang->line('text_added') : $this->lang->line('text_updated');
