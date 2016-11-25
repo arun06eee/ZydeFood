@@ -97,6 +97,7 @@ $lang['menu_country'] 		                = 'Countries';
 $lang['menu_security_question'] 		    = 'Security Questions';
 $lang['menu_rating'] 		                = 'Ratings';
 $lang['menu_status'] 		                = 'Statuses';
+$lang['menu_tax']							= 'Tax';
 $lang['menu_mealtimes'] 		            = 'Mealtimes';
 $lang['menu_extension'] 		            = 'Extensions';
 $lang['menu_module'] 		                = 'Modules';

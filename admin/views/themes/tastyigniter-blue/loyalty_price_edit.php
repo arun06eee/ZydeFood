@@ -11,14 +11,6 @@
 			<div class="tab-content">
 				<div id="general" class="tab-pane row wrap-all active">
 					<div class="form-group">
-						<label for="input-max_range" class="col-sm-3 control-label"><?php echo lang('text_id'); ?></label>
-						<div class="col-sm-5">
-							<input type="text" name="loyalty_price_id" id="input-max_range" class="form-control" value="<?php echo set_value('id', $id); ?>" />
-							<?php echo form_error('id', '<span class="text-danger">', '</span>'); ?>
-						</div>
-					</div>
-
-					<div class="form-group">
 						<label for="input-name" class="col-sm-3 control-label"><?php echo lang('label_name'); ?></label>
 						<div class="col-sm-5">
 							<input type="text" name="name" id="input-name" class="form-control" value="<?php echo set_value('name', $name); ?>" />

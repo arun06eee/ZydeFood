@@ -44,6 +44,15 @@ $theme['nav_menu'] = array(
 			'loyalty_price' => array('class' => 'loyalty_price', 'href' => site_url('loyalty_price'), 'title' => lang('menu_loyalty_price'), 'permission' => 'Admin.Loyalty_price'),
 		)
 	),
+	
+	'tax' => array(
+		'class' => 'tax',
+		'href'  => site_url('tax'),
+		'icon' 	=> 'fa fa-legal',
+		'title' => lang('menu_tax'),
+		'permission' => 'Admin.Tax',
+	),
+	
 	'marketing' => array(
 		'class' => 'marketing',
 		'icon' => 'fa-line-chart',

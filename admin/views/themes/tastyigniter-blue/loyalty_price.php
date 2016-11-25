@@ -9,7 +9,6 @@
 						<thead>
 							<tr>
 								<th class="action"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
-								<th><a class="sort" href="<?php echo $sort_id; ?>"><?php echo lang('text_id'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'id') ? $order_by_active : $order_by; ?>"></i></a></th>
 								<th><a class="sort" href="<?php echo $sort_name; ?>"><?php echo lang('label_name'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'name') ? $order_by_active : $order_by; ?>"></i></a></th>
 								<th><a class="sort" href="<?php echo $sort_discount; ?>"><?php echo lang('column_discount'); ?><i class="fa fa-sort-<?php echo ($sort_by == 'discount') ? $order_by_active : $order_by; ?>"></i></a></th>
 							</tr>
@@ -20,7 +19,6 @@
 							<tr>
 								<td class="action"><input type="checkbox" value="<?php echo $loyalty_price['id']; ?>" name="delete[]" />&nbsp;&nbsp;&nbsp;
 									<a class="btn btn-edit" title="<?php echo lang('text_edit'); ?>" href="<?php echo $loyalty_price['edit']; ?>"><i class="fa fa-pencil"></i></a></td>
-								<td><?php echo $loyalty_price['id']; ?></td>
 								<td><?php echo $loyalty_price['name']; ?></td>
 								<td><?php echo $loyalty_price['discount']; ?></td>
 							</tr>
