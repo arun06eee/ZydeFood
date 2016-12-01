@@ -153,33 +153,31 @@ class TI_Cart extends CI_Cart {
 	 *
 	 * @return float
 	 */
-	public function calculate_tax() {
+	public function calculate_tax($gettax, $gettaxTotal) {
 		$this->_cart_totals['taxes'] = array();
 
 		// Calculate taxes if enabled
-		if ($this->CI->config->item('tax_mode') === '1' AND $this->CI->config->item('tax_percentage')) {
-			$tax_percent = $this->CI->config->item('tax_percentage') ? $this->CI->config->item('tax_percentage') : 0;
+		//if ($this->CI->config->item('tax_mode') === '1' AND $this->CI->config->item('tax_percentage')) {
+			
+			$tax_percent = $gettaxTotal ? $gettaxTotal : 0;
 
 			$total = $this->_cart_contents['order_total'];
 
 			// Remove delivery charge from total if its not taxable
-			if (isset($this->_cart_totals['delivery']['amount']) AND $this->CI->config->item('tax_delivery_charge') !== '1') {
+			if (isset($this->_cart_totals['delivery']['amount'])) {
 				$total -= $this->_cart_totals['delivery']['amount'];
 			}
 
 			// If apply taxes on menu price, else
-			if ($this->CI->config->item('tax_menu_price') === '1') {
-				$tax_title = ' (' . $tax_percent . '%)';
-				$ignore = 'add';
-
+			if (! empty ($gettax)) {
+				foreach ($gettax as $gettaxes){
+					$tax_title .= ' (' . $gettaxes['name'] .'- '.$gettaxes['percentage']. '% included)';
+					$ignore = 'add';					
+				}
+				$overtotal = $total + $this->_cart_totals['delivery']['amount'];
 				// calculate tax amount based on percentage
-				$tax_amount = ($tax_percent / 100 * $total);
-			} else {
-				$tax_title = ' (' . $tax_percent . '% included)';
-				$ignore = 'ignore';
-
-				// calculate tax amount based on percentage
-				$tax_amount = $total - ($total / (1 + $tax_percent / 100));
+				//$tax_amount = $total - ($total / (1 + $tax_percent / 100));
+				$tax_amount = ($overtotal * ($tax_percent / 100));
 			}
 
 			$this->_cart_totals['taxes']['priority'] = '3';
@@ -189,7 +187,7 @@ class TI_Cart extends CI_Cart {
 			$this->_cart_totals['taxes']['percent'] = $tax_percent;
 
 			$this->_save_cart();
-		}
+		//}
 
 		return $this->_cart_totals['taxes'];
 	}
@@ -355,6 +353,7 @@ class TI_Cart extends CI_Cart {
 		$cart_totals = $this->_cart_totals;
 		$cart_totals['cart_total']['amount'] = $this->total();
 		$cart_totals['order_total']['amount'] = $this->order_total();
+		$cart_totals['taxs']['amount'] = $this->calculate_tax($gettax, $gettaxTotal);
 
 		return $cart_totals;
 	}
@@ -480,10 +479,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	public function tax_array() {
+	/* public function tax_array() {
 		return !empty($this->_cart_totals['taxes']) ? $this->_cart_totals['taxes'] : array();
 	}
-
+ */
 	// --------------------------------------------------------------------
 
 	/**
@@ -494,10 +493,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	public function tax_title() {
+	/* public function tax_title() {
 		$taxes = $this->tax_array();
 		return !empty($taxes['title']) ? $taxes['title'] : NULL;
-	}
+	} */
 
 	// --------------------------------------------------------------------
 
@@ -509,10 +508,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	public function tax_percent() {
+	/* public function tax_percent() {
 		$taxes = $this->tax_array();
 		return !empty($taxes['percent']) ? $taxes['percent'] : NULL;
-	}
+	} */
 
 	// --------------------------------------------------------------------
 
@@ -524,10 +523,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	public function tax_amount() {
+/* 	public function tax_amount() {
 		$taxes = $this->tax_array();
 		return !empty($taxes['amount']) ? $taxes['amount'] : NULL;
-	}
+	} */
 
 	// --------------------------------------------------------------------
 
