@@ -16,6 +16,7 @@
 	border-radius: 50px;
 	padding: 0 20px;
 	background-color: rgba(0, 0, 0, 0.8);
+	height: 53px;
 }
 
 .main-search-form-wrapper input{

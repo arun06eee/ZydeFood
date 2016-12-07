@@ -6,6 +6,34 @@
         <description>Restaurant news, articles and information.</description>
         
                 <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.feedburner.com/Tastyigniter" /><feedburner:info uri="tastyigniter" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><item>
+            <title>5 Signposts For A Successful Restaurant</title>
+            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/5God__rGweQ/5-signposts-successful-restaurant</link>
+            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/12/5-signposts-successful-restaurant</guid>
+            <pubDate>Mon, 05 Dec 2016 10:30:00 +0000</pubDate>
+            <description>&lt;p&gt;&lt;img src="https://tastyigniter.com/storage/app/uploads/public/583/6eb/c345836ebc347b0b395374904-680.jpg" alt="" width="680" height="" /&gt;&lt;/p&gt;
+                                We’ve seen a lot of restaurants come and go during our time supporting this industry. Some become successful overnight and others make a good start, then dwindle until they disappear and fall by the wayside, entirely. 
+
+Something that we’ve noted is that the ones that are successful have a handful...&lt;a href="https://tastyigniter.com/blog/2016/12/5-signposts-successful-restaurant"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/5God__rGweQ" height="1" width="1" alt=""/&gt;</description>
+        <feedburner:origLink>https://tastyigniter.com/blog/2016/12/5-signposts-successful-restaurant</feedburner:origLink></item>
+                <item>
+            <title>How to Keep Your Restaurant Running Costs Under Control</title>
+            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/Ovafj0DKu68/how-keep-your-restaurant-running-costs-under-control</link>
+            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/12/how-keep-your-restaurant-running-costs-under-control</guid>
+            <pubDate>Thu, 01 Dec 2016 08:30:00 +0000</pubDate>
+            <description>&lt;p&gt;&lt;img src="https://tastyigniter.com/storage/app/uploads/public/583/6ea/5eb5836ea5eb97a7532985271-680.jpg" alt="" width="680" height="" /&gt;&lt;/p&gt;
+                                Controlling and managing restaurant running costs must be an essential fundamental practice for any successful restaurant owner. It’s key that staff know how to combine effective menu planning and sales forecasts to ensure that there isn’t overspend whilst producing the best quality dishes and servi...&lt;a href="https://tastyigniter.com/blog/2016/12/how-keep-your-restaurant-running-costs-under-control"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/Ovafj0DKu68" height="1" width="1" alt=""/&gt;</description>
+        <feedburner:origLink>https://tastyigniter.com/blog/2016/12/how-keep-your-restaurant-running-costs-under-control</feedburner:origLink></item>
+                <item>
+            <title>7 Restaurants to Follow on Instagram</title>
+            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/pgiqlk9rC4c/7-restaurants-follow-instagram</link>
+            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/11/7-restaurants-follow-instagram</guid>
+            <pubDate>Tue, 29 Nov 2016 14:30:00 +0000</pubDate>
+            <description>&lt;p&gt;&lt;img src="https://tastyigniter.com/storage/app/uploads/public/583/6e7/80d5836e780d8501606259867-680.jpg" alt="" width="680" height="" /&gt;&lt;/p&gt;
+                                Instragram has really helped restaurants get noticed on social media. In particular those who have earned themselves a #FoodPorn tag. 
+
+If you want to get on the bandwagon, then we’ve collected the top 7 restaurants on Instagran so that you can see how they entertain and capture the attention of t...&lt;a href="https://tastyigniter.com/blog/2016/11/7-restaurants-follow-instagram"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/pgiqlk9rC4c" height="1" width="1" alt=""/&gt;</description>
+        <feedburner:origLink>https://tastyigniter.com/blog/2016/11/7-restaurants-follow-instagram</feedburner:origLink></item>
+                <item>
             <title>Why Putting Online Restaurant Booking on Your Website Will Improve It</title>
             <link>http://feedproxy.google.com/~r/Tastyigniter/~3/5vctXfCsF5g/why-putting-online-restaurant-booking-your-website-will-improve-it</link>
             <guid isPermaLink="false">https://tastyigniter.com/blog/2016/11/why-putting-online-restaurant-booking-your-website-will-improve-it</guid>
@@ -451,30 +479,5 @@ Initial TI setup now automati...&lt;a href="https://tastyigniter.com/blog/2016/0
                                 Any restaurant needs an online presence these days, whether that’s for web-based bookings or to allow customers to order in.
 If you’re interested in the latter aspect of restaurateuring, you’ll be part of a growing trend. Last year, the Telegraph reported that our appetite for having food delivered...&lt;a href="https://tastyigniter.com/blog/2016/02/are-you-making-most-your-online-restaurant"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/e_pi6fMinG4" height="1" width="1" alt=""/&gt;</description>
         <feedburner:origLink>https://tastyigniter.com/blog/2016/02/are-you-making-most-your-online-restaurant</feedburner:origLink></item>
-                <item>
-            <title>A meritocratic governance model for TastyIgniter development</title>
-            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/JykPCtPl6J4/meritocratic-governance-model</link>
-            <guid isPermaLink="false">https://tastyigniter.com/blog/2015/12/meritocratic-governance-model</guid>
-            <pubDate>Fri, 04 Dec 2015 12:58:00 +0000</pubDate>
-            <description>Using a clear, documented consensus-based governance process is a vital component for community driven development. Incorporating the organisational structures illustrated below will help ensure the TastyIgniter Project stays dynamic and vibrant throughout the project cycle.
-Objectives
-The main ob...&lt;a href="https://tastyigniter.com/blog/2015/12/meritocratic-governance-model"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/JykPCtPl6J4" height="1" width="1" alt=""/&gt;</description>
-        <feedburner:origLink>https://tastyigniter.com/blog/2015/12/meritocratic-governance-model</feedburner:origLink></item>
-                <item>
-            <title>TastyIgniter: An Open Source Platform to Manage a Restaurant</title>
-            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/kh7XcdWxS3E/tastyigniter-open-source</link>
-            <guid isPermaLink="false">https://tastyigniter.com/blog/2015/10/tastyigniter-open-source</guid>
-            <pubDate>Mon, 26 Oct 2015 02:57:00 +0000</pubDate>
-            <description>From: TechCabal
-By: David Adeleke
-Say you own a restaurant and you are ready to expand the reach of your services. You are thinking about incorporating online table reservations and ordering into your services but you have no idea what it entails. You like the idea but you don’t know how to code a...&lt;a href="https://tastyigniter.com/blog/2015/10/tastyigniter-open-source"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/kh7XcdWxS3E" height="1" width="1" alt=""/&gt;</description>
-        <feedburner:origLink>https://tastyigniter.com/blog/2015/10/tastyigniter-open-source</feedburner:origLink></item>
-                <item>
-            <title>Introducing TastyIgniter</title>
-            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/X_hmEK567fA/introducing-tastyigniter</link>
-            <guid isPermaLink="false">https://tastyigniter.com/blog/2015/06/introducing-tastyigniter</guid>
-            <pubDate>Fri, 26 Jun 2015 08:05:00 +0000</pubDate>
-            <description>An open source restaurant ordering, reservations and management system for your business.&lt;a href="https://tastyigniter.com/blog/2015/06/introducing-tastyigniter"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/X_hmEK567fA" height="1" width="1" alt=""/&gt;</description>
-        <feedburner:origLink>https://tastyigniter.com/blog/2015/06/introducing-tastyigniter</feedburner:origLink></item>
             </channel>
 </rss>

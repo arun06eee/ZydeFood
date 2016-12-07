@@ -1,6 +1,51 @@
+<style>
+	#main-header {
+		position: fixed;
+		z-index: 100;
+		background:  transparent;
+		width: 100%;
+	}
+
+	#main-header .navbar-collapse {
+		background:  transparent;
+	}
+  
+	.introLoading {
+		background-color: #fff;
+	}  
+
+	.introLoader, .introLoading {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		overflow: hidden;
+		z-index: 9999;
+	}
+
+	.theme-dark.bubble.gifLoader .gifLoaderInner {
+		background-image: url('../images/circle-bub_dark.gif');
+		background-color: #333333;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+  
+	.introLoader.gifLoader .gifLoaderInner, .introLoader.gifLoader .gifLoaderInnerCustom {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+</style>
+
+<div id="introLoader" class="introLoading introLoader gifLoader theme-dark bubble" >
+  <div id="introLoaderSpinner" class="gifLoaderInner" style=""></div>
+</div>
+
 <?php echo get_header(); ?>
 <?php echo get_partial('content_top'); ?>
-
 <?php if ($this->alert->get()) { ?>
     <div id="notification">
         <div class="container">
@@ -60,3 +105,31 @@
 	</div>
 </div>
 <?php echo get_footer(); ?>
+
+<script>
+
+(function ($) {
+
+
+	"use strict";
+
+
+	/**
+	 * introLoader - Preloader
+	 */
+	$("#introLoader").introLoader({
+		animation: {
+			name: 'gifLoader',
+			options: {
+				style: 'dark bubble',
+				delayBefore: 500,
+				delayAfter: 0,
+				exitTime: 300
+			}
+		}
+	});
+
+
+})(jQuery);
+
+</script>
