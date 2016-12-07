@@ -208,6 +208,32 @@ class Cart_module extends Main_Controller {
         $this->output->set_output(json_encode($json));											// encode the json array and set final out to be sent to jQuery AJAX
     }
 
+	public function loyaltyPoints() {
+		$json = array();
+		
+		if (!$json AND $this->cart->contents() AND is_string($this->input->post('points'))) {
+			switch ($this->input->post('action')) {
+				case 'remove':
+					$this->cart->remove_points($this->input->post('points'));
+					$json['success'] = $this->lang->line('alert_points_removed');
+					break;
+
+				case 'add';
+					if(($response = $this->cart_module_lib->validateLoyaltyPoints($this->input->post('points'))) === TRUE) {
+						$json['success'] = $this->lang->line('alert_points_applied');
+					}else{
+						$json['error'] = $response;
+					}
+					break;
+				default;
+					$json['redirect'] = referrer_url();
+					break;
+			}
+		}
+
+		$this->output->set_output(json_encode($json));
+	}
+
 	public function remove() {																	// remove() method to update cart
         $json = array();
 
@@ -308,6 +334,7 @@ class Cart_module extends Main_Controller {
 						'name' 				=> (strlen($cart_item['name']) > 25) ? strtolower(substr($cart_item['name'], 0, 25)) .'...' : strtolower($cart_item['name']),
 						//add currency symbol and format item price to two decimal places
 						'price' 			=> $this->currency->format($cart_item['price']),
+						'tax'				=> 15,
 						'qty' 				=> $cart_item['qty'],
 						'image' 			=> $cart_image,
 						//add currency symbol and format item subtotal to two decimal places
@@ -330,13 +357,15 @@ class Cart_module extends Main_Controller {
 				$this->alert->set('custom', $response, 'cart_module');
 			}
 
+			if (($response = $this->cart_module_lib->validateTaxesCharge($this->cart->total())) !== TRUE) {
+				$this->alert->set('custom', $response, 'cart_module');
+			}
+
 			if (($response = $this->cart_module_lib->validateCoupon($this->cart->coupon_code())) !== TRUE) {
 				$this->alert->set('custom', $response, 'cart_module');
 			}
 
             Events::trigger('cart_module_before_cart_totals');
-
-            $this->cart->calculate_tax();
 
             $data['cart_totals'] = $this->cart_module_lib->cartTotals();
 		}

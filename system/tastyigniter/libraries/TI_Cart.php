@@ -125,7 +125,51 @@ class TI_Cart extends CI_Cart {
 
 		return $save_cart;
 	}
+	
+		// --------------------------------------------------------------------
 
+	/**
+	 * Add Loyalty points *** SMART MENU
+	 *
+	 * This function permits calculates the loyalty points from loyalty.
+	 *
+	 * @access    private
+	 * @param array $points
+	 * @return bool
+	 */
+	public function add_loyaltyPoints($loyaltypoints = array()) {
+		$save_cart = FALSE;
+
+		if (!empty ($loyaltypoints)) {
+			$loyaltypoints['amount'] = ($loyaltypoints['priceRate'] * $loyaltypoints['applied_points']);
+		}
+		
+		if ($loyaltypoints['amount'] > 0) {
+			$this->_cart_totals['loyalty']['priority'] = '6';
+			$this->_cart_totals['loyalty']['amount'] = $loyaltypoints['amount'];
+			$this->_cart_totals['loyalty']['action'] = '';
+			$this->_cart_totals['loyalty']['points'] = $loyaltypoints['applied_points'];
+			$save_cart = TRUE;
+		}
+
+		if ($save_cart === TRUE) {
+			$this->_save_cart();
+		}
+
+		return $save_cart;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function remove_points($points = '') {
+		$loyalty = $this->loyaltypoints();
+
+		if ($points !== '') {
+			unset($this->_cart_totals['loyalty']);
+			$this->_save_cart();
+		}
+	}
+	
 	// --------------------------------------------------------------------
 
 	/**
@@ -335,6 +379,7 @@ class TI_Cart extends CI_Cart {
 		if (isset($cart['delivery'])) unset($cart['delivery']);
 		if (isset($cart['coupon'])) unset($cart['coupon']);
 		if (isset($cart['taxes'])) unset($cart['taxes']);
+		if (isset($cart['loyalty'])) unset($cart['loyalty']);
 
 		return $cart;
 	}
@@ -353,6 +398,7 @@ class TI_Cart extends CI_Cart {
 		$cart_totals = $this->_cart_totals;
 		$cart_totals['cart_total']['amount'] = $this->total();
 		$cart_totals['order_total']['amount'] = $this->order_total();
+		$cart_totals['net_total']['amount'] = $this->net_total();
 		$cart_totals['taxs']['amount'] = $this->calculate_tax($gettax, $gettaxTotal);
 
 		return $cart_totals;
@@ -412,7 +458,11 @@ class TI_Cart extends CI_Cart {
 	public function order_total() {
 		return $this->_cart_contents['order_total'];
 	}
-
+	
+	public function net_total() {
+		$net_total = ($this->_cart_contents['order_total']) - ($this->_cart_contents['totals']['loyalty']['amount']);
+		return $net_total;
+	}
 	// --------------------------------------------------------------------
 
 	/**
@@ -427,6 +477,26 @@ class TI_Cart extends CI_Cart {
 		return isset($this->_cart_totals['delivery']['amount']) ? $this->_cart_totals['delivery']['amount'] : 0;
 	}
 
+	// --------------------------------------------------------------------
+
+	public function loyaltypoints() {
+		return !empty($this->_cart_totals['loyalty']) ? $this->_cart_totals['loyalty'] : array();
+	}
+	
+	// --------------------------------------------------------------------
+	
+	public function loyalty_points() {
+		$loyalty = $this->loyaltypoints();
+		return !empty($loyalty['points']) ? $loyalty['points'] : NULL;
+	}
+	
+	// --------------------------------------------------------------------
+	
+	public function loyalty_amount() {
+		$loyalty = $this->loyaltypoints();
+		return !empty($loyalty['amount']) ? $loyalty['amount'] : NULL;
+	}
+	
 	// --------------------------------------------------------------------
 
 	/**

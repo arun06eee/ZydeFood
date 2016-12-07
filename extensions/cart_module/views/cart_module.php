@@ -55,7 +55,7 @@
                         <div class="cart-items">
                             <ul>
                                 <?php foreach ($cart_items as $cart_item) { ?>
-                                    <li>
+								    <li>
                                         <a class="cart-btn remove text-muted small" onClick="removeCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '0');"><i class="fa fa-minus-circle"></i></a>
                                         <a class="name-image" onClick="openMenuOptions('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>');">
                                             <?php if (!empty($cart_item['image'])) { ?>
@@ -86,6 +86,13 @@
                                 <span class="input-group-btn"><a class="btn btn-default" onclick="applyCoupon();" title="<?php echo lang('button_apply_coupon'); ?>"><i class="fa fa-check"></i></a></span>
                             </div>
                         </div>
+						
+						<div class="loyaltypoint">
+							<div class="input-group">
+								<input type="text" name="loyalty_points" class="form-control" value="<?php echo isset($loyalty['points']) ? $loyalty['points'] : ''; ?>" placeholder="<?php echo lang('text_use_points'); ?>" />
+								<span class="input-group-btn"><a class="btn btn-default" onclick="applyLoyaltyPoints()" title="<?php echo lang('button_apply_points'); ?>"><i class="fa fa-check"></i></a></span>
+							</div>
+						</div>
 
                         <div class="cart-total">
                             <div class="table-responsive">
@@ -95,21 +102,24 @@
                                             <?php if (!empty($total)) { ?>
                                                 <tr>
                                                     <td><span class="text-muted">
-                                                        <?php if ($name === 'order_total') { ?>
+                                                        <?php if ($name === 'net_total') { ?>
                                                             <b><?php echo $total['title']; ?>:</b>
                                                         <?php } else if ($name === 'coupon' AND isset($total['code'])) { ?>
                                                             <?php echo $total['title']; ?>:&nbsp;&nbsp;
                                                             <a class="remove clickable" onclick="clearCoupon('<?php echo $total['code']; ?>');"><span class="fa fa-times"></span></a>
-                                                        <?php } else { ?>
+                                                        <?php } else if($name === 'loyalty' AND isset($total['points'])) { ?>
+															<?php echo $total['title'];?>:&nbsp;&nbsp;
+															<a class="remove clickable" onclick="clearpoints('<?php echo $total['points']; ?>');"><span class="fa fa-times"></span></a>
+														<?php } else { ?>
                                                             <?php echo $total['title']; ?>:
                                                         <?php } ?>
                                                     </span></td>
-                                                    <td class="text-right">
-                                                        <?php if ($name === 'coupon') { ?>
+													<td class="text-right">
+                                                        <?php if ($name === 'coupon' OR $name === 'loyalty') { ?>
                                                             -<?php echo $total['amount']; ?>
-                                                        <?php } else if ($name === 'order_total') { ?>
+                                                        <?php } else if ($name === 'net_total') { ?>
                                                             <b><span class="order-total"><?php echo $total['amount']; ?></span></b>
-                                                        <?php } else { ?>
+													   <?php } else { ?>
                                                             <?php echo $total['amount']; ?>
                                                         <?php } ?>
                                                     </td>
@@ -155,7 +165,7 @@
     var cartHeight = pageHeight-(65/100*pageHeight);
 
     $(document).on('ready', function() {
-        $('.cart-alert-wrap .alert').fadeTo('slow', 0.1).fadeTo('slow', 1.0).delay(5000).slideUp('slow');
+		$('.cart-alert-wrap .alert').fadeTo('slow', 0.1).fadeTo('slow', 1.0).delay(5000).slideUp('slow');
         $('#cart-info .cart-items').css({"height" : "auto", "max-height" : cartHeight, "overflow" : "auto", "margin-right" : "-15px", "padding-right" : "5px"});
 
         $(window).bind("load resize", function() {
@@ -265,6 +275,33 @@
         });
     }
 
+    function applyLoyaltyPoints() {
+        var loyalty_points = $('#cart-box input[name="loyalty_points"]').val();
+   	    $.ajax({
+            url: js_site_url('cart_module/cart_module/loyaltyPoints'),
+            type: 'post',
+            data: 'action=add&points=' + loyalty_points,
+            dataType: 'json',
+            success: function(json) {
+                updateCartBox(json)
+            }
+        }); 
+    }
+
+	function clearpoints(loyalty_points) {
+        $('input[name=\'loyalty_points\']').attr('value', '');
+
+        $.ajax({
+            url: js_site_url('cart_module/cart_module/loyaltyPoints'),
+            type: 'post',
+            data: 'action=remove&points=' + loyalty_points,
+            dataType: 'json',
+            success: function(json) {
+                updateCartBox(json)
+            }
+        });
+    }
+	
     function applyCoupon() {
         var coupon_code = $('#cart-box input[name="coupon_code"]').val();
         $.ajax({
@@ -277,7 +314,7 @@
             }
         });
     }
-
+	
     function clearCoupon(coupon_code) {
         $('input[name=\'coupon\']').attr('value', '');
 
