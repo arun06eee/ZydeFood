@@ -56,8 +56,9 @@
                             <ul>
                                 <?php foreach ($cart_items as $cart_item) { ?>
 								    <li>
+                                        <a class="cart-btn remove text-muted small" onClick="addCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '0');"><i class="fa fa-plus-circle"></i></a>&nbsp;&nbsp;
                                         <a class="cart-btn remove text-muted small" onClick="removeCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '0');"><i class="fa fa-minus-circle"></i></a>
-                                        <a class="name-image" onClick="openMenuOptions('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>');">
+                                        <a class="name-image" onClick="openMenuOptions('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>');" style="float: left;" >
                                             <?php if (!empty($cart_item['image'])) { ?>
                                                 <img class="image img-responsive img-thumbnail" width="<?php echo $cart_images_w; ?>" height="<?php echo $cart_images_h; ?>" alt="<?php echo $cart_item['name']; ?>" src="<?php echo $cart_item['image']; ?>">
                                             <?php } ?>
@@ -69,7 +70,7 @@
                                                 <span class="options text-muted small"><?php echo $cart_item['options']; ?></span>
                                             <?php } ?>
                                         </a>
-                                        <p class="comment-amount">
+                                        <p class="comment-amount pull-right">
                                             <span class="amount pull-right"><?php echo $cart_item['sub_total']; ?></span>
                                             <?php if (!empty($cart_item['comment'])) { ?>
                                                 <span class="comment text-muted small">[<?php echo $cart_item['comment']; ?>]</span>

@@ -10,7 +10,7 @@
 								<?php echo $slide['caption']; ?>
 							</div>
 
-							<img src="<?php echo $slide['image_src']; ?>" style="width:100%" />
+							<img src="<?php echo $slide['image_src']; ?>" style="width:100%;height:95%;" />
 						</li>
 					<?php } ?>
 				<?php } ?>

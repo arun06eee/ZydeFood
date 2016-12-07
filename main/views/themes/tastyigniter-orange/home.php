@@ -1,15 +1,17 @@
 <style>
-	#main-header {
-		position: fixed;
-		z-index: 100;
-		background:  transparent;
-		width: 100%;
-	}
 
 	#main-header .navbar-collapse {
 		background:  transparent;
 	}
-  
+
+	#main-header, #main-header .navbar-collapse, .modal-header{
+		background-color:  transparent;
+	}
+
+	#main-header-menu-collapse {
+		background-color:  transparent !important;
+	}
+
 	.introLoading {
 		background-color: #fff;
 	}  
@@ -129,7 +131,16 @@
 		}
 	});
 
+$(window).on('scroll', function() { 
+	if( $('body').scrollTop() > 100 ){  
+		$("#main-header").css('background', 'black !important') 
+	}else {
+		$("#main-header").css('background', 'transparent !important'); 
+	}
+});
 
+$('body').scrollTop(10);
+  
 })(jQuery);
 
 </script>
