@@ -34,6 +34,11 @@
 	font-size: 20px;
 	cursor: pointer;
 }
+
+.main-search-form-wrapper input:focus{
+	border: none;
+    box-shadow: none;
+}
 </style>
 <div id="local-box" <?php echo ($location_search === TRUE) ? 'class="local-box-fluid"' : ''; ?>>
 	<div class="container">
