@@ -21,24 +21,30 @@ class Cart_module_lib {
     }
 
     public function cartTotals() {
-
         $result = array();
-
         $order_totals = $this->CI->Cart_model->getTotals();
         $cart_totals = $this->CI->cart->totals();
-        foreach ($cart_totals as $name => $cart_total) {
-            $order_total = ! empty($order_totals[$name]['status']) ? $order_totals[$name] : array('title' => '');
 
+		foreach ($cart_totals as $name => $cart_total) {
+
+            $order_total = ! empty($order_totals[$name]['status']) ? $order_totals[$name] : array('title' => '');
+ 
             if (empty($cart_total['amount']) OR empty($order_total['status'])) {
                 continue;
             }
 
             $cart_total['title'] = empty($cart_total['title']) ? $order_total['title'] : $cart_total['title'];
-
             if (isset($cart_total['code'])) {
                 $cart_total['title'] = str_replace('{coupon}', $cart_total['code'], $cart_total['title']);
-            } else if (isset($cart_total['tax'])) {
+            }
+
+			if (isset($cart_total['points'])) {
+				$cart_total['title'] = str_replace('{loyalty}', $cart_total['points'], $cart_total['title']);
+			}
+			
+			if ($name == 'taxes') {
                 $cart_total['title'] = str_replace('{tax}', $cart_total['tax'], $cart_total['title']);
+                $cart_total['amount'] = $cart_total['amount'];
             }
 
             $result[$name] = array_merge($cart_total, array(
@@ -47,7 +53,6 @@ class Cart_module_lib {
                 'priority' => isset($order_total['priority']) ? $order_total['priority'] : $cart_total['priority'],
             ));
         }
-
         return sort_array($result, 'priority');
     }
 
@@ -63,6 +68,15 @@ class Cart_module_lib {
         return TRUE;
     }
 
+	public function validateTaxesCharge($cart_total) {
+		$gettax  = $this->CI->Cart_model->Get_Taxes();
+		$gettaxTotal = $this->CI->Cart_model->Get_Tax_Total();		
+		$taxes_charge = $this->CI->cart->calculate_tax($gettax, $gettaxTotal);
+
+        return TRUE;
+    }
+
+	
     public function validateOrderType($order_type = '', $check_min_total = TRUE) {
         $order_type = empty($order_type) ? $this->CI->location->orderType() : $order_type;
         $cart_total = $this->CI->cart->total();
@@ -212,4 +226,30 @@ class Cart_module_lib {
 
         return $error;
     }
+
+	public function validateLoyaltyPoints($Loyalty_points = '') {
+        $error = '';
+		$loyaltypoints = $this->CI->Cart_model->checkLoyaltyPoints($this->CI->customer->getId());
+		$loyaltyPrice = $this->CI->Cart_model->getloyaltyPrice();
+
+		if (empty($Loyalty_points) OR !is_numeric($Loyalty_points)) {
+            $error = $this->CI->lang->line('alert_loyaltyPoints_invalid');						// display error message
+        } else if ($loyaltypoints['0']['current_points'] === NULL) {
+			$error = $this->CI->lang->line('alert_Points');								// display error message
+        } else if ($loyaltypoints['0']['current_points'] < $Loyalty_points) {
+			$error = $this->CI->lang->line('alert_high_points_applied');
+		}
+
+        if ($error === '') {
+                $this->CI->cart->add_loyaltyPoints(array('applied_points' => $Loyalty_points, 'total_points' => $loyaltypoints[0]['current_points'], 'priceRate' => $loyaltyPrice[0]['discount']));
+                return TRUE;
+        }
+
+        if (!empty($Loyalty_points)) {
+            $this->CI->cart->remove_points($Loyalty_points);
+        }
+
+        return $error;
+    }
+
 }

@@ -36,6 +36,7 @@ class Cart_model extends TI_Model {
     }
 
     public function getMenu($menu_id) {
+
         if (!empty($menu_id) AND is_numeric($menu_id)) {
             $this->db->select('menus.menu_id, menu_name, menu_description, menu_price, menu_photo, stock_qty, subtract_stock,
 				minimum_qty, special_status, special_price, menus.mealtime_id, mealtimes.mealtime_name, mealtimes.start_time, mealtimes.end_time, mealtime_status');
@@ -218,6 +219,33 @@ class Cart_model extends TI_Model {
 
         return $result;
     }
+	
+	public function checkLoyaltyPoints($customer_id) {
+		$this->db->select('current_points');
+		$this->db->where('customer_id', $customer_id);
+		$this->db->from('customers');
+		
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+		}
+
+		return $result;
+	}
+	
+	public function getloyaltyPrice() {
+		$this->db->select('discount');
+		$this->db->from('loyalty_price');
+		
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0){
+			$result = $query->result_array();
+		}
+		
+		return $result;
+	}
 
     public function checkCouponHistory($coupon_id) {
         if (!empty($coupon_id)) {
@@ -265,6 +293,37 @@ class Cart_model extends TI_Model {
 
         return $query;
     }
+	
+	public function Get_Taxes() {
+		$this->db->select('*');
+		$this->db->where('status','1');
+		$this->db->from('tax');
+
+		$query = $this->db->get();
+		$result = array();
+
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+		}
+
+		return $result;
+	}
+	
+	public function Get_Tax_Total() {
+		$taxtotal = 0;
+		
+		$this->db->select_sum('percentage');
+		$this->db->where('status','1');
+		$this->db->from('zyde_tax');
+
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0) {
+			$row = $query->row_array();
+			$taxtotal = $row['percentage'];
+		}
+		return $taxtotal;
+	}
 }
 
 /* End of file cart_model.php */
