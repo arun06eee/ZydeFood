@@ -11,6 +11,7 @@ $lang['text_no_cart_items'] 	            = '<p class="text-center">There are no 
 $lang['text_delivery'] 			            = 'Delivery';
 $lang['text_collection'] 		            = 'Pick-up';
 $lang['text_apply_coupon'] 		            = 'Enter coupon code';
+$lang['text_use_points'] 		            = 'Enter Loyalty points';
 $lang['text_sub_total'] 		            = 'Sub Total';
 $lang['text_coupon'] 			            = 'Coupon';
 $lang['text_order_total'] 		            = 'Order Total';
@@ -33,6 +34,8 @@ $lang['button_order'] 			            = 'Checkout';
 $lang['button_payment'] 			        = 'Payment';
 $lang['button_confirm'] 			        = 'Confirm';
 $lang['button_apply_coupon'] 			    = 'Apply Coupon';
+$lang['button_apply_points'] 			    = 'Apply Points';
+$lang['button_apply_loyalty_points'] 	    = 'Apply Points';
 $lang['button_view_cart'] 			        = 'Back to My Order';
 
 $lang['column_title'] 		                = 'Title';
@@ -75,6 +78,11 @@ $lang['alert_coupon_not_applied'] 	        = '<p class="alert-danger">Your coupo
 $lang['alert_coupon_maximum_reached'] 	    = '<p class="alert-danger">Maximum number of redemption for the coupon has been reached.</p>';
 $lang['alert_coupon_order_restriction'] 	= '<p class="alert-danger">Your coupon can ONLY be applied to <b>%s</b> orders</p>';
 $lang['alert_menu_not_within_mealtime'] 	= '<p class="alert-warning">%s is available for %s ONLY between (%s - %s)</p>';
+$lang['alert_loyaltyPoints_invalid'] 	    = '<p class="alert-danger">Please enter a valid points.</p>';
+$lang['alert_Points'] 	 				    = '<p class="alert-danger">NO points available.</p>';
+$lang['alert_high_points_applied'] 	 		= '<p class="alert-danger">You can not apply this much points.</p>';
+$lang['alert_points_removed'] 	            = '<p class="alert-success">Your points has been removed successfully.</p>';
+$lang['alert_points_applied'] 	            = '<p class="alert-success">Your points has been applied successfully.</p>';
 
 $lang['help_show_cart_images'] 			    = 'Show or hide cart menu images';
 $lang['help_cart_image_size'] 			    = '(Height x Width)';
