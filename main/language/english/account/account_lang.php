@@ -23,6 +23,7 @@ $lang['label_password'] 		        = 'Password:';
 $lang['label_telephone'] 		        = 'Telephone:';
 $lang['label_s_question'] 		        = 'Security Question:';
 $lang['label_s_answer'] 		        = 'Security Answer:';
+$lang['current_points'] 		        = 'Current Points:';
 
 $lang['column_cart_items'] 		        = 'Total Items';
 $lang['column_cart_total'] 		        = 'Total Amount';

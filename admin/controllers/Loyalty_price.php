@@ -96,7 +96,7 @@ class loyalty_price extends Admin_Controller {
 			$save_type = ( ! is_numeric($this->input->get('id'))) ? $this->lang->line('text_added') : $this->lang->line('text_updated');
 
 			if ($new_Loyalty = $this->Loyalty_price_model->Save_LoyaltyPrice($this->input->get('id'), $this->input->post())) {
-                $this->alert->set('success', sprintf($this->lang->line('alert_success'), 'loyaltyprice'.$save_type));
+                $this->alert->set('success', sprintf($this->lang->line('alert_success'), 'loyalty Price' .$save_type));
             } else {
 			  redirect('loyalty_price');
             }

@@ -75,6 +75,10 @@
 												<td><b><?php echo lang('label_s_answer'); ?></b></td>
 												<td><?php echo $customer_info['security_answer']; ?></td>
 											</tr>
+											<tr>
+												<td><b><?php echo lang('current_points'); ?></b></td>
+												<td><?php echo $customer_info['current_points']; ?></td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
