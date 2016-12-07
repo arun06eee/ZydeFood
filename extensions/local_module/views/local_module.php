@@ -1,3 +1,40 @@
+<style>
+#local-box {
+	background: transparent;
+}
+
+#local-box .panel-local {
+	background: transparent;
+	border: none;
+}
+.main-search-form-wrapper {
+	z-index: 5;
+	width: 55%;
+	margin: 0 auto;
+	position: relative;
+	border: 2px solid rgba(255, 255, 255, 0.9);
+	border-radius: 50px;
+	padding: 0 20px;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.main-search-form-wrapper input{
+	background: none;
+	color: #FFF;
+	border: 0;
+	border-radius: 0;
+	padding: 12px 0;
+	height: 50px;
+}
+.main-search-form-wrapper a{
+	top: 10px;
+	right: 0;
+	background: none;
+	color: rgba(255, 255, 255, 0.9);
+	font-size: 20px;
+	cursor: pointer;
+}
+</style>
 <div id="local-box" <?php echo ($location_search === TRUE) ? 'class="local-box-fluid"' : ''; ?>>
 	<div class="container">
 		<div class="row">
@@ -7,16 +44,16 @@
 						<div class="panel-body">
 							<h2><?php echo lang('text_order_summary'); ?></h2>
 							<span class="search-label sr-only"><?php echo lang('label_search_query'); ?></span>
-							<div class="col-xs-12 col-sm-6 col-md-5 center-block">
+							<div class="col-xs-12 col-sm-6 col-md-5 center-block main-search-form-wrapper">
 								<?php if ($location_search_mode === 'multi') { ?>
 									<form id="location-form" method="POST" action="<?php echo $local_action; ?>" role="form">
 										<div class="input-group postcode-group">
 											<input type="text" id="search-query" class="form-control text-center postcode-control input-lg" name="search_query" placeholder="<?php echo lang('label_search_query'); ?>" value="<?php echo $search_query; ?>">
-											<a id="search" class="input-group-addon btn btn-primary" onclick="searchLocal()"><?php echo lang('text_find'); ?></a>
+											<a id="search" class="input-group-addon" onclick="searchLocal()"><i class="fa fa-search"></i></a>
 										</div>
 									</form>
 								<?php } else { ?>
-									<a class="btn btn-block btn-primary" href="<?php echo $single_location_url; ?>"><?php echo lang('text_find'); ?></a>
+									<a class="btn" href="<?php echo $single_location_url; ?>"><i class="fa fa-search"></i></a>
 								<?php } ?>
 							</div>
 						</div>
