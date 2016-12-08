@@ -132,14 +132,14 @@
 	});
 
 $(window).on('scroll', function() { 
-	if( $('body').scrollTop() > 100 ){  
+	if( $('body').scrollTop() > 10 ){  
 		$("#main-header").css('background', 'black !important') 
 	}else {
 		$("#main-header").css('background', 'transparent !important'); 
 	}
 });
 
-$('body').scrollTop(10);
+$('body').scrollTop(0);
   
 })(jQuery);
 

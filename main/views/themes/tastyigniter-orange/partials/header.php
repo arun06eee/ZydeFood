@@ -91,7 +91,8 @@
 						<div class="collapse navbar-collapse" id="main-header-menu-collapse">
 							<ul class="nav navbar-nav navbar-right">
 								<?php if ($this->config->item('reservation_mode') === '1') { ?>
-									<li><a href="<?php echo site_url('reservation'); ?>"><?php echo lang('menu_reservation'); ?></a></li>
+<!--									<li><a href="<?php echo site_url('reservation'); ?>"><?php echo lang('menu_reservation'); ?></a></li> -->
+										<li><a href="<?php echo site_url('locations'); ?>"><?php echo lang('menu_menu'); ?></a></li>
 								<?php } ?>
 
 								<?php if ($this->customer->isLogged()) { ?>
