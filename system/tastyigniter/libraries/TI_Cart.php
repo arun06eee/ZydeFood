@@ -48,7 +48,7 @@ class TI_Cart extends CI_Cart {
 		if ($this->_cart_contents === NULL)
 		{
 			// No cart exists so we'll set some base values
-			$this->_cart_contents = array('cart_total' => 0, 'total_items' => 0, 'order_total' => 0, 'totals' => array());
+			$this->_cart_contents = array('cart_total' => 0, 'total_items' => 0, 'order_total' => 0, 'net_total' => 0, 'totals' => array());
 		}
 
 		$this->_cart_totals = isset($this->_cart_contents['totals']) ? $this->_cart_contents['totals'] : array();
@@ -199,9 +199,6 @@ class TI_Cart extends CI_Cart {
 	 */
 	public function calculate_tax($gettax, $gettaxTotal) {
 		$this->_cart_totals['taxes'] = array();
-
-		// Calculate taxes if enabled
-		//if ($this->CI->config->item('tax_mode') === '1' AND $this->CI->config->item('tax_percentage')) {
 			
 			$tax_percent = $gettaxTotal ? $gettaxTotal : 0;
 
@@ -231,7 +228,6 @@ class TI_Cart extends CI_Cart {
 			$this->_cart_totals['taxes']['percent'] = $tax_percent;
 
 			$this->_save_cart();
-		//}
 
 		return $this->_cart_totals['taxes'];
 	}
@@ -374,12 +370,15 @@ class TI_Cart extends CI_Cart {
 		unset($cart['cart_total']);
 		unset($cart['order_total']);
 		unset($cart['totals']);
+		unset($cart['taxes']);
+		unset($cart['loyalty']);
 
 		// Backward compatibility
 		if (isset($cart['delivery'])) unset($cart['delivery']);
 		if (isset($cart['coupon'])) unset($cart['coupon']);
 		if (isset($cart['taxes'])) unset($cart['taxes']);
 		if (isset($cart['loyalty'])) unset($cart['loyalty']);
+		if (isset($cart['net_total'])) unset($cart['net_total']);
 
 		return $cart;
 	}
@@ -399,7 +398,7 @@ class TI_Cart extends CI_Cart {
 		$cart_totals['cart_total']['amount'] = $this->total();
 		$cart_totals['order_total']['amount'] = $this->order_total();
 		$cart_totals['net_total']['amount'] = $this->net_total();
-		$cart_totals['taxs']['amount'] = $this->calculate_tax($gettax, $gettaxTotal);
+		$cart_totals['taxs']['amount'] = $this->tax_array();
 
 		return $cart_totals;
 	}
@@ -460,8 +459,7 @@ class TI_Cart extends CI_Cart {
 	}
 	
 	public function net_total() {
-		$net_total = ($this->_cart_contents['order_total']) - ($this->_cart_contents['totals']['loyalty']['amount']);
-		return $net_total;
+		return ($this->_cart_contents['order_total']) - ($this->_cart_contents['totals']['loyalty']['amount']);
 	}
 	// --------------------------------------------------------------------
 
@@ -549,10 +547,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	/* public function tax_array() {
+	public function tax_array() {
 		return !empty($this->_cart_totals['taxes']) ? $this->_cart_totals['taxes'] : array();
 	}
- */
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -563,10 +561,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	/* public function tax_title() {
+	public function tax_title() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['title']) ? $taxes['title'] : NULL;
-	} */
+		return !empty($taxes['tax']) ? $taxes['tax'] : NULL;
+	}
 
 	// --------------------------------------------------------------------
 
@@ -578,10 +576,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-	/* public function tax_percent() {
+	public function tax_percent() {
 		$taxes = $this->tax_array();
 		return !empty($taxes['percent']) ? $taxes['percent'] : NULL;
-	} */
+	}
 
 	// --------------------------------------------------------------------
 
@@ -593,10 +591,10 @@ class TI_Cart extends CI_Cart {
 	 * @access	public
 	 * @return	integer
 	 */
-/* 	public function tax_amount() {
+ 	public function tax_amount() {
 		$taxes = $this->tax_array();
 		return !empty($taxes['amount']) ? $taxes['amount'] : NULL;
-	} */
+	}
 
 	// --------------------------------------------------------------------
 

@@ -165,7 +165,6 @@ class Cart_model extends TI_Model {
                 );
             }
         }
-
         return sort_array($results, 'priority');
     }
 

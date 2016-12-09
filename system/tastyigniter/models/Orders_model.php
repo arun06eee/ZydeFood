@@ -235,6 +235,21 @@ class Orders_model extends TI_Model {
         return $result;
     }
 
+    public function getNetOrderTotals($order_id) {
+        $this->from('order_totals');
+        $this->order_by('priority', 'ASC');
+        $this->db->where('order_id', $order_id);
+
+        $query = $this->db->get();
+        $result = array();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+
+        return $result;
+    }
+
     public function getOrderCoupon($order_id) {
         $this->db->from('coupons_history');
         $this->db->where('order_id', $order_id);
@@ -405,6 +420,7 @@ class Orders_model extends TI_Model {
     }
 
     public function addOrder($order_info = array(), $cart_contents = array()) {
+
         if (empty($order_info) OR empty($cart_contents)) return FALSE;
 
         if (isset($order_info['location_id'])) {
@@ -462,6 +478,10 @@ class Orders_model extends TI_Model {
 
         if (isset($cart_contents['order_total'])) {
             $this->db->set('order_total', $cart_contents['order_total']);
+        }
+
+        if (isset($cart_contents['net_total'])) {
+            $this->db->set('net_total', $cart_contents['net_total']);
         }
 
         if (isset($cart_contents['total_items'])) {
@@ -621,6 +641,8 @@ class Orders_model extends TI_Model {
                             $total['title'] = str_replace('{coupon}', $total['code'], $total['title']);
                         } else if (isset($total['tax'])) {
                             $total['title'] = str_replace('{tax}', $total['tax'], $total['title']);
+                        }else if (isset($total['points'])) {
+                            $total['title'] = str_replace('{loyalty}', $total['points'], $total['title']);
                         }
 
                         $this->db->set('order_id', $order_id);

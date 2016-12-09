@@ -210,7 +210,7 @@ class Cart_module extends Main_Controller {
 
 	public function loyaltyPoints() {
 		$json = array();
-		
+
 		if (!$json AND $this->cart->contents() AND is_string($this->input->post('points'))) {
 			switch ($this->input->post('action')) {
 				case 'remove':
