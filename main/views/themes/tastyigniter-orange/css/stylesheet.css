@@ -405,7 +405,12 @@ text-shadow: 0 1px 0 #fff;
 /*** End Alerts ***/
 
 
-
+.theme-dark.bubble.gifLoader .gifLoaderInner {
+    background-image: url('../images/circle-bub_dark.gif');
+    background-color: #333333;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
 
 
 /*** Buttons ***/

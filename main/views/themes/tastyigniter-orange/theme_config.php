@@ -8,8 +8,8 @@
 */
 
 // Set a custom theme title.
-$theme['title']         = 'TastyIgniter Orange';
-$theme['author']        = 'SamPoyigi';
+$theme['title']         = 'ZydeSoft';
+$theme['author']        = 'Arun kumar';
 $theme['version']       = '2.0';
 $theme['description']   = 'Responsive theme for front-end';
 $theme['child']       	= TRUE;
@@ -35,6 +35,7 @@ $theme['head_tags'] = array(
 		array(theme_url('tastyigniter-orange/js/jquery-1.11.2.min.js'), 'jquery-js', '1'),
 		array(theme_url('tastyigniter-orange/js/bootstrap.min.js'), 'bootstrap-js', '10'),
 		array(theme_url('tastyigniter-orange/js/select2.js'), 'select-2-js', '12'),
+      	array(theme_url('tastyigniter-orange/js/jquery.introLoader.min.js'), 'jquery.introLoader.min.js'),
 		array(theme_url('tastyigniter-orange/js/jquery.raty.js'), 'jquery-raty-js', '13'),
 		array(theme_url('tastyigniter-orange/js/common.js'), 'common-js', '100100100100100'),
 	),
