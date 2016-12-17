@@ -83,7 +83,7 @@
 												<tr><td class="thick-line" colspan="4"></td></tr>
 												<?php foreach ($order_totals as $total) { ?>
 													<tr>
-														<td class="no-line" colspan="2"></td><?php echo $order_totals; ?>
+														<td class="no-line" colspan="2"></td>
 														<?php if ($total['code'] === 'order_total') { ?>
 															<td class="text-right thick-line"><b><?php echo $total['title']; ?></b></td>
 															<td class="text-right thick-line"><b><?php echo $total['value']; ?></b></td>

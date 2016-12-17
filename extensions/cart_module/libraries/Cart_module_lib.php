@@ -76,7 +76,7 @@ class Cart_module_lib {
         return TRUE;
     }
 
-	
+
     public function validateOrderType($order_type = '', $check_min_total = TRUE) {
         $order_type = empty($order_type) ? $this->CI->location->orderType() : $order_type;
         $cart_total = $this->CI->cart->total();

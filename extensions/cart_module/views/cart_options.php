@@ -145,7 +145,7 @@
                         <div class="col-xs-12 col-md-6">
                             <br />
                             <?php if ($row_id) { ?>
-                                <a class="btn btn-success btn-block" onclick="addToCart('<?php echo $menu_id; ?>');" title="<?php echo lang('text_update'); ?>"><?php echo lang('button_update'); ?></a>
+                                <a class="btn btn-success btn-block" onClick="addToCart('<?php echo $menu['menu_id']; ?>' title="<?php echo lang('text_update'); ?>"><?php echo lang('button_update'); ?></a>
                             <?php } else { ?>
                                 <a class="btn btn-success btn-block" onclick="addToCart('<?php echo $menu_id; ?>');" title="<?php echo lang('text_add_to_order'); ?>"><?php echo lang('button_add_to_order'); ?></a>
                             <?php } ?>

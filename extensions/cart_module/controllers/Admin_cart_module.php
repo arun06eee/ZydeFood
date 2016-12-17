@@ -108,7 +108,6 @@ class Admin_cart_module extends Admin_Controller {
             } else {
                 $this->alert->set('warning', sprintf($this->lang->line('alert_error_nothing'), $this->lang->line('text_updated')));
 			}
-			print_r($this->input->post('cart_totals'));
 
 			return TRUE;
 		}

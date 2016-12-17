@@ -91,7 +91,6 @@ class loyalty_price extends Admin_Controller {
 
 	public function _saveLoyaltyPrice() {
 		//if ($this->validateForm() === TRUE) {
-			print_r($this->input->post());
             
 			$save_type = ( ! is_numeric($this->input->get('id'))) ? $this->lang->line('text_added') : $this->lang->line('text_updated');
 

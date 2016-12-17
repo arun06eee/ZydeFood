@@ -56,8 +56,8 @@
                             <ul>
                                 <?php foreach ($cart_items as $cart_item) { ?>
 								    <li>
-                                        <a class="cart-btn remove text-muted small" onClick="addCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '0');"><i class="fa fa-plus-circle"></i></a>&nbsp;&nbsp;
-                                        <a class="cart-btn remove text-muted small" onClick="removeCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '0');"><i class="fa fa-minus-circle"></i></a>
+                                        <a class="cart-btn remove text-muted small" onClick="addToCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo '1' ?>', '0');"><i class="fa fa-plus-circle"></i></a>&nbsp;&nbsp;
+                                        <a class="cart-btn remove text-muted small" onClick="removeCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '<?php echo $cart_item['qty'] - '1' ?>');"><i class="fa fa-minus-circle"></i></a>
                                         <a class="name-image" onClick="openMenuOptions('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>');" style="float: left;" >
                                             <?php if (!empty($cart_item['image'])) { ?>
                                                 <img class="image img-responsive img-thumbnail" width="<?php echo $cart_images_w; ?>" height="<?php echo $cart_images_h; ?>" alt="<?php echo $cart_item['name']; ?>" src="<?php echo $cart_item['image']; ?>">
@@ -363,5 +363,9 @@
         }
 
         $('#cart-info .cart-items').css({"height" : "auto", "max-height" : cartHeight, "overflow" : "auto", "margin-right" : "-15px", "padding-right" : "5px"});
+    }
+
+    function addCart(menu_id, quantity) {
+        console.log("hi");
     }
     //--></script>

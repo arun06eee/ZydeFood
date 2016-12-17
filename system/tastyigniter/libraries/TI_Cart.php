@@ -633,7 +633,7 @@ class TI_Cart extends CI_Cart {
 	 */
 	public function destroy()
 	{
-		$this->_cart_contents = array('cart_total' => 0, 'total_items' => 0, 'order_total' => 0, 'totals' => array());
+		$this->_cart_contents = array('cart_total' => 0, 'total_items' => 0, 'order_total' => 0, 'net_total' => 0,'totals' => array());
 		$this->CI->session->unset_userdata('cart_contents');
 	}
 }
