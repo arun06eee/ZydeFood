@@ -6,11 +6,12 @@ class Checkout extends Main_Controller {
 		parent::__construct(); 																	//  calls the constructor
 
         $this->load->model('Pages_model');
-        $this->load->model('Addresses_model'); 													// load the addresses model
-        $this->load->model('Orders_model'); 													// load the orders model
-        $this->load->model('Locations_model'); 													// load the locations model
+        $this->load->model('Addresses_model');                                                  // load the addresses model
+        $this->load->model('Orders_model');                                                     // load the orders model
+        $this->load->model('Locations_model');                                                  // load the locations model
         $this->load->model('Countries_model');
         $this->load->model('Extensions_model');
+        $this->load->model('cart_module/Cart_model'); 
 
         $this->load->library('location');
         $this->location->initialize();
@@ -473,11 +474,14 @@ class Checkout extends Main_Controller {
         if (!empty($order_data) AND !empty($cart_contents) AND $this->input->post('payment')) {
 
             $order_data['order_id'] = $this->Orders_model->addOrder($order_data, $cart_contents);
+           
+            $getTotalLoyaltyPoint = $this->Cart_model->checkLoyaltyPoints($this->customer->getId());
+            $ReduceLoyaltyPoints = $getTotalLoyaltyPoint[0]['current_points'] - $cart_contents['totals']['loyalty']['points'];
+            $this->Cart_model->reduce_loyaltypoints($ReduceLoyaltyPoints, $this->customer->getId());
 
             $this->session->set_userdata('order_data', $order_data);					// save order details to session and return TRUE
 
-            if ($order_info = $this->Orders_model->getOrder($order_data['order_id'], $order_data['customer_id'])) {	// retrieve order details array from getMainOrder method in Orders model
-
+            if ($order_info = $this->Orders_model->getOrder($order_data['order_id'], $order_data['customer_id'])) {	// retrieve order details array from getMainOrder method in Orders 
                 if (!empty($order_info['order_id']) AND !empty($order_data['ext_payment'])) {
 
                     $payment = $order_data['ext_payment'];

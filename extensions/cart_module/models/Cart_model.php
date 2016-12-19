@@ -246,6 +246,14 @@ class Cart_model extends TI_Model {
 		return $result;
 	}
 
+    public function reduce_loyaltypoints($ReduceLoyaltypoints, $customer_id) {
+        $this->db->where('customer_id', $customer_id);
+        $this->db->set('current_points', $ReduceLoyaltypoints);
+        $this->db->update('customers');
+
+        return TRUE;
+    }
+
     public function checkCouponHistory($coupon_id) {
         if (!empty($coupon_id)) {
             $this->db->where('coupon_id', $coupon_id);
