@@ -631,6 +631,7 @@ class Orders_model extends TI_Model {
 
             $cart_contents['totals']['cart_total']['amount'] = (isset($cart_contents['cart_total'])) ? $cart_contents['cart_total'] : '';
             $cart_contents['totals']['order_total']['amount'] = (isset($cart_contents['order_total'])) ? $cart_contents['order_total'] : '';
+            $cart_contents['totals']['net_total']['amount'] = (isset($cart_contents['net_total'])) ? $cart_contents['net_total'] : '';
 
             foreach ($cart_contents['totals'] as $name => $total) {
                 foreach ($order_totals as $total_name => $order_total) {

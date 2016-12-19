@@ -84,7 +84,7 @@
 												<?php foreach ($order_totals as $total) { ?>
 													<tr>
 														<td class="no-line" colspan="2"></td>
-														<?php if ($total['code'] === 'order_total') { ?>
+														<?php if ($total['code'] === 'order_total' OR $total['code'] === 'net_total') { ?>
 															<td class="text-right thick-line"><b><?php echo $total['title']; ?></b></td>
 															<td class="text-right thick-line"><b><?php echo $total['value']; ?></b></td>
 														<?php } else { ?>

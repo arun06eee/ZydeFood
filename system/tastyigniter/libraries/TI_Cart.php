@@ -293,6 +293,7 @@ class TI_Cart extends CI_Cart {
 	protected function _save_cart() {
 		// Let's add up the individual prices and set the cart sub-total
 		$this->_cart_contents['total_items'] = $this->_cart_contents['cart_total'] = $this->_cart_contents['order_total'] = 0;
+		$this->_cart_contents['net_total'] = $this->net_total();
 		foreach ($this->_cart_contents as $key => $val) {
 			// We make sure the array contains the proper indexes
 			if ( ! is_array($val) OR ! isset($val['price'], $val['qty'])) {
@@ -320,6 +321,7 @@ class TI_Cart extends CI_Cart {
 		}
 
 		$this->_cart_contents['order_total'] = $total;
+		$this->_cart_contents['net_total'] = $this->net_total();
 
 		// Is our cart empty? If so we delete it from the session
 		if (count($this->_cart_contents) <= 4) {

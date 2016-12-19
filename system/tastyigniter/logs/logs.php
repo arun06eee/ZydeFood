@@ -1,110 +1,105 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
-ERROR - 2016-12-14 07:10:07 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp64\www\ZydeFood\extensions\cart_module\views\cart_module.php 59
-ERROR - 2016-12-14 07:10:30 --> Severity: Warning --> Invalid argument supplied for foreach() C:\wamp64\www\ZydeFood\extensions\cart_module\views\cart_module.php 59
-ERROR - 2016-12-15 05:25:24 --> Severity: Parsing Error --> syntax error, unexpected '?' C:\wamp64\www\ZydeFood\extensions\cart_module\views\cart_module.php 61
-ERROR - 2016-12-15 05:26:30 --> Severity: Parsing Error --> syntax error, unexpected '?' C:\wamp64\www\ZydeFood\extensions\cart_module\views\cart_module.php 61
-ERROR - 2016-12-16 06:54:29 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 06:54:29 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 06:54:28 +0000
+ERROR - 2016-12-19 05:32:14 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 05:32:14 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 05:32:13 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;58538fa42138e@gmail.com&gt;
+Message-ID: &lt;585770dd43004@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_58538fa42138e&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_585770dd43004&quot;
 </pre>
-ERROR - 2016-12-16 06:57:43 --> 404 Page Not Found: 
-ERROR - 2016-12-16 07:12:45 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 07:12:45 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 07:12:44 +0000
+ERROR - 2016-12-19 05:37:19 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 05:37:19 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 05:37:18 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;585393ec838cd@gmail.com&gt;
+Message-ID: &lt;5857720e28fb0@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_585393ec838cd&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_5857720e28fb0&quot;
 </pre>
-ERROR - 2016-12-16 07:23:58 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 07:23:58 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 07:23:57 +0000
+ERROR - 2016-12-19 05:48:33 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 05:48:33 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 05:48:32 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;5853968da33b2@gmail.com&gt;
+Message-ID: &lt;585774b020535@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_5853968da33b2&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_585774b02091d&quot;
 </pre>
-ERROR - 2016-12-16 07:35:22 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 07:35:22 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 07:35:21 +0000
+ERROR - 2016-12-19 06:38:46 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 06:38:46 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 06:38:45 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;58539939b614d@gmail.com&gt;
+Message-ID: &lt;58578075bc3e5@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_58539939b614d&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_58578075bc3e5&quot;
 </pre>
-ERROR - 2016-12-16 07:48:34 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 07:48:34 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 07:48:33 +0000
+ERROR - 2016-12-19 06:49:45 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 06:49:45 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 06:49:44 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;58539c5179097@gmail.com&gt;
+Message-ID: &lt;58578308d37e6@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_58539c5179097&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_58578308d37e6&quot;
 </pre>
-ERROR - 2016-12-16 07:59:08 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 07:59:08 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 07:59:07 +0000
+ERROR - 2016-12-19 06:55:09 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 06:55:09 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 06:55:08 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;58539ecbecd48@gmail.com&gt;
+Message-ID: &lt;5857844ca912f@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_58539ecbecd48&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_5857844ca912f&quot;
 </pre>
-ERROR - 2016-12-16 13:22:34 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 13:22:34 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 13:22:33 +0000
+ERROR - 2016-12-19 06:57:19 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 06:57:19 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 06:57:18 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;5853ea997e1fc@gmail.com&gt;
+Message-ID: &lt;585784ce88f3b@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_5853ea997e1fc&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_585784ce88f3b&quot;
 </pre>
-ERROR - 2016-12-16 13:26:48 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
-ERROR - 2016-12-16 13:26:48 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
-Date: Fri, 16 Dec 2016 13:26:47 +0000
+ERROR - 2016-12-19 07:00:20 --> Severity: Warning --> mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() C:\wamp64\www\ZydeFood\system\libraries\Email.php 1837
+ERROR - 2016-12-19 07:00:20 --> Unable to send email using PHP mail(). Your server might not be configured to send mail using this method.<br /><pre>User-Agent: TastyIgniter
+Date: Mon, 19 Dec 2016 07:00:19 +0000
 From: &quot;Zyde Food&quot; &lt;rajdhinesh256@gmail.com&gt;
 Return-Path: &lt;rajdhinesh256@gmail.com&gt;
 Reply-To: &lt;rajdhinesh256@gmail.com&gt;
 X-Sender: rajdhinesh256@gmail.com
 X-Mailer: TastyIgniter
 X-Priority: 3 (Normal)
-Message-ID: &lt;5853eb97ef0d6@gmail.com&gt;
+Message-ID: &lt;5857858330a77@gmail.com&gt;
 Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary=&quot;B_ALT_5853eb97ef4be&quot;
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_5857858330a77&quot;
 </pre>
