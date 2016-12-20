@@ -651,7 +651,7 @@ class Orders_model extends TI_Model {
                         $this->db->set('title', htmlspecialchars($total['title']));
                         $this->db->set('priority', $order_total['priority']);
 
-                        if ($name === 'coupon') {
+                        if ($name === 'coupon' OR $name === 'loyalty') {
                             $this->db->set('value', 0 - $total['amount']);
                         } else {
                             $this->db->set('value', $total['amount']);
