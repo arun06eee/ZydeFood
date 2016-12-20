@@ -11,7 +11,8 @@ class Checkout extends Main_Controller {
         $this->load->model('Locations_model');                                                  // load the locations model
         $this->load->model('Countries_model');
         $this->load->model('Extensions_model');
-        $this->load->model('cart_module/Cart_model'); 
+        $this->load->model('cart_module/Cart_model');
+        $this->load->model('Loyalty_model');
 
         $this->load->library('location');
         $this->location->initialize();
@@ -480,6 +481,17 @@ class Checkout extends Main_Controller {
             $this->Cart_model->reduce_loyaltypoints($ReduceLoyaltyPoints, $this->customer->getId());
 
             $this->session->set_userdata('order_data', $order_data);					// save order details to session and return TRUE
+
+            $Points_to_customer = $this->Loyalty_model->get_loyaltyData();              // add loyalty points to the customer by their order amount
+
+            foreach ($Points_to_customer as $provide_point) {
+
+                if ($provide_point['min_range'] < $cart_contents['net_total'] AND $provide_point['max_range'] > $cart_contents['net_total']) {
+
+                    $customer_points = $getTotalLoyaltyPoint[0]['current_points'] + $provide_point['points'] - $cart_contents['totals']['loyalty']['points'];    
+                    $this->Loyalty_model->Add_pointsto_customer($customer_points, $this->customer->getId());    //update loyalty points with provided points
+                }
+            }
 
             if ($order_info = $this->Orders_model->getOrder($order_data['order_id'], $order_data['customer_id'])) {	// retrieve order details array from getMainOrder method in Orders 
                 if (!empty($order_info['order_id']) AND !empty($order_data['ext_payment'])) {

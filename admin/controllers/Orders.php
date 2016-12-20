@@ -134,6 +134,7 @@ class Orders extends Admin_Controller {
 				'order_status'		=> $result['status_name'],
 				'status_color'		=> $result['status_color'],
 				'order_total'		=> $this->currency->format($result['order_total']),
+				'net_total'			=> $this->currency->format($result['net_total']),
 				'date_added'		=> day_elapsed($result['date_added']),
 				'edit' 				=> site_url('orders/edit?id=' . $result['order_id'])
 			);

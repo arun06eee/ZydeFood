@@ -113,7 +113,7 @@
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-2">
-					<a class="btn btn-success" style="background-color:green" onclick="Confirmsubmit()"><i class="fa fa-paper-plane"></i> Submit</a>
+					<a class="btn btn-success" style="background-color:#4cae4c" onclick="Confirmsubmit()"><i class="fa fa-paper-plane"></i> Submit</a>
 					</div>
 				</div>
 				<div id="local-alert" class="alert alert-danger alert-dismissable hidden" role="alert">
@@ -248,7 +248,7 @@
                             <td><span class="label label-default" style="background-color: <?php echo $order['status_color']; ?>;"><?php echo $order['order_status']; ?></span></td>
 							<td><?php echo $order['order_type']; ?></td>
 							<td><?php echo $order['payment']; ?></td>
-							<td><?php echo $order['order_total']; ?></td>
+							<td><?php echo $order['net_total']; ?></td>
 							<td class="text-center"><?php echo $order['order_time']; ?> - <?php echo $order['order_date']; ?></td>
 							<td><a onclick="fndownload(<?php echo $order['order_id']?> , '<?php echo $order['order_status'] ?>' )" class="show_invoice btn btn-success btn-xs" title="<?php echo lang('button_download_invoice'); ?>"><i class="fa fa-download"></i></a></td>
 						</tr>
@@ -333,7 +333,7 @@ function fndownload(id, status) {
 		$(".show_invoice").attr('href','orders/invoice/view/'+id);
 		$(".show_invoice").attr('target','_blank');
 	}else{
-		$("#local").removeClass('hidden')
+		$("#local").removeClass('hidden');
 	}
 }
 

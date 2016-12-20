@@ -202,14 +202,13 @@ class TI_Cart extends CI_Cart {
 			
 			$tax_percent = $gettaxTotal ? $gettaxTotal : 0;
 
-			$total = $this->_cart_contents['order_total'];
+			$total = $this->_cart_contents['cart_total'] + $this->_cart_contents['totals']['delivery']['amount'];
 
 			// Remove delivery charge from total if its not taxable
 			if (isset($this->_cart_totals['delivery']['amount'])) {
 				$total -= $this->_cart_totals['delivery']['amount'];
 			}
 
-			// If apply taxes on menu price, else
 			if (! empty ($gettax)) {
 				foreach ($gettax as $gettaxes){
 					$tax_title .= ' (' . $gettaxes['name'] .'- '.$gettaxes['percentage']. '% included)';
@@ -217,7 +216,6 @@ class TI_Cart extends CI_Cart {
 				}
 				$overtotal = $total + $this->_cart_totals['delivery']['amount'];
 				// calculate tax amount based on percentage
-				//$tax_amount = $total - ($total / (1 + $tax_percent / 100));
 				$tax_amount = ($overtotal * ($tax_percent / 100));
 			}
 
@@ -461,7 +459,13 @@ class TI_Cart extends CI_Cart {
 	}
 	
 	public function net_total() {
-		return ($this->_cart_contents['order_total']) - ($this->_cart_contents['totals']['loyalty']['amount']);
+		$net_total = $this->_cart_contents['order_total'] - ($this->_cart_contents['totals']['loyalty']['amount']);
+
+		if( $net_total < 0 ) {
+			return '-';
+		}else {
+			return $net_total;
+		}
 	}
 	// --------------------------------------------------------------------
 

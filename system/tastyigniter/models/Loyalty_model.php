@@ -194,6 +194,34 @@ class Loyalty_model extends TI_Model {
 		return $loyalty_id;
 	}
 	
+	public function get_loyaltyData() {
+		$this->db->select('*');
+		$this->db->where('status', 1);
+		$this->db->from('loyalty');
+
+		$query = $this->db->get();
+		$result = array();
+
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+		}
+
+		return $result;
+	}
+
+	public function Add_pointsto_customer($provide_points, $customer_id) {
+		print_r($customer_id);
+		$this->db->set('current_points', $provide_points);
+		$this->db->where('customer_id', $customer_id);
+		$this->db->update('customers');
+
+		$query = $this->db->update();
+
+		return $query;
+
+	}
+
+
 	public function deleteLoyalty($loyalty_id) {
 
 		if (is_numeric($loyalty_id)) $loyalty_id = array($loyalty_id);

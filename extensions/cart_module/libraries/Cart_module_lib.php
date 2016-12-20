@@ -53,6 +53,7 @@ class Cart_module_lib {
                 'priority' => isset($order_total['priority']) ? $order_total['priority'] : $cart_total['priority'],
             ));
         }
+
         return sort_array($result, 'priority');
     }
 
@@ -242,7 +243,7 @@ class Cart_module_lib {
 
         if ($error === '') {
                 $this->CI->cart->add_loyaltyPoints(array('applied_points' => $Loyalty_points, 'total_points' => $loyaltypoints[0]['current_points'], 'priceRate' => $loyaltyPrice[0]['discount']));
- 
+
                 return TRUE;
         }
 
