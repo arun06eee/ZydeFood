@@ -62,10 +62,14 @@ if (!empty($body['color'])) {
 	$style .= ".newsletter-subscribe { background-color: {$body['color']}; color:{$font['color']}}";
 }
 
-if (!empty($body['color'])) {
+if (!empty($body['color'])) { 
 	$style .= ".nav-tabs-line > li.active > a, .nav-tabs-line > li.active > a:hover, .nav-tabs-line > li.active > a:focus, .nav-tabs-line > li.open a, .nav-tabs-line > li > a:hover, .nav-tabs-line > li > a:focus,";
-	$style .= ".nav-tabs-line > li.open a, .nav-tabs-line > li:hover, .nav-tabs-line > li:focus, .nav-tabs-line > li.active, .nav-tabs-line > li.active:hover, .nav-tabs-line > li.active:focus { border-bottom-color: {$body['color']};}";
-}
+	$style .= ".nav-tabs-line > li.open a, .nav-tabs-line > li:hover, .nav-tabs-line > li:focus, .nav-tabs-line > li.active, .nav-tabs-line > li.active:hover, .nav-tabs-line > li.active:focus {";
+	$style .= "border-top: transparent; border-left: transparent; border-right: transparent; color: black; cursor: hand; border-bottom-color: #E64D64; transition:.1s;}";
+	$style .= ".wrap-vertical {background-color: #f5f5f5;";
+	$style .= "margin-right: 15px;";
+	$style .= "}";
+} 
 
 if (!empty($font['color']))
 	$style .= ".newsletter-subscribe { color:{$font['color']}}";
@@ -179,9 +183,9 @@ if ( ! empty($heading['under_height']))
 $style .= "}";
 
 // Sidebar
-$style .= ".partial .panel {";
+$style .= ".partial .panel{";
 if (!empty($sidebar['background']))
-	$style .= "background-color: {$sidebar['background']};";
+	$style .= "background-color: {$sidebar['background']}; border: none;";
 
 if (!empty($sidebar['image'])) {
 	$style .= "background-image: url('".image_url($sidebar['image'])."');";
@@ -196,6 +200,13 @@ if (!empty($sidebar['image'])) {
 		$style .= "background-size: {$sidebar['display']};";
 	}
 }
+$style .= "}";
+/* 
+$style .= ".panel{ border: none; !important}"; */
+
+$style .="#breadcrumb {";
+if (!empty($sidebar['background']))
+	$style .= "background-color: #f5f5f5;";
 $style .= "}";
 
 $style .= ".partial .panel, .partial .panel-default > .panel-heading, .partial .panel-cart, #page-content .cart-total .table td,";

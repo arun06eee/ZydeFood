@@ -329,7 +329,7 @@ display: block;
 
 /*** Breadcrumbs ***/
 .breadcrumb {
-background-color: transparent;
+background-color: #f5f5f5;
 margin-bottom: 0px;
 }
 .breadcrumb a, .breadcrumb a:hover, .breadcrumb a:focus {
@@ -545,8 +545,6 @@ font-weight: bold;
 
 
 
-
-
 /*** Nav Tabs ***/
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:focus,
@@ -560,10 +558,10 @@ margin: 0;
 .nav-tabs.nav-tabs-line > li > a {
 border: 0 none;
 margin-right: 0;
+background-color: #f5f5f5 !important;
 }
 .nav-tabs.nav-tabs-line > li.active > a {
 border: 0 none;
-color: #333333;
 }
 .nav-tabs-line > li.active,
 .nav-tabs-line > li.active:hover,

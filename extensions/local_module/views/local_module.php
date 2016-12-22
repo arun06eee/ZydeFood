@@ -114,98 +114,100 @@
 							</div>
 						<?php } ?>
 
-						<div class="panel-body">
-							<div class="row boxes">
-								<div class="box-one col-xs-12 col-sm-5 col-md-5">
-									<?php if (!empty($location_image)) { ?>
-										<img class="img-responsive pull-left" src="<?php echo $location_image; ?>">
-									<?php } ?>
-									<dl <?php echo (!empty($location_image)) ? 'class="box-image"' : ''; ?>>
-										<dd><h4><?php echo $location_name; ?></h4></dd>
-										<?php if (config_item('allow_reviews') !== '1') { ?>
-											<dd class="text-muted">
-												<div class="rating rating-sm">
-													<span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star-half-o"></span><span class="fa fa-star-o"></span>
-													<span class="small"><?php echo $text_total_review; ?></span>
-												</div>
-											</dd>
+						<div class="panel">
+							<div class="panel-body">
+								<div class="row boxes">
+									<div class="box-one col-xs-12 col-sm-5 col-md-5">
+										<?php if (!empty($location_image)) { ?>
+											<img class="img-responsive pull-left" src="<?php echo $location_image; ?>">
 										<?php } ?>
-										<dd><span class="text-muted"><?php echo str_replace('<br />', ', ', $location_address); ?></span></dd>
-									</dl>
-								</div>
-								<div class="col-xs-12 box-divider visible-xs"></div>
-								<div class="box-two col-xs-12 col-sm-3 col-md-3">
-									<dl>
-										<?php if ($opening_status === 'open') { ?>
-											<dt><?php echo lang('text_is_opened'); ?></dt>
-										<?php } else if ($opening_status === 'opening') { ?>
-											<dt class="text-muted"><?php echo sprintf(lang('text_opening_time'), $opening_time); ?></dt>
-										<?php } else { ?>
-											<dt class="text-muted"><?php echo lang('text_closed'); ?></dt>
-										<?php } ?>
-										<?php if ($opening_status !== 'closed') { ?>
-											<dd class="visible-xs">
-												<?php if (!empty($opening_type) AND $opening_type == '24_7') { ?>
-													<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo lang('text_24_7_hour'); ?></span>
-												<?php } else if (!empty($opening_time) AND !empty($closing_time)) { ?>
-													<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo $opening_time; ?> - <?php echo $closing_time; ?></span>
-												<?php } ?>
-											</dd>
-										<?php } ?>
-										<dd class="text-muted">
-											<?php if ($has_delivery) { ?>
-												<?php if ($delivery_status === 'open') { ?>
-													<?php echo sprintf(lang('text_delivery_time_info'), sprintf(lang('text_in_minutes'), $delivery_time)); ?>
-												<?php } else if ($delivery_status === 'opening') { ?>
-													<?php echo sprintf(lang('text_delivery_time_info'), sprintf(lang('text_starts'), $delivery_time)); ?>
-												<?php } else { ?>
-													<?php echo sprintf(lang('text_delivery_time_info'), lang('text_is_closed')); ?>
-												<?php } ?>
+										<dl <?php echo (!empty($location_image)) ? 'class="box-image"' : ''; ?>>
+											<dd><h4><?php echo $location_name; ?></h4></dd>
+											<?php if (config_item('allow_reviews') !== '1') { ?>
+												<dd class="text-muted">
+													<div class="rating rating-sm">
+														<span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star-half-o"></span><span class="fa fa-star-o"></span>
+														<span class="small"><?php echo $text_total_review; ?></span>
+													</div>
+												</dd>
 											<?php } ?>
-										</dd>
-										<dd class="text-muted">
-											<?php if ($has_collection) { ?>
-												<?php if ($collection_status === 'open') { ?>
-													<?php echo sprintf(lang('text_collection_time_info'), sprintf(lang('text_in_minutes'), $collection_time)); ?>
-												<?php } else if ($collection_status === 'opening') { ?>
-													<?php echo sprintf(lang('text_collection_time_info'), sprintf(lang('text_starts'), $collection_time)); ?>
-												<?php } else { ?>
-													<?php echo sprintf(lang('text_collection_time_info'), lang('text_is_closed')); ?>
-												<?php } ?>
-											<?php } ?>
-										</dd>
-									</dl>
-								</div>
-								<div class="col-xs-12 box-divider visible-xs"></div>
-								<div class="box-three col-xs-12 col-sm-4 col-md-4">
-									<dl>
-										<?php if ($opening_status !== 'closed') { ?>
-											<dd class="hidden-xs">
-												<?php if (!empty($opening_type) AND $opening_type == '24_7') { ?>
-													<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo lang('text_24_7_hour'); ?></span>
-												<?php } else if (!empty($opening_time) AND !empty($closing_time)) { ?>
-													<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo $opening_time; ?> - <?php echo $closing_time; ?></span>
-												<?php } ?>
-											</dd>
-										<?php } ?>
-										<dd class="text-muted">
-											<?php if (!$has_delivery AND $has_collection) { ?>
-												<?php echo lang('text_collection_only'); ?>
-											<?php } else if ($has_delivery AND !$has_collection) { ?>
-												<?php echo lang('text_delivery_only'); ?>
-											<?php } else if ($has_delivery AND $has_collection) { ?>
-												<?php echo lang('text_both_types'); ?>
+											<dd><span class="text-muted"><?php echo str_replace('<br />', ', ', $location_address); ?></span></dd>
+										</dl>
+									</div>
+									<div class="col-xs-12 box-divider visible-xs"></div>
+									<div class="box-two col-xs-12 col-sm-3 col-md-3">
+										<dl>
+											<?php if ($opening_status === 'open') { ?>
+												<dt><?php echo lang('text_is_opened'); ?></dt>
+											<?php } else if ($opening_status === 'opening') { ?>
+												<dt class="text-muted"><?php echo sprintf(lang('text_opening_time'), $opening_time); ?></dt>
 											<?php } else { ?>
-												<?php echo lang('text_no_types'); ?>
+												<dt class="text-muted"><?php echo lang('text_closed'); ?></dt>
 											<?php } ?>
-										</dd>
-										<?php if ($has_delivery) { ?>
-											<dd class="text-muted"><?php echo $text_delivery_condition; ?></dd>
-<!--                                            <dd class="text-muted">--><?php //echo ($delivery_charge > 0) ? sprintf(lang('text_delivery_charge'), currency_format($delivery_charge)) : lang('text_free_delivery'); ?><!--</dd>-->
-										<?php } ?>
-<!--                                        <dd class="text-muted">--><?php //echo lang('text_min_total'); ?><!--: --><?php //echo currency_format($min_total); ?><!--</dd>-->
-									</dl>
-							   </div>
+											<?php if ($opening_status !== 'closed') { ?>
+												<dd class="visible-xs">
+													<?php if (!empty($opening_type) AND $opening_type == '24_7') { ?>
+														<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo lang('text_24_7_hour'); ?></span>
+													<?php } else if (!empty($opening_time) AND !empty($closing_time)) { ?>
+														<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo $opening_time; ?> - <?php echo $closing_time; ?></span>
+													<?php } ?>
+												</dd>
+											<?php } ?>
+											<dd class="text-muted">
+												<?php if ($has_delivery) { ?>
+													<?php if ($delivery_status === 'open') { ?>
+														<?php echo sprintf(lang('text_delivery_time_info'), sprintf(lang('text_in_minutes'), $delivery_time)); ?>
+													<?php } else if ($delivery_status === 'opening') { ?>
+														<?php echo sprintf(lang('text_delivery_time_info'), sprintf(lang('text_starts'), $delivery_time)); ?>
+													<?php } else { ?>
+														<?php echo sprintf(lang('text_delivery_time_info'), lang('text_is_closed')); ?>
+													<?php } ?>
+												<?php } ?>
+											</dd>
+											<dd class="text-muted">
+												<?php if ($has_collection) { ?>
+													<?php if ($collection_status === 'open') { ?>
+														<?php echo sprintf(lang('text_collection_time_info'), sprintf(lang('text_in_minutes'), $collection_time)); ?>
+													<?php } else if ($collection_status === 'opening') { ?>
+														<?php echo sprintf(lang('text_collection_time_info'), sprintf(lang('text_starts'), $collection_time)); ?>
+													<?php } else { ?>
+														<?php echo sprintf(lang('text_collection_time_info'), lang('text_is_closed')); ?>
+													<?php } ?>
+												<?php } ?>
+											</dd>
+										</dl>
+									</div>
+									<div class="col-xs-12 box-divider visible-xs"></div>
+									<div class="box-three col-xs-12 col-sm-4 col-md-4">
+										<dl>
+											<?php if ($opening_status !== 'closed') { ?>
+												<dd class="hidden-xs">
+													<?php if (!empty($opening_type) AND $opening_type == '24_7') { ?>
+														<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo lang('text_24_7_hour'); ?></span>
+													<?php } else if (!empty($opening_time) AND !empty($closing_time)) { ?>
+														<span class="fa fa-clock-o"></span>&nbsp;&nbsp;<span><?php echo $opening_time; ?> - <?php echo $closing_time; ?></span>
+													<?php } ?>
+												</dd>
+											<?php } ?>
+											<dd class="text-muted">
+												<?php if (!$has_delivery AND $has_collection) { ?>
+													<?php echo lang('text_collection_only'); ?>
+												<?php } else if ($has_delivery AND !$has_collection) { ?>
+													<?php echo lang('text_delivery_only'); ?>
+												<?php } else if ($has_delivery AND $has_collection) { ?>
+													<?php echo lang('text_both_types'); ?>
+												<?php } else { ?>
+													<?php echo lang('text_no_types'); ?>
+												<?php } ?>
+											</dd>
+											<?php if ($has_delivery) { ?>
+												<dd class="text-muted"><?php echo $text_delivery_condition; ?></dd>
+	<!--                                            <dd class="text-muted">--><?php //echo ($delivery_charge > 0) ? sprintf(lang('text_delivery_charge'), currency_format($delivery_charge)) : lang('text_free_delivery'); ?><!--</dd>-->
+											<?php } ?>
+	<!--                                        <dd class="text-muted">--><?php //echo lang('text_min_total'); ?><!--: --><?php //echo currency_format($min_total); ?><!--</dd>-->
+										</dl>
+								   </div>
+								</div>
 							</div>
 						</div>
 					</div>

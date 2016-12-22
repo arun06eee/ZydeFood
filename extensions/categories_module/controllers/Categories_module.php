@@ -83,7 +83,7 @@ class Categories_module extends Main_Controller {
 		$tree = '<ul class="list-group list-group-responsive">';
 
 		if (!$is_child) {
-			$tree .= '<li class="list-group-item"><a class="" href="'.site_url($url).'"><i class="fa fa-angle-right"></i>&nbsp;&nbsp;'.$this->lang->line('text_show_all').'</a>';
+			$tree .= '<li class="list-group-item"><a class="" href="'.site_url($url).'"><i class="fa fa-check-circle-o"></i>&nbsp;&nbsp;'.$this->lang->line('text_show_all').'</a>';
 		}
 
 		if ( ! empty($categories)) {
@@ -98,11 +98,11 @@ class Categories_module extends Main_Controller {
 				}
 
 				if (!empty($category['children'])) {
-					$tree .= '<li class="list-group-item"><a'.$attr.'><i class="fa fa-angle-right"></i>&nbsp;&nbsp;' . $category['category_name'] . '</a>';
+					$tree .= '<li class="list-group-item"><a'.$attr.'><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;' . $category['category_name'] . '</a>';
 					$tree .= $this->categoryTree($category['children'], $mix_it_up, TRUE);
 					$tree .= '</li>';
 				} else {
-					$tree .= '<li class="list-group-item"><a'.$attr.'><i class="fa fa-angle-right"></i>&nbsp;&nbsp;' . $category['category_name'] . '</a></li>';
+					$tree .= '<li class="list-group-item"><a'.$attr.'><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;' . $category['category_name'] . '</a></li>';
 				}
 			}
 		}

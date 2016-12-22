@@ -2,7 +2,7 @@
     <div id="cart-box" class="module-box">
         <div class="panel panel-default panel-cart <?php echo ($is_checkout) ? 'hidden-xs' : ''; ?>">
             <div class="panel-heading">
-                <h3 class="panel-title"><?php echo lang('text_heading'); ?></h3>
+                <h3 class="panel-title">&nbsp;<i class="fa fa-shopping-cart">&nbsp;&nbsp;&nbsp;</i><?php echo lang('text_heading'); ?></h3>
             </div>
 
             <div class="panel-body">
@@ -67,11 +67,12 @@
                                                 <?php echo $cart_item['name']; ?>
                                             </span>
                                             <?php if (!empty($cart_item['options'])) { ?>
-                                                <span class="options text-muted small"><?php echo $cart_item['options']; ?></span>
+                                                <span class="options text-muted"><?php echo $cart_item['options']; ?></span>
                                             <?php } ?>
                                         </a>
                                         <p class="comment-amount pull-right">
-                                            <span class="amount pull-right"><?php echo $cart_item['sub_total']; ?></span>
+                                            <span class="amount pull-left"><?php echo $cart_item['sub_total']; ?>&nbsp;&nbsp;
+                                            <a class="cart-btn remove text-muted small pull-right" onClick="removeCart('<?php echo $cart_item['menu_id']; ?>', '<?php echo $cart_item['rowid']; ?>', '<?php echo '0' ?>');"><i class="fa fa-trash"></i></a>
                                             <?php if (!empty($cart_item['comment'])) { ?>
                                                 <span class="comment text-muted small">[<?php echo $cart_item['comment']; ?>]</span>
                                             <?php } ?>
