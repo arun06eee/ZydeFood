@@ -1,6 +1,6 @@
 <?php
 /**
- * Zydesoft
+ * Zydesoft arun
  *
  * An open source online ordering, reservation and management system for restaurants.
  *
