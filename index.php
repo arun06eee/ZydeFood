@@ -1,6 +1,6 @@
 <?php
 /**
- * TastyIgniter
+ * Zydesoft
  *
  * An open source online ordering, reservation and management system for restaurants.
  *
