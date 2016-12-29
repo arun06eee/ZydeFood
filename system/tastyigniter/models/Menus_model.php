@@ -62,6 +62,7 @@ class Menus_model extends TI_Model {
 			}
 
 			$this->db->join('categories', 'categories.category_id = menus.menu_category_id', 'left');
+			$this->db->join('locations', 'locations.location_id = menus.Locations_id', 'left');
 			$this->db->join('menus_specials', 'menus_specials.menu_id = menus.menu_id', 'left');
 			$this->db->join('mealtimes', 'mealtimes.mealtime_id = menus.mealtime_id', 'left');
 
@@ -77,6 +78,10 @@ class Menus_model extends TI_Model {
 
 			if ( ! empty($filter['filter_category'])) {
 				$this->db->where('menu_category_id', $filter['filter_category']);
+			}
+
+			if( ! empty($filter['filter_locations'])) {
+				$this->db->where('Locations_id', $filter['filter_locations']);
 			}
 
 			if (is_numeric($filter['filter_status'])) {
@@ -150,10 +155,26 @@ class Menus_model extends TI_Model {
 			return $results;
 		}
 	}
+	
+	public function getLocation(){
+		$this->db->select('location_id, location_name');
+		$this->db->from('locations');
+
+		$query = $this->db->get();
+
+		$result = array();
+
+		if ($query->num_rows() > 0) {
+			foreach ($query->result_array() as $row) {
+				$result[] = $row;
+			}
+		}
+		return $result;
+	}
 
 	public function getMenu($menu_id) {
 		//$this->db->select('menus.menu_id, *');
-		$this->db->select('menus.menu_id, menu_name, menu_description, menu_price, menu_photo, menu_category_id, stock_qty,
+		$this->db->select('menus.menu_id, menu_name, menu_description, menu_price, menu_photo, menu_category_id, Locations_id, stock_qty,
 			minimum_qty, subtract_stock, menu_status, menu_priority, category_id, categories.name, description, special_id, start_date,
 			end_date, special_price, special_status, menus.mealtime_id, mealtimes.mealtime_name, mealtimes.start_time, mealtimes.end_time, mealtime_status');
 		$this->db->from('menus');
@@ -168,6 +189,7 @@ class Menus_model extends TI_Model {
 			return $query->row_array();
 		}
 	}
+
 
 	public function updateStock($menu_id, $quantity = 0, $action = 'subtract') {
 		$update = FALSE;
@@ -240,6 +262,10 @@ class Menus_model extends TI_Model {
 			$this->db->set('menu_category_id', (int) $this->config->item('special_category_id'));
 		} else if (isset($save['menu_category'])) {
 			$this->db->set('menu_category_id', $save['menu_category']);
+		}
+
+		if (isset($save['location'])) {
+			$this->db->set('Locations_id', $save['location']);
 		}
 
 		if (isset($save['menu_photo'])) {

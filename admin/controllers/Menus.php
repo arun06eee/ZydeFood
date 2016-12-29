@@ -86,6 +86,7 @@ class Menus extends Admin_Controller {
 
 		$data['menus'] = array();
 		$results = $this->Menus_model->getList($filter);
+
 		foreach ($results as $result) {
 
 			$price = ($result['special_status'] === '1' AND $result['is_special'] === '1') ? $result['special_price'] : $result['menu_price'];
@@ -95,6 +96,7 @@ class Menus extends Admin_Controller {
 				'menu_name'        => $result['menu_name'],
 				'menu_description' => $result['menu_description'],
 				'category_name'    => $result['name'],
+				'Locations'		   => $result['location_name'],
 				'menu_price'       => $this->currency->format($price),
 				'menu_photo'       => $result['menu_photo'],
 				'stock_qty'        => $result['stock_qty'],
@@ -112,6 +114,15 @@ class Menus extends Admin_Controller {
 			$data['categories'][] = array(
 				'category_id'   => $category['category_id'],
 				'category_name' => $category['name'],
+			);
+		}
+
+		$data['locations'] = array();
+		$get_location = $this->Menus_model->getLocation();
+		foreach($get_location as $get_locations) {
+			$data['locations'][] = array(
+				'location_id' => $get_locations['location_id'],
+				'location_name' => $get_locations['location_name'],
 			);
 		}
 
@@ -184,6 +195,7 @@ class Menus extends Admin_Controller {
 		$data['menu_description'] = $menu_info['menu_description'];
 		$data['menu_price'] = $menu_info['menu_price'];
 		$data['menu_category'] = $menu_info['category_id'];
+		$data['available_location'] = $menu_info['Locations_id'];
 		$data['stock_qty'] = $menu_info['stock_qty'];
 		$data['minimum_qty'] = (isset($menu_info['minimum_qty'])) ? $menu_info['minimum_qty'] : '1';
 		$data['subtract_stock'] = $menu_info['subtract_stock'];
@@ -203,6 +215,15 @@ class Menus extends Admin_Controller {
 			$data['categories'][] = array(
 				'category_id'   => $result['category_id'],
 				'category_name' => $result['name'],
+			);
+		}
+
+		$data['locations'] = array();
+		$get_location = $this->Menus_model->getLocation();
+		foreach($get_location as $get_locations) {
+			$data['locations'][] = array(
+				'location_id' => $get_locations['location_id'],
+				'location_name' => $get_locations['location_name'],
 			);
 		}
 
