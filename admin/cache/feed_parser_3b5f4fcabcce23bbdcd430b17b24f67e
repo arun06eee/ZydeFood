@@ -6,6 +6,24 @@
         <description>Restaurant news, articles and information.</description>
         
                 <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.feedburner.com/Tastyigniter" /><feedburner:info uri="tastyigniter" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><item>
+            <title>7 Restaurant Predictions for 2017</title>
+            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/796U2yhGZtw/7-restaurant-predictions-2017</link>
+            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/12/7-restaurant-predictions-2017</guid>
+            <pubDate>Wed, 28 Dec 2016 14:30:00 +0000</pubDate>
+            <description>&lt;p&gt;&lt;img src="https://tastyigniter.com/storage/app/uploads/public/586/39e/c3358639ec33bf49789241349-680.jpg" alt="" width="680" height="" /&gt;&lt;/p&gt;
+                                According to the annual Waitrose Food and Drink Report, there are some exciting food and drink trends on the way for the next year, and this will reflect in the restaurant predictions for 2017. 
+
+It seems that it’s not just cars and clothes that are used as an expression for people these days, the...&lt;a href="https://tastyigniter.com/blog/2016/12/7-restaurant-predictions-2017"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/796U2yhGZtw" height="1" width="1" alt=""/&gt;</description>
+        <feedburner:origLink>https://tastyigniter.com/blog/2016/12/7-restaurant-predictions-2017</feedburner:origLink></item>
+                <item>
+            <title>How to Boost Table Bookings During the 'festive' Months</title>
+            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/_DBGu18uw3s/how-boost-table-bookings-during-festive-months</link>
+            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/12/how-boost-table-bookings-during-festive-months</guid>
+            <pubDate>Thu, 15 Dec 2016 15:15:00 +0000</pubDate>
+            <description>&lt;p&gt;&lt;img src="https://tastyigniter.com/storage/app/uploads/public/586/3a3/a6b5863a3a6b53d0065838966-680.jpg" alt="" width="680" height="" /&gt;&lt;/p&gt;
+                                Christmas is a fantastic time for restaurants. Friends are getting together to catch up and exchange gifts and offices are having their Christmas dinners and Parties. Whilst it may be a great time to be in the restaurant biz, it doesn’t mean that you can rest on your laurels and wait for the custome...&lt;a href="https://tastyigniter.com/blog/2016/12/how-boost-table-bookings-during-festive-months"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/_DBGu18uw3s" height="1" width="1" alt=""/&gt;</description>
+        <feedburner:origLink>https://tastyigniter.com/blog/2016/12/how-boost-table-bookings-during-festive-months</feedburner:origLink></item>
+                <item>
             <title>Shock Restaurant Statistics for 2016</title>
             <link>http://feedproxy.google.com/~r/Tastyigniter/~3/_RANBrnoiNc/shock-restaurant-statistics-2016</link>
             <guid isPermaLink="false">https://tastyigniter.com/blog/2016/12/shock-restaurant-statistics-2016</guid>
@@ -466,23 +484,5 @@ Coupons make restau...&lt;a href="https://tastyigniter.com/blog/2016/05/restaura
 At TastyIgniter we believe in the power of people. Which is why we’re taking a meritocratic approach to our project’s development.
 Get involved with innovative suggestions for up...&lt;a href="https://tastyigniter.com/blog/2016/04/tastyigniter-community-forum"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/6One-TL1fBU" height="1" width="1" alt=""/&gt;</description>
         <feedburner:origLink>https://tastyigniter.com/blog/2016/04/tastyigniter-community-forum</feedburner:origLink></item>
-                <item>
-            <title>Why Should Your Restaurant Be Mobile Friendly?</title>
-            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/Eb6XOE8zAMk/why-should-your-restaurant-be-mobile-friendly</link>
-            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/03/why-should-your-restaurant-be-mobile-friendly</guid>
-            <pubDate>Tue, 22 Mar 2016 13:22:00 +0000</pubDate>
-            <description>&lt;p&gt;&lt;img src="https://tastyigniter.com/storage/app/uploads/public/57b/c1a/b7357bc1ab73befa733367851-680.jpg" alt="" width="680" height="" /&gt;&lt;/p&gt;
-                                Now that smartphones are so well integrated into society, it’s time to get your online presence of your restaurant mobile friendly and in tune with them. Not only are they being used to access sites such as social media, but they are also being used to perform online searches for place to eat on the...&lt;a href="https://tastyigniter.com/blog/2016/03/why-should-your-restaurant-be-mobile-friendly"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/Eb6XOE8zAMk" height="1" width="1" alt=""/&gt;</description>
-        <feedburner:origLink>https://tastyigniter.com/blog/2016/03/why-should-your-restaurant-be-mobile-friendly</feedburner:origLink></item>
-                <item>
-            <title>TastyIgniter 2.0.0 Changelog</title>
-            <link>http://feedproxy.google.com/~r/Tastyigniter/~3/1f1LfnFhXjM/tastyigniter-2-0-0-changelog</link>
-            <guid isPermaLink="false">https://tastyigniter.com/blog/2016/03/tastyigniter-2-0-0-changelog</guid>
-            <pubDate>Wed, 16 Mar 2016 15:48:00 +0000</pubDate>
-            <description>For TastyIgniter Version 2.0 released on the 15th March 2016, a number of settings and features were added and updated. A number of bugs were also fixed. All the changes are as follows. Upgrading from the previous TI version, 1.4, should be seamless.
- 
-ADDED Features
-Initial TI setup now automati...&lt;a href="https://tastyigniter.com/blog/2016/03/tastyigniter-2-0-0-changelog"&gt;Read More&lt;/a&gt;&lt;img src="http://feeds.feedburner.com/~r/Tastyigniter/~4/1f1LfnFhXjM" height="1" width="1" alt=""/&gt;</description>
-        <feedburner:origLink>https://tastyigniter.com/blog/2016/03/tastyigniter-2-0-0-changelog</feedburner:origLink></item>
             </channel>
 </rss>

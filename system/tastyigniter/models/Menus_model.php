@@ -44,7 +44,7 @@ class Menus_model extends TI_Model {
 		return $this->db->count_all_results();
 	}
 
-	public function getList($filter = array()) {
+	public function getList($filter = array(), $location_id) {
 		if ( ! empty($filter['page']) AND $filter['page'] !== 0) {
 			$filter['page'] = ($filter['page'] - 1) * $filter['limit'];
 		}
@@ -59,6 +59,7 @@ class Menus_model extends TI_Model {
 					menus.mealtime_id, mealtimes.mealtime_name, mealtimes.start_time, mealtimes.end_time, mealtime_status');
 				$this->db->select('IF(start_date <= CURRENT_DATE(), IF(end_date >= CURRENT_DATE(), "1", "0"), "0") AS is_special', FALSE);
 				$this->db->select('IF(start_time <= CURRENT_TIME(), IF(end_time >= CURRENT_TIME(), "1", "0"), "0") AS is_mealtime', FALSE);
+				$this->db->where('Locations_id', $location_id);
 			}
 
 			$this->db->join('categories', 'categories.category_id = menus.menu_category_id', 'left');
