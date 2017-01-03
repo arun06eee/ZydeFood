@@ -318,7 +318,7 @@ class Template {
 		return is_array($this->_head_tags['script']) ? implode("\n\t\t", $this->_head_tags['script']) : '';
 	}
 
-	public function getBreadcrumb($tag_open = '<li class="{class}">', $link_open = '<a href="{link}">', $link_close = ' </a>', $tag_close = '</li>') {
+	public function getBreadcrumb($tag_open = '<li class="{class}">', $link_open = '<a href="{link}" style="color:#e64d64">', $link_close = ' </a>', $tag_close = '</li>') {
 		$crumbs = '';
 
 		foreach ($this->_breadcrumbs as $crumb) {

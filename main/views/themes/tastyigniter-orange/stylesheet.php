@@ -75,6 +75,7 @@ if (!empty($font['color']))
 	$style .= ".newsletter-subscribe { color:{$font['color']}}";
 
 // Header
+
 $style .= "#main-header, #main-header .navbar-collapse, .modal-header {";
 if (!empty($header['background']))
 	$style .= "background-color: {$header['background']};";
@@ -201,8 +202,6 @@ if (!empty($sidebar['image'])) {
 	}
 }
 $style .= "}";
-/* 
-$style .= ".panel{ border: none; !important}"; */
 
 $style .="#breadcrumb {";
 if (!empty($sidebar['background']))
@@ -242,6 +241,7 @@ if ( ! empty($link['hover'])) {
 	$style .= "#page-footer .main-footer a:hover, #page-footer .main-footer a:focus,";
 	$style .= "#page-footer .bottom-footer a:hover, #page-footer .bottom-footer a:focus,";
 	$style .= "a.list-group-item:hover, .list-group-item > a:hover,";
+	$style .= "a.cart-btn:hover, .cart-btn > a:hover,";
 	$style .= ".side-bar a.list-group-item.active, .side-bar .list-group-item.active > a,";
 	$style .= ".side-bar a.list-group-item:hover, .side-bar .list-group-item > a:hover,";
 	$style .= "a.list-group-item.active, .list-group-item > a.active { color: {$link['hover']};}";

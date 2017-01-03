@@ -78,7 +78,7 @@ class Menus extends Main_Controller {
 
         $list_data['show_menu_images'] = $this->config->item('show_menu_images');
 
-        $list_data['menus'] = $this->Menus_model->getList($filter);
+        $list_data['menus'] = $this->Menus_model->getList($filter, $this->input->get('location_id'));
 
         $categories = $this->Categories_model->getCategories();
 

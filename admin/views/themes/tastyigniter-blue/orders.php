@@ -218,7 +218,7 @@
 
 			<form role="form" id="list-form" accept-charset="utf-8" method="POST" action="<?php echo current_url(); ?>">
 				<div id="local" class="alert alert-warning alert-dismissable hidden" role="alert">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>An error occurred, nothing generated.</p>
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>The order must reach the <span style="color:red"><b>completed</b></span> order status before generating an invoice.</p>
 				</div>
 				<div class="table-responsive">
 				<table id="OrderTable" border="0" class="table table-striped table-border">
@@ -328,8 +328,7 @@ function filterList() {
 
 function fndownload(id, status) {
 		$("#local").addClass('hidden');
-		var Multiple_status = status;
-	if (Multiple_status == "Completed") {
+	if (status == "Completed") {
 		$(".show_invoice").attr('href','orders/invoice/view/'+id);
 		$(".show_invoice").attr('target','_blank');
 	}else{

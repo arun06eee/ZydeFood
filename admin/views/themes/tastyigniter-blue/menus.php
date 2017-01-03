@@ -65,6 +65,10 @@
                                 <th class="action">
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
+                                <th class="id">
+                                    <a class="sort" href="<?php echo $sort_id; ?>"><?php echo lang('column_id'); ?>
+                                        <i class="fa fa-sort-<?php echo ($sort_by == 'menus.menu_id') ? $order_by_active : $order_by; ?>"></i></a>
+                                </th>
                                 <!--<th>Photo</th>-->
                                 <th class="name">
                                     <a class="sort" href="<?php echo $sort_name; ?>"><?php echo lang('column_name'); ?>
@@ -80,10 +84,7 @@
                                         <i class="fa fa-sort-<?php echo ($sort_by == 'stock_qty') ? $order_by_active : $order_by; ?>"></i></a>
                                 </th>
                                 <th class="text-center"><?php echo lang('column_status'); ?></th>
-                                <th class="id">
-                                    <a class="sort" href="<?php echo $sort_id; ?>"><?php echo lang('column_id'); ?>
-                                        <i class="fa fa-sort-<?php echo ($sort_by == 'menus.menu_id') ? $order_by_active : $order_by; ?>"></i></a>
-                                </th>
+                                <th><?php echo lang('column_locations') ?></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -94,6 +95,7 @@
                                             <input type="checkbox" value="<?php echo $menu['menu_id']; ?>" name="delete[]"/>&nbsp;&nbsp;&nbsp;
                                             <a class="btn btn-edit" title="<?php echo lang('text_edit'); ?>" href="<?php echo $menu['edit']; ?>"><i class="fa fa-pencil"></i></a>
                                         </td>
+                                        <td class="id"><?php echo $menu['menu_id']; ?></td>
                                         <!--<td class="left"><img src="<?php echo $menu['menu_photo']; ?>"></td>-->
                                         <td class="name"><?php echo $menu['menu_name']; ?></td>
                                         <td class="left"><?php echo $menu['menu_price']; ?>&nbsp;&nbsp;
@@ -108,7 +110,7 @@
                                         <td class="left"><?php echo $menu['category_name']; ?></td>
                                         <td class="left"><?php echo ($menu['stock_qty'] < 1) ? '<span class="red">' . $menu['stock_qty'] . '</span>' : $menu['stock_qty']; ?></td>
                                         <td class="text-center"><?php echo $menu['menu_status']; ?></td>
-                                        <td class="id"><?php echo $menu['menu_id']; ?></td>
+                                        <td class="left"><?php echo $menu['Locations']; ?>
                                     </tr>
                                 <?php } ?>
                             <?php } else { ?>

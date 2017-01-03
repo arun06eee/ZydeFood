@@ -54,6 +54,22 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="input-name" class="col-sm-3 control-label"><?php echo lang('label_location'); ?></label>
+                        <div  class="col-sm-5">
+                            <select name="location" id="location" class="form-control">
+                                <option value=""><?php echo lang('text_select_location'); ?></option>
+                                <?php foreach ($locations as $location) { ?>
+                                    <?php if ($available_location === $location['location_id']) { ?>
+                                        <option value="<?php echo $location['location_id']; ?>" <?php echo set_select('available_location', $location['location_id'], TRUE); ?> ><?php echo $location['location_name']; ?></option>
+                                    <?php } else { ?>
+                                        <option value="<?php echo $location['location_id']; ?>" <?php echo set_select('available_location', $location['location_id']); ?> ><?php echo $location['location_name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                            <?php echo form_error('menu_category', '<span class="text-danger">','</span>') ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="" class="col-sm-3 control-label"><?php echo lang('label_image'); ?>
                             <span class="help-block"><?php echo lang('help_image'); ?></span>
                         </label>
