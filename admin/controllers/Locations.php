@@ -182,7 +182,7 @@ class Locations extends Admin_Controller {
 			$data['map_key'] = '';
 		}
 
-		$this->template->setScriptTag('https://maps.googleapis.com/maps/api/js?v=3' . $data['map_key'] .'&sensor=false&region=GB&libraries=geometry', 'google-maps-js', '104330');
+		$this->template->setScriptTag('https://maps.googleapis.com/maps/api/js?v=3' . $data['map_key'] .'&sensor=false&region=GB&libraries=geometry,places', 'google-maps-js', '104330');
 
 		if ($this->input->post() AND $location_id = $this->_saveLocation()) {
 			if ($this->input->post('save_close') === '1') {

@@ -1,4 +1,34 @@
 <?php echo get_header(); ?>
+<style>
+	#pac-input {
+		background-color: #fff;
+		font-family: Roboto;
+		font-size: 15px;
+		font-weight: 300;
+		margin-left: 12px;
+		padding: 0 11px 0 13px;
+		text-overflow: ellipsis;
+		width: 300px;
+		margin-top: 10px;
+		border: 1px solid transparent;
+		border-radius: 2px 0 0 2px;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		height: 32px;
+		outline: none;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+	}
+
+	#pac-input:focus {
+		border-color: #4d90fe;
+	}
+
+	.pac-container {
+		font-family: Roboto;
+	}
+</style>
+
 <div class="row content">
 	<div class="col-md-12">
 		<div class="row wrap-vertical">
@@ -596,6 +626,8 @@
 				<div id="delivery" class="tab-pane row wrap-none">
 					<?php if ($has_lat_lng) { ?>
 						<div class="col-md-7 wrap-none">
+							<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
 							<div id="map-holder" style="height:550px;"></div>
 						</div>
 						<div class="col-md-5 wrap-none">
@@ -933,6 +965,7 @@ $(document).on('change', '.area-types input[type="radio"]', function () {
 //--></script>
 <script type="text/javascript">//<![CDATA[
 var map = null,
+markersPoints = [],
 panel_row = <?php echo $panel_row; ?>,
 colors = <?php echo $area_colors; ?>,
 deliveryAreas = [],
@@ -977,6 +1010,100 @@ function initializeMap() {
 		map: map
 	});
 
+	var lat = marker.getPosition().lat();
+	var lng = marker.getPosition().lng();
+	if(lat == 0  || lng == 0){
+		geocoder = new google.maps.Geocoder();
+		var addr_input =  $("#input-address-1").val();
+
+		geocoder.geocode( { 'address': addr_input}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: results[0].geometry.location
+				});
+				
+				markersPoints.push(marker);
+				centerLatLng = results[0].geometry.location;
+			}
+		});
+	}
+
+	map.addListener('click', function(event) {
+		addMarker(event.latLng);
+	});
+
+	function addMarker(location) {
+		var marker = new google.maps.Marker({
+			position: location,
+			map: map
+		});
+
+		centerLatLng = location;
+		markersPoints.forEach(function(marker) {
+			marker.setMap(null);
+		});
+		markersPoints = [];
+
+		markersPoints.push(marker);
+	}
+
+	var input = document.getElementById('pac-input');
+	var searchBox = new google.maps.places.SearchBox(input);
+	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+	map.addListener('bounds_changed', function() {
+		searchBox.setBounds(map.getBounds());
+	});
+
+
+	searchBox.addListener('places_changed', function() {
+		var places = searchBox.getPlaces();
+		if (places.length == 0) {
+			return;
+		}
+
+		// Clear out the old markers.
+		markersPoints.forEach(function(marker) {
+			marker.setMap(null);
+		});
+		markersPoints = [];
+
+		// For each place, get the icon, name and location.
+		var bounds = new google.maps.LatLngBounds();
+		places.forEach(function(place) {
+			if (!place.geometry) {
+				console.log("Returned place contains no geometry");
+				return;
+			}
+			var icon = {
+				url: place.icon,
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(25, 25)
+			};
+
+			centerLatLng = place.geometry.location;
+			// Create a marker for each place.
+			markersPoints.push(new google.maps.Marker({
+				map: map,
+				icon: icon,
+				title: place.name,
+				position: place.geometry.location
+			}));
+
+			if (place.geometry.viewport) {
+				bounds.union(place.geometry.viewport);
+			} else {
+				bounds.extend(place.geometry.location);
+			}
+		});
+		map.fitBounds(bounds);
+	});
+
+  
 	$('#edit-form').on('submit', saveDeliveryAreas);
 
 	clearMapAreas();
@@ -1309,100 +1436,110 @@ function createDeliveryArea(row) {
 }
 
 function addDeliveryArea() {
-	deliveryArea = createDeliveryArea(panel_row);
-	var table_row = '1';
+	if(markersPoints.length > 0 ) {
+		deliveryArea = createDeliveryArea(panel_row);
+		var table_row = '1';
 
-	html  = '<div id="delivery-area' + panel_row + '" class="panel panel-default">';
-	html += '	<input type="hidden" name="delivery_areas[' + panel_row + '][shape]" value="" />';
-	html += '	<input type="hidden" name="delivery_areas[' + panel_row + '][vertices]" value="" />';
-	html += '	<input type="hidden" name="delivery_areas[' + panel_row + '][circle]" value="" />';
-	html += '	<div class="panel-heading collapsed" data-toggle="collapse" data-target="#delivery-area' + panel_row + ' .collapse">';
-	html += '		<div class="area-toggle"><i class="fa fa-angle-double-down up"></i><i class="fa fa-angle-double-up down"></i></div>';
-	html += '		<div class="area-name">&nbsp;&nbsp; <?php echo lang('text_area'); ?> ' + panel_row + '</div>';
-	html += '		<div class="area-color"><span class="fa-stack"><i class="fa fa-stop fa-stack-2x fa-inverse"></i><i class="fa fa-stop fa-stack-1x" style="color:' + deliveryArea.color + ';"></i></span></div>';
-	html += '		<div class="area-buttons pull-right hide"><a title="<?php echo lang('text_edit'); ?>"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp; <a class="btn-times area-remove" title="<?php echo lang('text_remove'); ?>" onClick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></div>';
-	html += '	</div>';
-	html += '	<div class="collapse">';
-	html += '	<div class="panel-body">';
-	html += '		<div class="form-group">';
-	html += '			<div class="btn-group btn-group-switch area-types wrap-vertical" data-toggle="buttons">';
-	html += '				<label class="btn btn-success area-type-circle"><input type="radio" name="delivery_areas[' + panel_row + '][type]" value="circle"><?php echo lang('text_circle'); ?></label>';
-	html += '				<label class="btn btn-success active btn-success area-type-shape"><input type="radio" name="delivery_areas[' + panel_row + '][type]" value="shape" checked="checked"><?php echo lang('text_shape'); ?></label>';
-	html += '			</div>';
-	html += '		</div>';
-	html += '		<div class="form-group">';
-	html += '			<label for="" class="col-sm-5 control-label"><?php echo lang('label_area_name'); ?></label>';
-	html += '			<div class="col-sm-7 wrap-none wrap-right">';
-	html += '				<input type="text" name="delivery_areas[' + panel_row + '][name]" id="" class="form-control" value="Area ' + panel_row + '" />';
-	html += '			</div>';
-	html += '		</div>';
-	html += '		<div class="form-group">';
-	html += '			<label for="" class="col-sm-12 control-label"><?php echo lang('label_delivery_condition'); ?>';
-	html += '				<span class="help-block"><?php echo lang('help_delivery_condition'); ?></span>';
-	html += '			</label>';
-	html += '			<div class="col-sm-12">';
-	html += '				<div class="table-responsive wrap-none">';
-	html += '					<table class="table table-striped table-border table-sortable">';
-	html += '						<thead>';
-	html += '						<tr>';
-	html += '							<th class="action action-one"></th>';
-	html += '							<th><?php echo lang('label_area_charge'); ?></th>';
-	html += '							<th><?php echo lang('label_charge_condition'); ?></th>';
-	html += '							<th><?php echo lang('label_area_min_amount'); ?></th>';
-	html += '						</tr>';
-	html += '						</thead>';
-	html += '						<tbody>';
-	html += '						<tr id="panel-row-' + panel_row + '-table-row-' + table_row + '">';
-	html += '							<td class="action action-one handle">';
-	html += '								<a class="btn btn-danger btn-xs" onclick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().remove() : false;">';
-	html += '									<i class="fa fa-times-circle"></i>';
-	html += '								</a>';
-	html += '							</td>';
-	html += '							<td>';
-	html += '								<input type="text" name="delivery_areas[' + panel_row + '][charge][' + table_row + '][amount]" class="form-control input-sm charge" value="0" />';
-	html += '							</td>';
-	html += '							<td>';
-	html += '								<select name="delivery_areas[' + panel_row + '][charge][' + table_row + '][condition]" class="form-control input-sm">';
-												<?php foreach ($delivery_charge_conditions as $condition => $condition_text) { ?>
-	html += '										<option value="<?php echo $condition; ?>"><?php echo $condition_text; ?></option>';
-												<?php } ?>
-	html += '								</select>';
-	html += '							</td>';
-	html += '							<td>';
-	html += '								<input type="text" name="delivery_areas[' + panel_row + '][charge][' + table_row + '][total]" class="form-control input-sm total" value="0" />';
-	html += '							</td>';
-	html += '						</tr>';
-	html += '						</tbody>';
-	html += '						<tfoot>';
-	html += '						<tr id="tfoot">';
-	html += '							<td class="action action-one text-center"><a class="btn btn-primary btn-xs btn-add-condition" data-panel-row="' + panel_row + '" data-table-row="' + table_row + '"><i class="fa fa-plus"></i></a></td>';
-	html += '							<td></td>';
-	html += '							<td></td>';
-	html += '							<td></td>';
-	html += '						</tr>';
-	html += '						</tfoot>';
-	html += '					</table>';
-	html += '				</div>';
-	html += '			</div>';
-	html += '		</div>';
-	html += '	</div>';
-	html += '	<div class="panel-footer hide">';
-	html += '		<div class="clearfix text-center">';
-	html += '			<button type="button" class="btn btn-default pull-left area-cancel" onClick="$(\'#delivery-area' + panel_row + ' .panel-heading\').trigger(\'click\');"><?php echo lang('button_close'); ?></button>';
-	html += '			<button type="button" class="btn btn-success pull-right area-save"><?php echo lang('button_save'); ?></button>';
-	html += '		</div>';
-	html += '	</div>';
-	html += '	</div>';
-	html += '</div>';
+		html  = '<div id="delivery-area' + panel_row + '" class="panel panel-default">';
+		html += '	<input type="hidden" name="delivery_areas[' + panel_row + '][shape]" value="" />';
+		html += '	<input type="hidden" name="delivery_areas[' + panel_row + '][vertices]" value="" />';
+		html += '	<input type="hidden" name="delivery_areas[' + panel_row + '][circle]" value="" />';
+		html += '	<div class="panel-heading collapsed" data-toggle="collapse" data-target="#delivery-area' + panel_row + ' .collapse">';
+		html += '		<div class="area-toggle"><i class="fa fa-angle-double-down up"></i><i class="fa fa-angle-double-up down"></i></div>';
+		html += '		<div class="area-name">&nbsp;&nbsp; <?php echo lang('text_area'); ?> ' + panel_row + '</div>';
+		html += '		<div class="area-color"><span class="fa-stack"><i class="fa fa-stop fa-stack-2x fa-inverse"></i><i class="fa fa-stop fa-stack-1x" style="color:' + deliveryArea.color + ';"></i></span></div>';
+		html += '		<div class="area-buttons pull-right hide"><a title="<?php echo lang('text_edit'); ?>"><i class="fa fa-pencil"></i></a> &nbsp;&nbsp; <a class="btn-times area-remove" title="<?php echo lang('text_remove'); ?>" onClick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></div>';
+		html += '	</div>';
+		html += '	<div class="collapse">';
+		html += '	<div class="panel-body">';
+		html += '		<div class="form-group">';
+		html += '			<div class="btn-group btn-group-switch area-types wrap-vertical" data-toggle="buttons">';
+		html += '				<label class="btn btn-success area-type-circle"><input type="radio" name="delivery_areas[' + panel_row + '][type]" value="circle"><?php echo lang('text_circle'); ?></label>';
+		html += '				<label class="btn btn-success active btn-success area-type-shape"><input type="radio" name="delivery_areas[' + panel_row + '][type]" value="shape" checked="checked"><?php echo lang('text_shape'); ?></label>';
+		html += '			</div>';
+		html += '		</div>';
+		html += '		<div class="form-group">';
+		html += '			<label for="" class="col-sm-5 control-label"><?php echo lang('label_area_name'); ?></label>';
+		html += '			<div class="col-sm-7 wrap-none wrap-right">';
+		html += '				<input type="text" name="delivery_areas[' + panel_row + '][name]" id="" class="form-control" value="Area ' + panel_row + '" />';
+		html += '			</div>';
+		html += '		</div>';
+		html += '		<div class="form-group">';
+		html += '			<label for="" class="col-sm-12 control-label"><?php echo lang('label_delivery_condition'); ?>';
+		html += '				<span class="help-block"><?php echo lang('help_delivery_condition'); ?></span>';
+		html += '			</label>';
+		html += '			<div class="col-sm-12">';
+		html += '				<div class="table-responsive wrap-none">';
+		html += '					<table class="table table-striped table-border table-sortable">';
+		html += '						<thead>';
+		html += '						<tr>';
+		html += '							<th class="action action-one"></th>';
+		html += '							<th><?php echo lang('label_area_charge'); ?></th>';
+		html += '							<th><?php echo lang('label_charge_condition'); ?></th>';
+		html += '							<th><?php echo lang('label_area_min_amount'); ?></th>';
+		html += '						</tr>';
+		html += '						</thead>';
+		html += '						<tbody>';
+		html += '						<tr id="panel-row-' + panel_row + '-table-row-' + table_row + '">';
+		html += '							<td class="action action-one handle">';
+		html += '								<a class="btn btn-danger btn-xs" onclick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().remove() : false;">';
+		html += '									<i class="fa fa-times-circle"></i>';
+		html += '								</a>';
+		html += '							</td>';
+		html += '							<td>';
+		html += '								<input type="text" name="delivery_areas[' + panel_row + '][charge][' + table_row + '][amount]" class="form-control input-sm charge" value="0" />';
+		html += '							</td>';
+		html += '							<td>';
+		html += '								<select name="delivery_areas[' + panel_row + '][charge][' + table_row + '][condition]" class="form-control input-sm">';
+													<?php foreach ($delivery_charge_conditions as $condition => $condition_text) { ?>
+		html += '										<option value="<?php echo $condition; ?>"><?php echo $condition_text; ?></option>';
+													<?php } ?>
+		html += '								</select>';
+		html += '							</td>';
+		html += '							<td>';
+		html += '								<input type="text" name="delivery_areas[' + panel_row + '][charge][' + table_row + '][total]" class="form-control input-sm total" value="0" />';
+		html += '							</td>';
+		html += '						</tr>';
+		html += '						</tbody>';
+		html += '						<tfoot>';
+		html += '						<tr id="tfoot">';
+		html += '							<td class="action action-one text-center"><a class="btn btn-primary btn-xs btn-add-condition" data-panel-row="' + panel_row + '" data-table-row="' + table_row + '"><i class="fa fa-plus"></i></a></td>';
+		html += '							<td></td>';
+		html += '							<td></td>';
+		html += '							<td></td>';
+		html += '						</tr>';
+		html += '						</tfoot>';
+		html += '					</table>';
+		html += '				</div>';
+		html += '			</div>';
+		html += '		</div>';
+		html += '	</div>';
+		html += '	<div class="panel-footer hide">';
+		html += '		<div class="clearfix text-center">';
+		html += '			<button type="button" class="btn btn-default pull-left area-cancel" onClick="$(\'#delivery-area' + panel_row + ' .panel-heading\').trigger(\'click\');"><?php echo lang('button_close'); ?></button>';
+		html += '			<button type="button" class="btn btn-success pull-right area-save"><?php echo lang('button_save'); ?></button>';
+		html += '		</div>';
+		html += '	</div>';
+		html += '	</div>';
+		html += '</div>';
 
-	$('#delivery-areas').append(html);
+		$('#delivery-areas').append(html);
 
-	$('#panel-row-' + panel_row + '-table-row-' + table_row + ' select.form-control').select2({
-		minimumResultsForSearch: Infinity
-	});
+		$('#panel-row-' + panel_row + '-table-row-' + table_row + ' select.form-control').select2({
+			minimumResultsForSearch: Infinity
+		});
 
-	panel_row++;
-	setDeliveryAreaEvents(deliveryArea);
+		panel_row++;
+		setDeliveryAreaEvents(deliveryArea);
+		
+		
+		markersPoints.forEach(function(marker) {
+			marker.setMap(null);
+		});
+		markersPoints = [];
+	}else {
+		alert("Choose your Area");
+	}
 }
 
 function addDeliveryCondition(panelRow, tableRow) {
