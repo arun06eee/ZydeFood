@@ -243,11 +243,15 @@ class Location {
 	}
 
 	public function hasDelivery() {
-    	return (!empty($this->local_info['offer_delivery']) AND $this->local_info['offer_delivery'] === '1') ? TRUE : FALSE;
+		if ($this->local_info['holiday'] != date("Y-m-d")){
+    		return (!empty($this->local_info['offer_delivery']) AND $this->local_info['offer_delivery'] === '1') ? TRUE : FALSE;
+    	}
 	}
 
 	public function hasCollection() {
-    	return (!empty($this->local_info['offer_collection']) AND $this->local_info['offer_collection'] === '1') ? TRUE : FALSE;
+		if ($this->local_info['holiday'] != date("Y-m-d")){
+    		return (!empty($this->local_info['offer_collection']) AND $this->local_info['offer_collection'] === '1') ? TRUE : FALSE;
+    	}
 	}
 
 	public function hasSearchQuery() {
