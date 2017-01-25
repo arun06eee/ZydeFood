@@ -88,12 +88,13 @@
                                 <span class="input-group-btn"><a class="btn btn-default" onclick="applyCoupon();" title="<?php echo lang('button_apply_coupon'); ?>"><i class="fa fa-check"></i></a></span>
                             </div>
                         </div>
-						
-						<div class="loyaltypoint">
+						<div class="loyaltypoint <?php echo $no_loyalty; ?>">
+                            <span><?php echo $customer_loyaltypoints;?></span>
 							<div class="input-group">
 								<input type="text" name="loyalty_points" class="form-control" value="<?php echo isset($loyalty['points']) ? $loyalty['points'] : ''; ?>" placeholder="<?php echo lang('text_use_points'); ?>" />
 								<span class="input-group-btn"><a class="btn btn-default" onclick="applyLoyaltyPoints()" title="<?php echo lang('button_apply_points'); ?>"><i class="fa fa-check"></i></a></span>
 							</div>
+                            <span><?php echo $points_to_bill; ?></span>
 						</div>
 
                         <div class="cart-total">

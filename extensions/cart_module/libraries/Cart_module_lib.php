@@ -25,33 +25,46 @@ class Cart_module_lib {
         $order_totals = $this->CI->Cart_model->getTotals();
         $cart_totals = $this->CI->cart->totals();
 
-		foreach ($cart_totals as $name => $cart_total) {
-
+        foreach ($cart_totals as $name => $cart_total) {
             $order_total = ! empty($order_totals[$name]['status']) ? $order_totals[$name] : array('title' => '');
- 
-            if (empty($cart_total['amount']) OR empty($order_total['status'])) {
-                continue;
+
+           if (empty($cart_total['amount']) OR empty($order_total['status'])) {
+                if (empty($cart_total['0']['amount'])) {
+                  continue;
+                }
             }
 
             $cart_total['title'] = empty($cart_total['title']) ? $order_total['title'] : $cart_total['title'];
+
             if (isset($cart_total['code'])) {
                 $cart_total['title'] = str_replace('{coupon}', $cart_total['code'], $cart_total['title']);
             }
 
-			if (isset($cart_total['points'])) {
-				$cart_total['title'] = str_replace('{loyalty}', $cart_total['points'], $cart_total['title']);
-			}
-			
-			if ($name == 'taxes') {
-                $cart_total['title'] = str_replace('{tax}', $cart_total['tax'], $cart_total['title']);
-                $cart_total['amount'] = $cart_total['amount'];
+            if (isset($cart_total['points'])) {
+                $cart_total['title'] = str_replace('{loyalty}', $cart_total['points'], $cart_total['title']);
             }
 
-            $result[$name] = array_merge($cart_total, array(
-                'title' => htmlspecialchars_decode($cart_total['title']),
-                'amount' => $this->CI->currency->format($cart_total['amount']),
-                'priority' => isset($order_total['priority']) ? $order_total['priority'] : $cart_total['priority'],
-            ));
+            if ($name == 'taxes') {
+                $i = 0 ;
+                foreach ($cart_total as $tax_data){
+                    if(is_array($tax_data)){
+                        $result[$name.$i] = array(
+                            'title' => htmlspecialchars_decode(str_replace('{tax}', $tax_data['title'], $cart_total['title'])),
+                            'amount' => $this->CI->currency->format($tax_data['amount']),
+                            'priority' => isset($order_total['priority']) ? $order_total['priority'] : $cart_total['priority'],
+                        );
+                        $i++;
+                    }
+                }
+            }
+
+            if($name !=  'taxes'){
+                $result[$name] = array_merge($cart_total, array(
+                    'title' => htmlspecialchars_decode($cart_total['title']),
+                    'amount' => $this->CI->currency->format($cart_total['amount']),
+                    'priority' => isset($order_total['priority']) ? $order_total['priority'] : $cart_total['priority'],
+                ));
+            }
         }
 
         return sort_array($result, 'priority');
@@ -242,9 +255,8 @@ class Cart_module_lib {
 		}
 
         if ($error === '') {
-                $this->CI->cart->add_loyaltyPoints(array('applied_points' => $Loyalty_points, 'total_points' => $loyaltypoints[0]['current_points'], 'priceRate' => $loyaltyPrice[0]['discount']));
-
-                return TRUE;
+            $this->CI->cart->add_loyaltyPoints(array('applied_points' => $Loyalty_points, 'total_points' => $loyaltypoints[0]['current_points'], 'priceRate' => $loyaltyPrice[0]['discount']));
+            return TRUE;
         }
 
         if (!empty($Loyalty_points)) {
@@ -254,4 +266,24 @@ class Cart_module_lib {
         return $error;
     }
 
+   public function customer_loyaltypoints() {
+        $points_details = array();
+        $cart_details = $this->CI->cart->totals();
+        $loyaltyPrice = $this->CI->Cart_model->getloyaltyPrice();
+
+        $points_to_apply = round(($cart_details['order_total']['amount']) / $loyaltyPrice[0]['discount']);
+
+        $loyaltypoints = $this->CI->Cart_model->checkLoyaltyPoints($this->CI->customer->getId());
+        $max_points = ($loyaltypoints['0']['current_points'] * $loyaltyPrice[0]['discount']);
+
+        if ($max_points < $cart_details['order_total']['amount']){
+            $points_details['points_to_apply'] = $loyaltypoints['0']['current_points'];
+            $points_details['loyaltypoints_to_show'] = $loyaltypoints['0']['current_points'];
+        }else {
+            $points_details['points_to_apply'] = $points_to_apply;
+            $points_details['loyaltypoints_to_show'] = $loyaltypoints['0']['current_points'];
+        }
+
+        return $points_details;
+    }
 }

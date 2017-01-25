@@ -23,6 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Orders_model extends TI_Model {
 
     public function getCount($filter = array()) {
+
         if (APPDIR === ADMINDIR) {
             if ( ! empty($filter['filter_search'])) {
                 $this->db->like('order_id', $filter['filter_search']);
@@ -120,13 +121,17 @@ class Orders_model extends TI_Model {
                 $this->db->where('MONTH(date_added)', $date[1]);
             }
 
+            if (!empty($filter['filter_start_date']) AND !empty($filter['filter_end_date'])) {
+                $this->db->where('order_date >=', $filter['filter_start_date']);
+                $this->db->where('order_date <=', $filter['filter_end_date']);
+            }
+
             $query = $this->db->get();
             $result = array();
 
             if ($query->num_rows() > 0) {
                 $result = $query->result_array();
             }
-
             return $result;
         }
     }

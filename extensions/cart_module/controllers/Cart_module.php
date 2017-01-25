@@ -25,6 +25,7 @@ class Cart_module extends Main_Controller {
 	}
 
 	public function index($module = array(), $data = array()) {
+
 		$this->getCart($module, $data);
 	}
 
@@ -264,6 +265,12 @@ class Cart_module extends Main_Controller {
 			};
 		}
 
+		if (empty($this->customer->getId())) {
+			$data['no_loyalty'] = 'hidden';
+		}
+
+		$samp = $this->cart_module_lib->customer_loyaltypoints();
+
 		$this->template->setStyleTag(extension_url('cart_module/views/stylesheet.css'), 'cart-module-css', '144000');
 
 		$data['is_opened']                  = $this->location->isOpened();
@@ -277,6 +284,8 @@ class Cart_module extends Main_Controller {
 		$data['show_cart_images'] 	        = isset($ext_data['show_cart_images']) ? $ext_data['show_cart_images'] : '';
 		$data['cart_images_h'] 		        = isset($ext_data['cart_images_h']) ? $ext_data['cart_images_h'] : '';
 		$data['cart_images_w'] 		        = isset($ext_data['cart_images_w']) ? $ext_data['cart_images_w'] :'';
+		$data['customer_loyaltypoints']		= '<i class="fa fa-bullhorn" style="color: #e64d64"></i> You have '.$samp['loyaltypoints_to_show'].' Loyalty points';
+		$data['points_to_bill']				= '<i class="fa fa-money" style="color: #e64d64"></i>&nbsp;&nbspYou can use maximum of '.$samp['points_to_apply'].' points for this bill.';
 
 		$data['delivery_time'] = $this->location->deliveryTime();
 		if ($data['delivery_status'] === 'closed') {

@@ -195,17 +195,33 @@
 											<?php } ?>
 										</select>&nbsp;
 									</div>
-									<div class="form-group">
+								<!--	<div class="form-group">
 										<select name="filter_date" class="form-control input-sm">
-											<option value=""><?php echo lang('text_filter_date'); ?></option>
-											<?php foreach ($order_dates as $key => $value) { ?>
-											<?php if ($key === $filter_date) { ?>
-												<option value="<?php echo $key; ?>" <?php echo set_select('filter_date', $key, TRUE); ?> ><?php echo $value; ?></option>
-											<?php } else { ?>
-												<option value="<?php echo $key; ?>" <?php echo set_select('filter_date', $key); ?> ><?php echo $value; ?></option>
-											<?php } ?>
-											<?php } ?>
+											<option value=""><?php //echo lang('text_filter_date'); ?></option>
+											<?php //foreach ($order_dates as $key => $value) { ?>
+											<?php //if ($key === $filter_date) { ?>
+												<option value="<?php //echo $key; ?>" <?php //echo set_select('filter_date', $key, TRUE); ?> ><?php //echo $value; ?></option>
+											<?php// } else { ?>
+												<option value="<?php //echo $key; ?>" <?php //echo set_select('filter_date', $key); ?> ><?php //echo $value; ?></option>
+											<?php// } ?>
+											<?php //} ?>
 										</select>
+									</div>-->
+									<div class="form-group" style="width:10%">
+										<input type="text" name="filter_start_date" class="form-control input-sm date" value="" placeholder="start date" />
+										<!--<?php #if ($filter_start_date === $filter_date) { ?>
+											<input type="text" value="<?php #echo set_select('filter_start_date', $filter_start_date); ?>"/>
+										<?php #} else { ?>
+											<input type="text" value="<?php #echo set_select('filter_start_date', $filter_start_date); ?>"/>
+										<?php #} ?>-->
+									</div>
+									<div class="form-group">
+										<input type="text" name="filter_end_date" class="form-control input-sm date" value="" placeholder="end date" />
+										<!--<?php# if ($filter_end_date === $filter_date) { ?>
+											<input type="text" value="<?php #echo set_select('filter_end_date', $filter_end_date); ?>"/>
+										<?php #} else { ?>
+											<input type="text" value="<?php #echo set_select('filter_end_date', $filter_end_date); ?>"/>
+										<?php #} ?>-->
 									</div>
 									<a class="btn btn-grey" onclick="filterList();" title="<?php echo lang('text_filter'); ?>"><i class="fa fa-filter"></i></a>&nbsp;
 									<a class="btn btn-grey" href="<?php echo page_url(); ?>" title="<?php echo lang('text_clear'); ?>"><i class="fa fa-times"></i></a>
@@ -245,7 +261,7 @@
 							<td><?php echo $order['order_id']; ?></td>
 							<td><?php echo $order['location_name']; ?></td>
 							<td><?php echo $order['first_name'] .' '. $order['last_name']; ?></td>
-                            <td><span class="label label-default" style="background-color: <?php echo $order['status_color']; ?>;"><?php echo $order['order_status']; ?></span></td>
+                            <td><span value="<?php echo $order['status_id']; ?>" name="temp" class="label label-default" style="background-color: <?php echo $order['status_color']; ?>;"><?php echo $order['order_status']; ?></span></td>
 							<td><?php echo $order['order_type']; ?></td>
 							<td><?php echo $order['payment']; ?></td>
 							<td><?php echo $order['net_total']; ?></td>
@@ -272,12 +288,16 @@
 </div>
 <script type="text/javascript"><!--
 $(document).ready(function () {
-	
+
+	$('.date').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+
 	requestURL("orders/Status_count", dataUpdateOrder);
 	//setInterval(function(){
 		requestURL("orders/Status_count", dataUpdateOrder);
 	//},1000);
-	
+
 	function dataUpdateOrder(data) {
 		$(".pre_pen_orders").empty();
 		$(".comp_delivr_orders").empty();
@@ -309,7 +329,7 @@ $(document).ready(function () {
 			}
 		}
 	}
-	
+
 	function requestURL(url, callback){
 		$.ajax ({
 			type: "GET",
@@ -327,6 +347,8 @@ function filterList() {
 }
 
 function fndownload(id, status) {
+		$(".show_invoice").removeAttr('href');
+		$(".show_invoice").removeAttr('target');
 		$("#local").addClass('hidden');
 	if (status == "Completed") {
 		$(".show_invoice").attr('href','orders/invoice/view/'+id);
@@ -348,7 +370,7 @@ function Confirmsubmit() {
 		"assignee_id"		: $('select[name="assignee_id"]').val(),
 		"status_comment"	: $('textarea[name="status_comment"]').val()
 	};
-	if  (checkbox_status != '') {
+	if (checkbox_status != '') {
 		$.ajax({
 			type: "POST",
 			url: "Orders/orderStatusChange?",

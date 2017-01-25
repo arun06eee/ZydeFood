@@ -1031,10 +1031,9 @@ function addholidays() {
 	html += '	<td class="action action-one"><a class="btn btn-danger" onclick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></td>';
 	html += '	<td>';
 	html += '		<input type="text" name="holidays[' + table_row + '][holiday_date]" class="form-control date" value="" /></td>';
-	html += '	<td><div class="input-group">';
+	html += '	<td>';
 	html += '	<input type="text" name="holidays[' + table_row + '][reason]" class="form-control" value="" />';
-	html += '	<span class="input-group"></span>';
-	html += '	</div></td>';
+	html += '	</td>';
 	html += '	<td><div class="btn-group btn-group-switch" data-toggle="buttons">';
 	html += '		<label class="btn btn-danger"><input type="radio" name="holidays[' + table_row + '][holiday_status]" value="0" /><?php echo lang('text_disabled'); ?></label>';
 	html += '		<label class="btn btn-success active"><input type="radio" name="holidays[' + table_row + '][holiday_status]" value="1" checked="checked" /><?php echo lang('text_enabled'); ?></label>';

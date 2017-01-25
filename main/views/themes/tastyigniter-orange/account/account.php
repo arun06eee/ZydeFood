@@ -36,7 +36,8 @@
 							<li><a href="#cart" data-toggle="tab"><?php echo lang('text_cart'); ?></a></li>
 							<li><a href="#orders" data-toggle="tab"><?php echo lang('text_orders'); ?></a></li>
 							<li><a href="#reservations" data-toggle="tab"><?php echo lang('text_reservations'); ?></a></li>
-							<li><a href="#inbox" data-toggle="tab"><?php echo sprintf(lang('text_inbox'), $inbox_total); ?></a></li>
+							<!--<li><a href="#inbox" data-toggle="tab"><?php echo sprintf(lang('text_inbox'), $inbox_total); ?></a></li>-->
+							<li><a href="#loyaltypointsHistory" data-toggle="tab"><?php echo lang('text_points_history'); ?></a></li>
 						</ul>
 					</div>
 
@@ -213,6 +214,33 @@
                                         <p><?php echo lang('text_no_inbox'); ?></p>
 									</div>
 								<?php } ?>
+							</div>
+
+							<div id="loyaltypointsHistory" class="tab-pane">
+							<div class="table-responsive">
+								<table class="table table-none">
+									<thead>
+										<tr>
+											<th><?php echo lang('column_email'); ?></th>
+											<th><?php echo lang('column_location'); ?></th>
+											<th><?php echo lang('column_date'); ?></th>
+											<th><?php echo lang('column_redeem_points'); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($points_history as $points_histories) { ?>
+											<tr>
+												<td><?php echo $points_histories['email']; ?></td>
+												<td><?php echo $points_histories['location']; ?></td>
+												<td><?php echo $points_histories['date']; ?></td>
+												<td>
+													<span class="label label-default" style="background-color:#00a65a"><?php echo $points_histories['points_provided']; ?></span>
+													<span class="label label-default" style="background-color:#ea0b29"><?php echo $points_histories['points_used']; ?></span>
+												</td>
+											</tr>
+										<?php } ?>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>

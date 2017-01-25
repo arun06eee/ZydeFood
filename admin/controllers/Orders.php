@@ -80,6 +80,20 @@ class Orders extends Admin_Controller {
 			$filter['filter_date'] = $data['filter_date'] = '';
 		}
 
+		if($this->input->get('filter_start_date')) {
+			$filter['filter_start_date'] = $data['filter_start_date'] = $this->input->get('filter_start_date');
+			$url .= 'filter_start_date'.$filter['filter_start_date'].'&';
+		} else {
+			$filter['filter_start_date'] = $data['filter_start_date'] = '';
+		}
+
+		if($this->input->get('filter_end_date')) {
+			$filter['filter_end_date'] = $data['filter_end_date'] = $this->input->get('filter_end_date');
+			$url .= 'filter_end_date'.$filter['filter_end_date'].'&';
+		} else {
+			$filter['filter_end_date'] = $data['filter_end_date'] = '';
+		}
+
 		if ($this->input->get('sort_by')) {
 			$filter['sort_by'] = $data['sort_by'] = $this->input->get('sort_by');
 		} else {
@@ -97,6 +111,9 @@ class Orders extends Admin_Controller {
         $this->template->setTitle($this->lang->line('text_title'));
         $this->template->setHeading($this->lang->line('text_heading'));
 		$this->template->setButton($this->lang->line('button_delete'), array('class' => 'btn btn-danger', 'onclick' => 'confirmDelete();'));
+
+		$this->template->setStyleTag(assets_url('js/datepicker/datepicker.css'), 'datepicker-css');
+		$this->template->setScriptTag(assets_url("js/datepicker/bootstrap-datepicker.js"), 'bootstrap-datepicker-js');
 
 		if ($this->input->post('delete') AND $this->_deleteOrder() === TRUE) {
 			redirect('orders');
@@ -132,6 +149,7 @@ class Orders extends Admin_Controller {
 				'order_time'		=> mdate('%H:%i', strtotime($result['order_time'])),
 				'order_date'		=> day_elapsed($result['order_date']),
 				'order_status'		=> $result['status_name'],
+				'status_id'			=> $result['status_id'],
 				'status_color'		=> $result['status_color'],
 				'order_total'		=> $this->currency->format($result['order_total']),
 				'net_total'			=> $this->currency->format($result['net_total']),

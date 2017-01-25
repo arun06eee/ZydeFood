@@ -99,6 +99,19 @@ class Account extends Main_Controller {
 			);
 		}
 
+		$data['loyalty_points_history'] = array();
+		$results = $this->Orders_model->getList($filter + array('sort_by' => 'order_id'));
+
+		foreach ($results as $result) {
+			$data['points_history'][] = array (
+				'email'				=> $result['email'],
+				'location'			=> $result['location_name'],
+				'date'				=> $result['order_date'],
+				'points_used'		=> $result['redeem_points'],
+				'points_provided'	=> $result['redeem_points_provide']
+			);
+		}
+
 		$this->template->render('account/account', $data);
 	}
 }
