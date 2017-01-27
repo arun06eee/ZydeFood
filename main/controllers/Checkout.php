@@ -160,6 +160,7 @@ class Checkout extends Main_Controller {
 
         $data['order_totals'] = array();
         $order_totals = $this->Orders_model->getOrderTotals($order_info['order_id']);
+
         if ($order_totals) {
             foreach ($order_totals as $total) {
                 if ($order_type === 'collection' AND $total['code'] === 'delivery') continue;

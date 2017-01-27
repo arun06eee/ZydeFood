@@ -11,7 +11,11 @@
                                 <span class="bg-blue"><i class="stat-icon fa fa-cart-arrow-down fa-2x"></i></span>
                             </div>
                             <div class="col-xs-8 stat-content">
-                                <span class="stat-text text-blue Recived_orders">0</span>
+                            	<?php if (!empty($recived_count)) { ?>
+                                <span class="stat-text text-blue Recived_orders"><?php echo $recived_count; ?></span>
+                                <?php } else { ?>
+                                <span class="stat-text text-blue Recived_orders">--</span>
+                                <?php } ?>
                                 <span class="stat-heading text-blue">Recived Orders</span>
                             </div>
                         </div>
@@ -26,7 +30,11 @@
                                 <span class="bg-primary"><i class="stat-icon fa fa-spoon fa-2x"></i></span>
                             </div>
                             <div class="col-xs-8 stat-content">
-                                <span class="stat-text text-primary pre_pen_orders"></span>
+                            	<?php if (!empty($pre_pen_count)) { ?>
+                                <span class="stat-text text-primary pre_pen_orders"><?php echo $pre_pen_count; ?></span>
+                                <?php } else { ?>
+                                <span class="stat-text text-primary pre_pen_orders">--</span>
+                                <?php } ?>
                                 <span class="stat-heading text-primary">Prepration & Pending Orders</span>
                             </div>
                         </div>
@@ -41,7 +49,11 @@
                                 <span class="bg-green"><i class="fa fa-truck fa-2x"></i></span>
                             </div>
                             <div class="col-xs-8 stat-content">
-                                <span class="stat-text text-green sales comp_delivr_orders"></span>
+                            	<?php if (!empty($comp_delivr_count)) { ?>
+                                <span class="stat-text text-green sales comp_delivr_orders"><?php echo $comp_delivr_count; ?></span>
+                                <?php } else { ?>
+                                <span class="stat-text text-green sales comp_delivr_orders">--</span>
+                                <?php } ?>
                                 <span class="stat-heading text-green ">Completed & Delivered Orders</span>
                             </div>
                         </div>
@@ -56,7 +68,11 @@
                                 <span class="bg-red"><i class="stat-icon fa fa-times fa-2x"></i></span>
                             </div>
                             <div class="col-xs-8 stat-content">
-                                <span class="stat-text text-red tables_reserved canceled_orders">0</span>
+                            	<?php if(!empty($cancelled_count)) { ?>
+                                <span class="stat-text text-red tables_reserved canceled_orders"><?php echo $cancelled_count; ?></span>
+                                <?php } else { ?>
+                                <span class="stat-text text-red tables_reserved canceled_orders">--</span>
+                                <?php } ?>
                                 <span class="stat-heading text-red">Canceled Orders</span>
                             </div>
                         </div>
@@ -207,21 +223,23 @@
 											<?php //} ?>
 										</select>
 									</div>-->
-									<div class="form-group" style="width:10%">
-										<input type="text" name="filter_start_date" class="form-control input-sm date" value="" placeholder="start date" />
-										<!--<?php #if ($filter_start_date === $filter_date) { ?>
-											<input type="text" value="<?php #echo set_select('filter_start_date', $filter_start_date); ?>"/>
-										<?php #} else { ?>
-											<input type="text" value="<?php #echo set_select('filter_start_date', $filter_start_date); ?>"/>
-										<?php #} ?>-->
+									<div class="input-group" style="width: 17%">
+										<?php if (isset($filter_start_date)) { ?>
+											<input type="text" name="filter_start_date" class="form-control input-sm date" value="<?php echo $filter_start_date; ?>" placeholder="start date" />
+											<span class="input-group-addon"><i class="fa fa-calendar" style="color:black"></i></span>
+										<?php } else { ?>
+											<input type="text" name="filter_start_date" class="form-control input-sm date" value="" placeholder="Start date" />
+											<span class="input-group-addon"><i class="fa fa-calendar" style="color:black"></i></span>
+										<?php } ?>
 									</div>
-									<div class="form-group">
-										<input type="text" name="filter_end_date" class="form-control input-sm date" value="" placeholder="end date" />
-										<!--<?php# if ($filter_end_date === $filter_date) { ?>
-											<input type="text" value="<?php #echo set_select('filter_end_date', $filter_end_date); ?>"/>
-										<?php #} else { ?>
-											<input type="text" value="<?php #echo set_select('filter_end_date', $filter_end_date); ?>"/>
-										<?php #} ?>-->
+									<div class="input-group" style="width: 16%">
+										<?php if (isset($filter_end_date)) { ?>
+											<input type="text" name="filter_end_date" class="form-control input-sm date" value="<?php  echo $filter_end_date; ?>" placeholder="end date" />
+											<span class="input-group-addon"><i class="fa fa-calendar" style="color:black"></i></span>
+										<?php } else { ?>
+											<input type="text" name="filter_end_date" class="form-control input-sm date" value="" placeholder="End date" />
+											<span class="input-group-addon"><i class="fa fa-calendar" style="color:black"></i></span>
+										<?php } ?>
 									</div>
 									<a class="btn btn-grey" onclick="filterList();" title="<?php echo lang('text_filter'); ?>"><i class="fa fa-filter"></i></a>&nbsp;
 									<a class="btn btn-grey" href="<?php echo page_url(); ?>" title="<?php echo lang('text_clear'); ?>"><i class="fa fa-times"></i></a>
@@ -292,7 +310,7 @@ $(document).ready(function () {
 	$('.date').datepicker({
 		format: 'yyyy-mm-dd'
 	});
-
+/*
 	requestURL("orders/Status_count", dataUpdateOrder);
 	//setInterval(function(){
 		requestURL("orders/Status_count", dataUpdateOrder);
@@ -339,7 +357,7 @@ $(document).ready(function () {
 				callback(data);
 			}
 		})
-	}
+	}*/
 });
 
 function filterList() {

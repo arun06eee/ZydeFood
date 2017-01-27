@@ -339,7 +339,6 @@ class TI_Cart extends CI_Cart {
 		// If we made it this far it means that our cart has data.
 		// Let's pass it to the Session class so it can be stored
 		$this->CI->session->set_userdata(array('cart_contents' => $this->_cart_contents));
-
 		// Woot!
 		return TRUE;
 	}
@@ -577,7 +576,10 @@ class TI_Cart extends CI_Cart {
 	 */
 	public function tax_title() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['tax']) ? $taxes['tax'] : NULL;
+		foreach ($taxes as $tax) {
+			$tax_title[] = $tax['title'];
+		}
+		return !empty($tax_title) ? $tax_title : NULL;
 	}
 
 	// --------------------------------------------------------------------
@@ -592,7 +594,10 @@ class TI_Cart extends CI_Cart {
 	 */
 	public function tax_percent() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['percent']) ? $taxes['percent'] : NULL;
+		foreach ($taxes as $tax) {
+			$tax_percent[] = $tax['title'];
+		}
+		return !empty($tax_percent) ? $tax_percent : NULL;
 	}
 
 	// --------------------------------------------------------------------
@@ -607,7 +612,10 @@ class TI_Cart extends CI_Cart {
 	 */
  	public function tax_amount() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['amount']) ? $taxes['amount'] : NULL;
+		foreach ($taxes as $tax) {
+			$tax_amount[] = $tax['amount'];
+		}
+		return !empty($tax_amount) ? $tax_amount : NULL;
 	}
 
 	// --------------------------------------------------------------------

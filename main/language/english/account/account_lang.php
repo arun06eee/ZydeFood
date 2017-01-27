@@ -7,7 +7,7 @@ $lang['text_cart'] 				        = 'My Shopping Cart';
 $lang['text_orders'] 			        = 'My Orders';
 $lang['text_reservations'] 		        = 'My Reservations';
 $lang['text_inbox'] 			        = 'My Inbox';
-$lang['text_points_history']			= 'Loyalty Points History';
+$lang['text_points_history']			= 'Redeem History';
 $lang['text_edit'] 			            = 'EDIT';
 $lang['text_checkout'] 			        = 'CHECKOUT NOW';
 $lang['text_change_password'] 			= 'Change Password';
@@ -35,6 +35,6 @@ $lang['column_subject'] 		        = 'Subject';
 $lang['column_email']					= 'Email';
 $lang['column_location']				= 'Location';
 $lang['column_date']					= 'Date';
-$lang['column_redeem_points']				= 'Add/Redeem';
+$lang['column_redeem_points']			= 'Add/Redeem';
 /* End of file account_lang.php */
 /* Location: ./main/language/english/main/account_lang.php */

@@ -36,7 +36,7 @@
 							<li><a href="#cart" data-toggle="tab"><?php echo lang('text_cart'); ?></a></li>
 							<li><a href="#orders" data-toggle="tab"><?php echo lang('text_orders'); ?></a></li>
 							<li><a href="#reservations" data-toggle="tab"><?php echo lang('text_reservations'); ?></a></li>
-							<!--<li><a href="#inbox" data-toggle="tab"><?php echo sprintf(lang('text_inbox'), $inbox_total); ?></a></li>-->
+							<li><a href="#inbox" data-toggle="tab"><?php echo sprintf(lang('text_inbox'), $inbox_total); ?></a></li>
 							<li><a href="#loyaltypointsHistory" data-toggle="tab"><?php echo lang('text_points_history'); ?></a></li>
 						</ul>
 					</div>
@@ -234,8 +234,12 @@
 												<td><?php echo $points_histories['location']; ?></td>
 												<td><?php echo $points_histories['date']; ?></td>
 												<td>
+												<?php if ($points_histories['points_provided'] != 0) { ?>
 													<span class="label label-default" style="background-color:#00a65a"><?php echo $points_histories['points_provided']; ?></span>
+												<?php } ?>
+												<?php if ($points_histories['points_used'] != 0) { ?>
 													<span class="label label-default" style="background-color:#ea0b29"><?php echo $points_histories['points_used']; ?></span>
+												<?php } ?>
 												</td>
 											</tr>
 										<?php } ?>

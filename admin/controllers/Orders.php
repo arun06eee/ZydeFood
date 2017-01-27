@@ -22,8 +22,8 @@ class Orders extends Admin_Controller {
     }
 
 	public function index() {
-		$url = '?';
 		$filter = array();
+		$url = '?';
 		if ($this->input->get('page')) {
 			$filter['page'] = (int) $this->input->get('page');
 		} else {
@@ -130,6 +130,22 @@ class Orders extends Admin_Controller {
 		$data['sort_time']			= site_url('orders'.$url.'sort_by=order_time&order_by='.$order_by);
 		$data['sort_date'] 			= site_url('orders'.$url.'sort_by=date_added&order_by='.$order_by);
 
+		$status_count = $this->Orders_model->Select_status_count($filter);
+		foreach ($status_count as $status_counts) {
+			if ($status_counts['status_id'] == '11'){
+				$data['recived_count'] = $status_counts['count'];
+			}
+			if ($status_counts['status_id'] == '12' OR $status_counts['status_id'] == '13') {
+				$data['pre_pen_count'] += $status_counts['count'];
+			}
+			if ($status_counts['status_id'] == '14' OR $status_counts['status_id'] == '15') {
+				$data['comp_delivr_count'] += $status_counts['count'];
+			}
+			if ($status_counts['status_id'] == '19'){
+				$data['cancelled_count'] = $status_counts['count'];
+			}
+		}
+
 		$results = $this->Orders_model->getList($filter);
 
 		$data['orders'] = array();
@@ -216,11 +232,6 @@ class Orders extends Admin_Controller {
 		$updateSelectOrder = $this->Orders_model->Selected_updateOrder($update_selected_order);
 		$updateOrderstatusHistory =  $this->Statuses_model->MultipleStatusHistory($update_selected_order);
 		redirect('orders');
-	}
-	
-	public function Status_count(){
-		$status_count = $this->Orders_model->Select_status_count();
-		echo  $status_count;
 	}
 
 	public function edit() {
