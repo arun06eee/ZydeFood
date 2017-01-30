@@ -25,8 +25,16 @@ class Cart_module extends Main_Controller {
 	}
 
 	public function index($module = array(), $data = array()) {
+		$holiday = $this->Locations_model->getholiday($this->location->getId());
+		$status =(unserialize($holiday['0']['holiday']));
 
-		$this->getCart($module, $data);
+		foreach ($status as $holiday_status) {
+			if($holiday_status['holiday_date'] == date("Y-m-d") AND $holiday_status['holiday_status']){
+				return false;
+			}else {			
+				$this->getCart($module, $data);
+			}
+		}
 	}
 
 	public function add() {																		// add() method to add item to cart
@@ -195,6 +203,7 @@ class Cart_module extends Main_Controller {
 
                 case 'add':
                     if (($response = $this->cart_module_lib->validateCoupon($this->input->post('code'))) === TRUE) {
+                        $code = $this->input->post('code');
                         $json['success'] = $this->lang->line('alert_coupon_applied');						// display success message
                     } else {
                         $json['error'] = $response;
@@ -205,7 +214,6 @@ class Cart_module extends Main_Controller {
                     break;
             }
         }
-
         $this->output->set_output(json_encode($json));											// encode the json array and set final out to be sent to jQuery AJAX
     }
 
@@ -269,7 +277,7 @@ class Cart_module extends Main_Controller {
 			$data['no_loyalty'] = 'hidden';
 		}
 
-		$samp = $this->cart_module_lib->customer_loyaltypoints();
+		$loyal = $this->cart_module_lib->customer_loyaltypoints();
 
 		$this->template->setStyleTag(extension_url('cart_module/views/stylesheet.css'), 'cart-module-css', '144000');
 
@@ -284,8 +292,8 @@ class Cart_module extends Main_Controller {
 		$data['show_cart_images'] 	        = isset($ext_data['show_cart_images']) ? $ext_data['show_cart_images'] : '';
 		$data['cart_images_h'] 		        = isset($ext_data['cart_images_h']) ? $ext_data['cart_images_h'] : '';
 		$data['cart_images_w'] 		        = isset($ext_data['cart_images_w']) ? $ext_data['cart_images_w'] :'';
-		$data['customer_loyaltypoints']		= '<i class="fa fa-bullhorn" style="color: #e64d64"></i> You have '.$samp['loyaltypoints_to_show'].' Loyalty points';
-		$data['points_to_bill']				= '<i class="fa fa-money" style="color: #e64d64"></i>&nbsp;&nbspYou can use maximum of '.$samp['points_to_apply'].' points for this bill.';
+		$data['customer_loyaltypoints']		= '<i class="fa fa-bullhorn" style="color: #e64d64"></i> You have '.$loyal['loyaltypoints_to_show'].' Loyalty points';
+		$data['points_to_bill']				= '<i class="fa fa-money" style="color: #e64d64"></i>&nbsp;&nbspYou can use maximum of '.$loyal['points_to_apply'].' points for this bill.';
 
 		$data['delivery_time'] = $this->location->deliveryTime();
 		if ($data['delivery_status'] === 'closed') {

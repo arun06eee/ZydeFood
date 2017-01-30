@@ -245,12 +245,13 @@ class Cart_module_lib {
         $error = '';
 		$loyaltypoints = $this->CI->Cart_model->checkLoyaltyPoints($this->CI->customer->getId());
 		$loyaltyPrice = $this->CI->Cart_model->getloyaltyPrice();
+        $points_to_apply = $this->customer_loyaltypoints();
 
 		if (empty($Loyalty_points) OR !is_numeric($Loyalty_points)) {
             $error = $this->CI->lang->line('alert_loyaltyPoints_invalid');						// display error message
         } else if ($loyaltypoints['0']['current_points'] === NULL) {
 			$error = $this->CI->lang->line('alert_Points');								// display error message
-        } else if ($loyaltypoints['0']['current_points'] < $Loyalty_points) {
+        } else if ( ($loyaltypoints['0']['current_points'] < $Loyalty_points) OR ($points_to_apply['points_to_apply'] < $Loyalty_points)) {
 			$error = $this->CI->lang->line('alert_high_points_applied');
 		}
 
@@ -283,6 +284,7 @@ class Cart_module_lib {
             $points_details['points_to_apply'] = $points_to_apply;
             $points_details['loyaltypoints_to_show'] = $loyaltypoints['0']['current_points'];
         }
+        //$this->validateLoyaltyPoints();
 
         return $points_details;
     }

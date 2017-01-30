@@ -489,6 +489,20 @@ class Locations_model extends TI_Model {
 		}
 	}
 
+	public function getholiday($location_id) {
+		$this->db->select('holiday');
+		$this->db->where('location_id', $location_id);
+		$this->db->from('locations');
+		
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+		}
+
+		return $result;;
+	}
+
 	public function addOpeningHours($location_id, $data = array()) {
 		$this->db->where('location_id', $location_id);
 		$this->db->delete('working_hours');

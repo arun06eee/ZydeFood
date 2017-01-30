@@ -81,21 +81,41 @@
                                 <?php } ?>
                             </ul>
                         </div>
-
-                        <div class="cart-coupon">
-                            <div class="input-group">
-                                <input type="text" name="coupon_code" class="form-control" value="<?php echo isset($coupon['code']) ? $coupon['code'] : ''; ?>" placeholder="<?php echo lang('text_apply_coupon'); ?>" />
-                                <span class="input-group-btn"><a class="btn btn-default" onclick="applyCoupon();" title="<?php echo lang('button_apply_coupon'); ?>"><i class="fa fa-check"></i></a></span>
-                            </div>
+                        <div id="cart-coupon">
+                            <?php if (!isset($cart_totals['coupon']['code'])) { ?>
+                                <div class="cart-coupon">
+                                    <div class="input-group">
+                                        <input type="text" name="coupon_code" class="form-control" value="<?php echo isset($coupon['code']) ? $coupon['code'] : ''; ?>" placeholder="<?php echo lang('text_apply_coupon'); ?>" />
+                                        <span class="input-group-btn"><a class="btn btn-default" onclick="applyCoupon();" title="<?php echo lang('button_apply_coupon'); ?>"><i class="fa fa-check"></i></a></span>
+                                    </div>
+                                </div>
+                            <?php } else {?>
+                                <p style="color: #428bca;">
+                                    <b>Coupon <?php echo $cart_totals['coupon']['code'] ?> applied</b>
+                                    <span class="pull-right">
+                                        <a class="remove clickable" onclick="clearCoupon('<?php echo $cart_totals['coupon']['code'] ?>');"><span class="fa fa-times"></span></a>
+                                    </span>
+                                </p> 
+                            <?php } ?>
                         </div>
-						<div class="loyaltypoint <?php echo $no_loyalty; ?>">
-                            <span><?php echo $customer_loyaltypoints;?></span>
-							<div class="input-group">
-								<input type="text" name="loyalty_points" class="form-control" value="<?php echo isset($loyalty['points']) ? $loyalty['points'] : ''; ?>" placeholder="<?php echo lang('text_use_points'); ?>" />
-								<span class="input-group-btn"><a class="btn btn-default" onclick="applyLoyaltyPoints()" title="<?php echo lang('button_apply_points'); ?>"><i class="fa fa-check"></i></a></span>
-							</div>
-                            <span><?php echo $points_to_bill; ?></span>
-						</div>
+                        <div id ="loyal">
+                            <?php if(!isset($cart_totals['loyalty']['points'])) { ?>
+        						<div class="loyaltypoint <?php echo $no_loyalty; ?>">
+                                    <span><?php echo $customer_loyaltypoints;?></span>
+        							<div class="input-group">
+        								<input type="text" name="loyalty_points" class="form-control" value="<?php echo isset($loyalty['points']) ? $loyalty['points'] : ''; ?>" placeholder="<?php echo lang('text_use_points'); ?>" />
+        								<span class="input-group-btn"><a class="btn btn-default" onclick="applyLoyaltyPoints()" title="<?php echo lang('button_apply_points'); ?>"><i class="fa fa-check"></i></a></span>
+        							</div>
+                                    <span><?php echo $points_to_bill; ?></span>
+        						</div>
+                            <?php } else {?>
+                                <p style="color: #428bca;"><b><?php echo $cart_totals['loyalty']['points'] ?> Loyalty Points applied</b>
+                                    <span class="pull-right">
+                                        <a class="remove clickable" onclick="clearpoints('<?php echo $cart_totals['loyalty']['points'] ?>');"><span class="fa fa-times"></span></a>
+                                    </span>
+                                </p>
+                            <?php } ?>
+                        </div>
 
                         <div class="cart-total">
                             <div class="table-responsive">
@@ -109,10 +129,10 @@
                                                             <b><?php echo $total['title']; ?>:</b>
                                                         <?php } else if ($name === 'coupon' AND isset($total['code'])) { ?>
                                                             <?php echo $total['title']; ?>:&nbsp;&nbsp;
-                                                            <a class="remove clickable" onclick="clearCoupon('<?php echo $total['code']; ?>');"><span class="fa fa-times"></span></a>
+                                                            <!--<a class="remove clickable" onclick="clearCoupon('<?php echo $total['code']; ?>');"><span class="fa fa-times"></span></a>-->
                                                         <?php } else if($name === 'loyalty' AND isset($total['points'])) { ?>
 															<?php echo $total['title'];?>:&nbsp;&nbsp;
-															<a class="remove clickable" onclick="clearpoints('<?php echo $total['points']; ?>');"><span class="fa fa-times"></span></a>
+															<!--<a class="remove clickable" onclick="clearpoints('<?php echo $total['points']; ?>');"><span class="fa fa-times"></span></a>-->
 														<?php } else { ?>
                                                             <?php echo $total['title']; ?>:
                                                         <?php } ?>
@@ -366,8 +386,4 @@
 
         $('#cart-info .cart-items').css({"height" : "auto", "max-height" : cartHeight, "overflow" : "auto", "margin-right" : "-15px", "padding-right" : "5px"});
     }
-
-    function addCart(menu_id, quantity) {
-        console.log("hi");
-    }
-    //--></script>
+//--></script>

@@ -378,6 +378,7 @@ class TI_Cart extends CI_Cart {
 		unset($cart['totals']);
 		unset($cart['taxes']);
 		unset($cart['loyalty']);
+		unset($cart['coupon']);
 
 		// Backward compatibility
 		if (isset($cart['delivery'])) unset($cart['delivery']);

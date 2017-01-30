@@ -83,7 +83,6 @@ $lang['alert_Points'] 	 				    = '<p class="alert-danger">NO points available.<
 $lang['alert_high_points_applied'] 	 		= '<p class="alert-danger">You can not apply this much points.</p>';
 $lang['alert_points_removed'] 	            = '<p class="alert-success">Your points has been removed successfully.</p>';
 $lang['alert_points_applied'] 	            = '<p class="alert-success">Your points has been applied successfully.</p>';
-
 $lang['help_show_cart_images'] 			    = 'Show or hide cart menu images';
 $lang['help_cart_image_size'] 			    = '(Height x Width)';
 $lang['help_fixed_offset'] 			        = 'Pixels to offset from top and bottom screen when calculating position of scroll.';
