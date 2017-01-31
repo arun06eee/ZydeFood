@@ -27,13 +27,15 @@ class Cart_module extends Main_Controller {
 	public function index($module = array(), $data = array()) {
 		$holiday = $this->Locations_model->getholiday($this->location->getId());
 		$status =(unserialize($holiday['0']['holiday']));
+		$check_holiday = 1;
 
 		foreach ($status as $holiday_status) {
 			if($holiday_status['holiday_date'] == date("Y-m-d") AND $holiday_status['holiday_status']){
-				return false;
-			}else {			
-				$this->getCart($module, $data);
+				$check_holiday = 0;
 			}
+		}
+		if ($check_holiday == 1) {
+			$this->getCart($module, $data);
 		}
 	}
 
@@ -351,7 +353,7 @@ class Cart_module extends Main_Controller {
 						'name' 				=> (strlen($cart_item['name']) > 25) ? strtolower(substr($cart_item['name'], 0, 25)) .'...' : strtolower($cart_item['name']),
 						//add currency symbol and format item price to two decimal places
 						'price' 			=> $this->currency->format($cart_item['price']),
-						'tax'				=> 15,
+						'tax'				=> '',
 						'qty' 				=> $cart_item['qty'],
 						'image' 			=> $cart_image,
 						//add currency symbol and format item subtotal to two decimal places

@@ -284,7 +284,6 @@ class Cart_module_lib {
             $points_details['points_to_apply'] = $points_to_apply;
             $points_details['loyaltypoints_to_show'] = $loyaltypoints['0']['current_points'];
         }
-        //$this->validateLoyaltyPoints();
 
         return $points_details;
     }
