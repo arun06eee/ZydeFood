@@ -257,7 +257,6 @@ class Local extends Main_Controller {
 			'info'  => $this->pagination->create_infos(),
 			'links' => $this->pagination->create_links()
 		);
-
 		return $data;
 	}
 

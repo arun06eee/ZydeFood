@@ -682,13 +682,10 @@ class Orders_model extends TI_Model {
                         $total['title'] = empty($total['title']) ? $order_total['title'] : $total['title'];
                         if (isset($total['code'])) {
                             $total['title'] = str_replace('{coupon}', $total['code'], $total['title']);
-                        } else if (isset($total['taxes'])) {
-                            foreach ($total['taxes'] as $tax_data) {
-                                $total['title'] = str_replace('{tax}', $tax_data['title'], $total['title']);
-                            }
                         }else if (isset($total['points'])) {
                             $total['title'] = str_replace('{loyalty}', $total['points'], $total['title']);
                         }
+
 
                         $this->db->set('order_id', $order_id);
                         $this->db->set('code', $name);
@@ -702,6 +699,25 @@ class Orders_model extends TI_Model {
                         }
 
                         $this->db->insert('order_totals');
+                    }
+                    if ($name === $total_name AND is_numeric($total['0']['amount'])) {
+
+                        //$total['title'] = $total['0']['title'];
+                        $i = 0;
+                        foreach ($total as $totals) {
+                            $total['title'.$i] = $totals['title'];
+                            $total['amount'.$i] = $totals['amount'];
+
+                        $this->db->set('order_id', $order_id);
+                        $this->db->set('code', $name);
+                        $this->db->set('value', $total['amount'.$i]);
+                        $this->db->set('title', $total['title'.$i]);
+                        $this->db->set('priority', $order_total['priority']);
+
+                        $this->db->insert('order_totals');
+
+                        $i++;
+                        }
                     }
                 }
             }

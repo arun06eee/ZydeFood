@@ -81,14 +81,16 @@ class Cart_module extends Main_Controller {
 
 			$price = (!empty($menu_data['special_status']) AND $menu_data['is_special'] === '1') ? $menu_data['special_price'] : $menu_data['menu_price'];
 
+			$current_location = $this->location->getId();
 			$cart_data = array(																// create an array of item to be added to cart with id, name, qty, price and options as keys
-				'rowid'         => !empty($cart_item['rowid']) ? $cart_item['rowid'] : NULL,
-				'id'     		=> $menu_data['menu_id'],
-				'name'   		=> $menu_data['menu_name'],
-				'qty'    		=> $quantity,
-				'price'  		=> $price,
-				'comment'       => $this->input->post('comment') ? substr(htmlspecialchars(trim($this->input->post('comment'))), 0, 50) : '',
-				'options' 		=> $cart_options
+				'location'		=> $this->location->getId(),
+				'rowid'			=> !empty($cart_item['rowid']) ? $cart_item['rowid'] : NULL,
+				'id'			=> $menu_data['menu_id'],
+				'name'			=> $menu_data['menu_name'],
+				'qty'			=> $quantity,
+				'price'			=> $price,
+				'comment'		=> $this->input->post('comment') ? substr(htmlspecialchars(trim($this->input->post('comment'))), 0, 50) : '',
+				'options'		=> $cart_options
 			);
 		}
 
@@ -346,26 +348,29 @@ class Cart_module extends Main_Controller {
 						$cart_image = $this->Image_tool_model->resize($menu_photo, $data['cart_images_h'], $data['cart_images_w']);
 					}
 
-					// load menu data into array
-					$data['cart_items'][] = array(
-						'rowid'				=> $cart_item['rowid'],
-						'menu_id' 			=> $cart_item['id'],
-						'name' 				=> (strlen($cart_item['name']) > 25) ? strtolower(substr($cart_item['name'], 0, 25)) .'...' : strtolower($cart_item['name']),
-						//add currency symbol and format item price to two decimal places
-						'price' 			=> $this->currency->format($cart_item['price']),
-						'tax'				=> '',
-						'qty' 				=> $cart_item['qty'],
-						'image' 			=> $cart_image,
-						//add currency symbol and format item subtotal to two decimal places
-						'sub_total' 		=> $this->currency->format($cart_item['subtotal']),
-						'comment'           => isset($cart_item['comment']) ? $cart_item['comment'] : '',
-						'options' 			=> ($this->cart->has_options($row_id) == TRUE) ? $this->cart->product_options_string($row_id) : ''
-					);
-
+					if ($cart_item['location'] == $this->location->getId()){
+						// load menu data into array
+						$data['cart_items'][] = array(
+							'location'			=> $cart_item['location'],
+							'rowid'				=> $cart_item['rowid'],
+							'menu_id' 			=> $cart_item['id'],
+							'name' 				=> (strlen($cart_item['name']) > 25) ? strtolower(substr($cart_item['name'], 0, 25)) .'...' : strtolower($cart_item['name']),
+							//add currency symbol and format item price to two decimal places
+							'price' 			=> $this->currency->format($cart_item['price']),
+							'tax'				=> '',
+							'qty' 				=> $cart_item['qty'],
+							'image' 			=> $cart_image,
+							//add currency symbol and format item subtotal to two decimal places
+							'sub_total' 		=> $this->currency->format($cart_item['subtotal']),
+							'comment'           => isset($cart_item['comment']) ? $cart_item['comment'] : '',
+							'options' 			=> ($this->cart->has_options($row_id) == TRUE) ? $this->cart->product_options_string($row_id) : ''
+						);
+					}
 				} else {
 					$this->alert->set('custom_now', $alert_msg, 'cart_module');
 					$this->cart->update(array('rowid' => $cart_item['rowid'], 'qty' => '0'));										// pass the cart_data array to add item to cart, if successful
 				}
+
 			}
 
 			if (($response = $this->cart_module_lib->validateOrderType()) !== TRUE) {
