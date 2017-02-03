@@ -81,7 +81,8 @@ class Tax_menu extends Admin_Controller {
 						'time'			=> mdate('%H:%i', strtotime($result['order_time'])),
 						'date'			=> day_elapsed($result['order_date']),
 					);
-				} else {
+				} else 
+					if (!($this->input->get('filter_by_titles'))) {
 					$data['tax_menus'][] = array(
 						'order_id'		=> $result['order_id'],
 						'tax_title'		=> $title,
