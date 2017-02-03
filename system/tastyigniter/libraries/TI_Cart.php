@@ -215,7 +215,7 @@ class TI_Cart extends CI_Cart {
 				$ignore = 'add';
 				foreach ($gettax as $gettaxes){
 					$this->_cart_totals['taxes'][] = array(
-					'title' => $gettaxes['name'] .' - '.$gettaxes['percentage']. '% included',
+					'title' => $gettaxes['name'] .' - '.$gettaxes['percentage']. '%',
 					'amount' => ($overtotal * ($gettaxes['percentage'] / 100)),
 					'priority' => '4',
 					'action' => $ignore

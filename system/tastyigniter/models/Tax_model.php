@@ -17,7 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * Coupons Model Class
  *
  * @category       Models
- * @package        TastyIgniter\Models\Loyalty_model.php
+ * @package        TastyIgniter\Models\Tax_model.php
  * @link           http://docs.tastyigniter.com
  */
  

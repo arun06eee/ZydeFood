@@ -47,10 +47,13 @@ $theme['nav_menu'] = array(
 	
 	'tax' => array(
 		'class' => 'tax',
-		'href'  => site_url('tax'),
 		'icon' 	=> 'fa fa-legal',
-		'title' => lang('menu_tax'),
-		'permission' => 'Admin.Tax',
+		'title' => 'Taxes',
+		'permission' => 'Admin.Tax|Admin.Tax_menu',
+		'child' => array(
+			'tax' => array('class' => 'tax', 'href'  => site_url('tax'), 'title'=> lang('menu_tax'), 'permission' => 'Admin.Tax'),
+			'tax_menu' => array('class' => 'tax_menu', 'href' => site_url('tax_menu'), 'title' => lang('menu_tax_details'), 'permission' => 'Admin.Tax_menu'),
+			)
 	),
 	
 	'marketing' => array(

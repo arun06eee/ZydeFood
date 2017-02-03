@@ -286,6 +286,18 @@ class Orders_model extends TI_Model {
         return $result;
     }
 
+    public function getTaxdetails() {
+        $this->db->select('tax_details');
+        $this->db->from('orders');
+
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
+    }
+
     public function isOrderPlaced($order_id) {
         $this->db->from('orders');
         $this->db->where('order_id', $order_id);
@@ -702,7 +714,6 @@ class Orders_model extends TI_Model {
                     }
                     if ($name === $total_name AND is_numeric($total['0']['amount'])) {
 
-                        //$total['title'] = $total['0']['title'];
                         $i = 0;
                         foreach ($total as $totals) {
                             $total['title'.$i] = $totals['title'];
