@@ -89,7 +89,8 @@
 			</form>
 
 			<div class="pagination-bar clearfix">
-				<div class="links"><?php echo $pagination['links']; ?></div>
+				<div class="pull-right"><b>Total Tax amount: <?php echo $total; ?></b></div>
+				<div class="links"><?php echo $pagination['linfks']; ?></div>
 			</div>
 		</div>
 	</div>
