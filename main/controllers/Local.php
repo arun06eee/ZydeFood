@@ -20,7 +20,7 @@ class Local extends Main_Controller {
 		}
 
 		if ($this->input->get('cmd') == 'getMenu') {
-			$this->getMenuApi();
+			$this->getMenuAPI();
 			exit;
 		}
 		
@@ -498,54 +498,24 @@ class Local extends Main_Controller {
 			$data['locations'] = sort_array($data['locations'], 'total_reviews');
 		}
 
-		$data['code'] = 0;
-		$data['status'] = "success";
-		
+		$data['status'] = 1;
+
 		$this->location->initialize();
 
 		print_r(json_encode($data));
 	}
-	
-	public function getMenuApi() {
-		$filter = array();
 
-		$data['code'] = 0;
-		$data['status'] = "success";
+	public function getMenuAPI() {
 
-		if ($this->input->get('page')) {
-			$filter['page'] = (int) $this->input->get('page');
-		} else {
-			$filter['page'] = '';
-		}
-
-		if ($this->config->item('menus_page_limit')) {
-			$filter['limit'] = $this->config->item('menus_page_limit');
-		}
-
-		$filter['sort_by'] = 'menus.menu_priority';
-		$filter['order_by'] = 'ASC';
-		$filter['filter_status'] = '1';
-		$filter['filter_category'] = (int) $this->input->get('category_id'); 									// retrieve 3rd uri segment else set FALSE if unavailable.
-
+		$data['status'] = 1;
 		$this->load->module('menus');
-		$data['menu_list'] = $this->menus->getList($filter);
-
-		$data['menu_total']	= $this->Menus_model->getCount();
-		if (is_numeric($data['menu_total']) AND $data['menu_total'] < 150) {
-			$filter['category_id'] = 0;
-		}
-
-		$data['location_name'] = $this->location->getName();
-
-		$data['local_info'] = $this->info();
-
-		$data['local_reviews'] = $this->reviews();
-
-		$data['local_gallery'] = $this->gallery();
+		$data['menu_count']	= $this->Menus_model->getCount();
+		$data['categories_count'] = $this->Categories_model->getCount();
+		$data['menu_list'] = $this->menus->getListAPI();
+		$data['menu_option_count'] = count($data['menu_list']['option_values']);
 
 		print_r(json_encode($data));
 	}
-	
 }
 
 /* End of file local.php */

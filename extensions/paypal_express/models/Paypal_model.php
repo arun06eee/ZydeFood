@@ -58,7 +58,8 @@ class Paypal_model extends TI_Model {
 				}
 			}
 
-			$nvp_data .= '&PAYMENTREQUEST_0_ITEMAMT='. urlencode($this->cart->total());
+//			$nvp_data .= '&PAYMENTREQUEST_0_ITEMAMT='. urlencode($this->cart->total());
+			$nvp_data .= '&PAYMENTREQUEST_0_ITEMAMT='. urlencode(100);
 
 			if ($this->cart->delivery() > 0) {
 				$nvp_data .= '&PAYMENTREQUEST_0_SHIPPINGAMT='. urlencode($this->cart->delivery());
@@ -69,10 +70,13 @@ class Paypal_model extends TI_Model {
 			}
 
 			if ($this->cart->order_total() > 0) {
-				$nvp_data  .= '&PAYMENTREQUEST_0_AMT='. urlencode($this->cart->order_total());
+				//print_r($this->cart->order_total());
+				//$nvp_data  .= '&PAYMENTREQUEST_0_AMT='. urlencode($this->cart->order_total());
+				$nvp_data  .= '&PAYMENTREQUEST_0_AMT='. urlencode(100);
 			}
 
 			$response = $this->callPayPal('SetExpressCheckout', $nvp_data);
+			print_r($response);
 
 			if (isset($response['ACK'])) {
 				if (strtoupper($response['ACK']) !== 'SUCCESS' OR strtoupper($response['ACK']) !== 'SUCCESSWITHWARNING') {
@@ -90,7 +94,8 @@ class Paypal_model extends TI_Model {
 
 		$nvp_data  = '&TOKEN='. urlencode($token);
 		$nvp_data .= '&PAYERID='. urlencode($payer_id);
-		$nvp_data .= '&PAYMENTREQUEST_0_ITEMAMT='. urlencode($this->cart->total());
+	//	$nvp_data .= '&PAYMENTREQUEST_0_ITEMAMT='. urlencode($this->cart->total());
+		$nvp_data .= '&PAYMENTREQUEST_0_ITEMAMT='. urlencode(100);
 
 		if ($this->cart->delivery() > 0) {
 			$nvp_data .= '&PAYMENTREQUEST_0_SHIPPINGAMT='. urlencode($this->cart->delivery());
@@ -101,7 +106,8 @@ class Paypal_model extends TI_Model {
 		}
 
 		if ($this->cart->order_total() > 0) {
-			$nvp_data  .= '&PAYMENTREQUEST_0_AMT='. urlencode($this->cart->order_total());
+			//$nvp_data  .= '&PAYMENTREQUEST_0_AMT='. urlencode($this->cart->order_total());
+			$nvp_data  .= '&PAYMENTREQUEST_0_AMT='. urlencode(100);
 		}
 
 		$response = $this->callPayPal('DoExpressCheckoutPayment', $nvp_data);
@@ -163,6 +169,7 @@ class Paypal_model extends TI_Model {
 	}
 
 	public function callPayPal($method, $nvp_data) {
+		print_r("hi arun");
 		$payment = $this->extension->getPayment('paypal_express');
 		$settings = $payment['ext_data'];
 		$api_user = (isset($settings['api_user'])) ? $settings['api_user'] : '';

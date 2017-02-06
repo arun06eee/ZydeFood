@@ -71,6 +71,7 @@ class Menus extends Main_Controller {
 		$this->index();
 	}
 
+	
     public function getList($filter, $list_data = array()) {
         $url = '?';
 
@@ -150,6 +151,67 @@ class Menus extends Main_Controller {
 
         return $list_data;
     }
+	
+	public function getListAPI(){
+		$list_data = array();
+		$filter = array();
+        $list_data['menus'] = $this->Menus_model->getListAPI($filter);
+
+
+        $categories = $this->Categories_model->getCategories();
+        $list_data['categories'] = array();
+
+        foreach (sort_array($categories) as $category) {
+            if (!empty($filter['filter_category']) AND $filter['filter_category'] != $category['category_id']) continue;
+
+            $category_image = '';
+            if ( ! empty($category['image'])) {
+                $category_image = $this->Image_tool_model->resize($category['image'], '800', '115');
+            }
+
+            $list_data['categories'][] = array(
+                'category_id'	    =>	$category['category_id'],
+                'name'	            =>	$category['name'],
+                'description'	    =>	$category['description'],
+                'priority'	        =>	$category['priority'],
+                'image'	            =>	$category_image
+            );
+        }
+
+        $list_data['menu_options'] = array();
+        $menu_options = $this->Menu_options_model->getMenuOptions();
+        foreach ($menu_options as $menu_id => $option) {
+            $option_values = array();
+
+            foreach ($option['option_values'] as $value) {
+                $option_values[] = array(
+                    'option_value_id' => $value['option_value_id'],
+                    'value'           => $value['value'],
+                    'price'           => (empty($value['new_price']) OR $value['new_price'] == '0.00') ? $this->currency->format($value['price']) : $this->currency->format($value['new_price']),
+                );
+            }
+
+            $list_data['menu_options'][] = array(
+                'menu_option_id'   => $option['menu_option_id'],
+                'option_id'        => $option['option_id'],
+                'option_name'      => $option['option_name'],
+                'display_type'     => $option['display_type'],
+                'priority'         => $option['priority'],
+                'default_value_id' => isset($option['default_value_id']) ? $option['default_value_id'] : 0,
+                'option_values'    => $option_values,
+            );
+        }
+
+
+		$list_data['option_values'] = $this->Menu_options_model->getOptionValues();
+	/* 	foreach ($menu_options as $option) {
+			if ( ! isset($list_data['option_values'][$option['option_id']])) {
+				$list_data['option_values'][] = $this->Menu_options_model->getOptionValues($option['option_id']);
+			}
+		} */
+		
+		return $list_data;
+	}
 }
 
 /* End of file menus.php */
