@@ -160,6 +160,7 @@ class Checkout extends Main_Controller {
 
         $data['order_totals'] = array();
         $order_totals = $this->Orders_model->getOrderTotals($order_info['order_id']);
+
         if ($order_totals) {
             foreach ($order_totals as $total) {
                 if ($order_type === 'collection' AND $total['code'] === 'delivery') continue;
@@ -475,23 +476,28 @@ class Checkout extends Main_Controller {
         if (!empty($order_data) AND !empty($cart_contents) AND $this->input->post('payment')) {
 
             $order_data['order_id'] = $this->Orders_model->addOrder($order_data, $cart_contents);
-           
+
             $getTotalLoyaltyPoint = $this->Cart_model->checkLoyaltyPoints($this->customer->getId());
+
             $ReduceLoyaltyPoints = $getTotalLoyaltyPoint[0]['current_points'] - $cart_contents['totals']['loyalty']['points'];
+
             $this->Cart_model->reduce_loyaltypoints($ReduceLoyaltyPoints, $this->customer->getId());
+            $this->Cart_model->used_points($cart_contents['totals']['loyalty']['points'],$order_data['order_id']);
 
             $this->session->set_userdata('order_data', $order_data);					// save order details to session and return TRUE
 
             $Points_to_customer = $this->Loyalty_model->get_loyaltyData();              // add loyalty points to the customer by their order amount
+            $provide_points = "";
 
             foreach ($Points_to_customer as $provide_point) {
 
                 if ($provide_point['min_range'] < $cart_contents['net_total'] AND $provide_point['max_range'] > $cart_contents['net_total']) {
-
-                    $customer_points = $getTotalLoyaltyPoint[0]['current_points'] + $provide_point['points'] - $cart_contents['totals']['loyalty']['points'];    
+                    $provide_points = $provide_point['points'];
+                    $customer_points = $getTotalLoyaltyPoint[0]['current_points'] + $provide_points - $cart_contents['totals']['loyalty']['points'];    
                     $this->Loyalty_model->Add_pointsto_customer($customer_points, $this->customer->getId());    //update loyalty points with provided points
                 }
             }
+            $this->Cart_model->points_provide($provide_points, $order_data['order_id']);
 
             if ($order_info = $this->Orders_model->getOrder($order_data['order_id'], $order_data['customer_id'])) {	// retrieve order details array from getMainOrder method in Orders 
                 if (!empty($order_info['order_id']) AND !empty($order_data['ext_payment'])) {

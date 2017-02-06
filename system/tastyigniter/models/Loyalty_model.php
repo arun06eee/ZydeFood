@@ -210,7 +210,6 @@ class Loyalty_model extends TI_Model {
 	}
 
 	public function Add_pointsto_customer($provide_points, $customer_id) {
-		print_r($customer_id);
 		$this->db->set('current_points', $provide_points);
 		$this->db->where('customer_id', $customer_id);
 		$this->db->update('customers');

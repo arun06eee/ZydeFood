@@ -22,8 +22,8 @@ class Orders extends Admin_Controller {
     }
 
 	public function index() {
-		$url = '?';
 		$filter = array();
+		$url = '?';
 		if ($this->input->get('page')) {
 			$filter['page'] = (int) $this->input->get('page');
 		} else {
@@ -80,6 +80,20 @@ class Orders extends Admin_Controller {
 			$filter['filter_date'] = $data['filter_date'] = '';
 		}
 
+		if($this->input->get('filter_start_date')) {
+			$filter['filter_start_date'] = $data['filter_start_date'] = $this->input->get('filter_start_date');
+			$url .= 'filter_start_date'.$filter['filter_start_date'].'&';
+		} else {
+			$filter['filter_start_date'] = $data['filter_start_date'] = '';
+		}
+
+		if($this->input->get('filter_end_date')) {
+			$filter['filter_end_date'] = $data['filter_end_date'] = $this->input->get('filter_end_date');
+			$url .= 'filter_end_date'.$filter['filter_end_date'].'&';
+		} else {
+			$filter['filter_end_date'] = $data['filter_end_date'] = '';
+		}
+
 		if ($this->input->get('sort_by')) {
 			$filter['sort_by'] = $data['sort_by'] = $this->input->get('sort_by');
 		} else {
@@ -98,6 +112,9 @@ class Orders extends Admin_Controller {
         $this->template->setHeading($this->lang->line('text_heading'));
 		$this->template->setButton($this->lang->line('button_delete'), array('class' => 'btn btn-danger', 'onclick' => 'confirmDelete();'));
 
+		$this->template->setStyleTag(assets_url('js/datepicker/datepicker.css'), 'datepicker-css');
+		$this->template->setScriptTag(assets_url("js/datepicker/bootstrap-datepicker.js"), 'bootstrap-datepicker-js');
+
 		if ($this->input->post('delete') AND $this->_deleteOrder() === TRUE) {
 			redirect('orders');
 		}
@@ -112,6 +129,22 @@ class Orders extends Admin_Controller {
 		$data['sort_total'] 		= site_url('orders'.$url.'sort_by=order_total&order_by='.$order_by);
 		$data['sort_time']			= site_url('orders'.$url.'sort_by=order_time&order_by='.$order_by);
 		$data['sort_date'] 			= site_url('orders'.$url.'sort_by=date_added&order_by='.$order_by);
+
+		$status_count = $this->Orders_model->Select_status_count($filter);
+		foreach ($status_count as $status_counts) {
+			if ($status_counts['status_id'] == '11'){
+				$data['recived_count'] = $status_counts['count'];
+			}
+			if ($status_counts['status_id'] == '12' OR $status_counts['status_id'] == '13') {
+				$data['pre_pen_count'] += $status_counts['count'];
+			}
+			if ($status_counts['status_id'] == '14' OR $status_counts['status_id'] == '15') {
+				$data['comp_delivr_count'] += $status_counts['count'];
+			}
+			if ($status_counts['status_id'] == '19'){
+				$data['cancelled_count'] = $status_counts['count'];
+			}
+		}
 
 		$results = $this->Orders_model->getList($filter);
 
@@ -132,6 +165,7 @@ class Orders extends Admin_Controller {
 				'order_time'		=> mdate('%H:%i', strtotime($result['order_time'])),
 				'order_date'		=> day_elapsed($result['order_date']),
 				'order_status'		=> $result['status_name'],
+				'status_id'			=> $result['status_id'],
 				'status_color'		=> $result['status_color'],
 				'order_total'		=> $this->currency->format($result['order_total']),
 				'net_total'			=> $this->currency->format($result['net_total']),
@@ -198,11 +232,6 @@ class Orders extends Admin_Controller {
 		$updateSelectOrder = $this->Orders_model->Selected_updateOrder($update_selected_order);
 		$updateOrderstatusHistory =  $this->Statuses_model->MultipleStatusHistory($update_selected_order);
 		redirect('orders');
-	}
-	
-	public function Status_count(){
-		$status_count = $this->Orders_model->Select_status_count();
-		echo  $status_count;
 	}
 
 	public function edit() {

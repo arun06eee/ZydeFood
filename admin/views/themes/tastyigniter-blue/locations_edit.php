@@ -40,6 +40,7 @@
 				<li><a href="#reservation" data-toggle="tab"><?php echo lang('text_tab_reservation'); ?></a></li>
 				<li><a id="open-map" href="#delivery" data-toggle="tab"><?php echo lang('text_tab_delivery'); ?></a></li>
 				<li><a href="#gallery" data-toggle="tab"><?php echo lang('text_tab_gallery'); ?></a></li>
+				<li><a href="#holidays" data-toggle="tab"><?php echo "Holidays" ?></a></li>
 				<!--<li><a href="#options" data-toggle="tab"><?php echo lang('text_tab_options'); ?></a></li>-->
 			</ul>
 		</div>
@@ -837,12 +838,73 @@
 						</div>
 					</div>
 				</div>
+				<div id="holidays">
+				<form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="<?php echo current_url(); ?>">
+				<div class="table-responsive">
+					<table class="table table-striped table-border table-holidays">
+						<thead>
+							<tr>
+								<th class="action action-one"></th>
+								<th style="width:15%"><?php echo 'Holiday Date'?></th>
+								<th><?php echo 'Reason' ?></th>
+								<th style="width:15%"><?php echo 'Status' ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $table_row = 0; ?>
+							<?php foreach ($holidays as $holiday) { ?>
+							<tr id="table-row<?php echo $table_row; ?>">
+								<td class="action action-one">
+									<?php if (empty($holiday['id'])) { ?>
+										<a class="btn btn-danger" onclick="confirm('<?php echo lang('alert_warning_confirm'); ?>') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a>
+									<?php } else { ?>
+										<a class="btn btn-danger" disabled="disabled"><i class="fa fa-times-circle"></i></a>
+									<?php } ?>
+								</td>
+								<td>
+									<input type="text" name="holidays[<?php echo $table_row; ?>][holiday_date]" class="form-control date" value="<?php echo set_value('holidays['.$table_row.'][holiday_date]', $holiday['holiday_date']); ?>" />
+									<?php echo form_error('holidays['.$table_row.'][id]', '<span class="text-danger">', '</span>'); ?>
+									<?php echo form_error('holidays['.$table_row.'][holiday_date]', '<span class="text-danger">', '</span>'); ?>
+								</td>
+								<td>
+									<input type="text" name="holidays[<?php echo $table_row; ?>][reason]" class="form-control" value="<?php echo set_value('holidays['.$table_row.'][reason]', $holiday['reason']); ?>" />
+									<?php echo form_error('holidays['.$table_row.'][reason]', '<span class="text-danger">', '</span>'); ?>
+								</td>
+								<td>
+									<div class="btn-group btn-group-switch" data-toggle="buttons">
+										<?php if ($holiday['holiday_status'] === '1') { ?>
+											<label class="btn btn-danger"><input type="radio" name="holidays[<?php echo $table_row; ?>][holiday_status]" value="0" <?php echo set_radio('holidays['.$table_row.'][holiday_status]', '0'); ?>><?php echo lang('text_disabled'); ?></label>
+											<label class="btn btn-success active"><input type="radio" name="holidays[<?php echo $table_row; ?>][holiday_status]" value="1" <?php echo set_radio('holidays['.$table_row.'][holiday_status]', '1', TRUE); ?>><?php echo lang('text_enabled'); ?></label>
+										<?php } else { ?>
+											<label class="btn btn-danger active"><input type="radio" name="holidays[<?php echo $table_row; ?>][holiday_status]" value="0" <?php echo set_radio('holidays['.$table_row.'][holiday_status]', '0', TRUE); ?>><?php echo lang('text_disabled'); ?></label>
+											<label class="btn btn-success"><input type="radio" name="holidays[<?php echo $table_row; ?>][holiday_status]" value="1" <?php echo set_radio('holidays['.$table_row.'][holiday_status]', '1'); ?>><?php echo lang('text_enabled'); ?></label>
+										<?php } ?>
+									</div>
+									<?php echo form_error('holidays['.$table_row.'][holiday_status]', '<span class="text-danger">', '</span>'); ?>
+								</td>
+							</tr>
+							<?php $table_row++; ?>
+							<?php } ?>
+						</tbody>
+						<tfoot>
+							<tr id="tfoot">
+								<td class="action action-one text-center"><a class="btn btn-primary btn-lg" onclick="addholidays();"><i class="fa fa-plus"></i></a></td>
+								<td colspan="5"></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</form>
+				</div>
 			</div>
 		</form>
 	</div>
 </div>
 <script type="text/javascript"><!--
-$(document).ready(function() {
+$(document).ready(function(){
+	$('.date').datepicker({
+		format: 'yyyy-mm-dd'
+	});
 	$('#delivery-areas select.form-control').select2({
 		minimumResultsForSearch: Infinity
 	});
@@ -993,6 +1055,29 @@ if (!google.maps.Polygon.prototype.getBounds) {
 		}
 		return bounds;
 	}
+}
+
+var table_row = <?php echo $table_row; ?>;
+
+function addholidays() {
+	var html  = '<tr id="table-row' + table_row + '">';
+	html += '	<td class="action action-one"><a class="btn btn-danger" onclick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></td>';
+	html += '	<td>';
+	html += '		<input type="text" name="holidays[' + table_row + '][holiday_date]" class="form-control date" value="" /></td>';
+	html += '	<td>';
+	html += '	<input type="text" name="holidays[' + table_row + '][reason]" class="form-control" value="" />';
+	html += '	</td>';
+	html += '	<td><div class="btn-group btn-group-switch" data-toggle="buttons">';
+	html += '		<label class="btn btn-danger"><input type="radio" name="holidays[' + table_row + '][holiday_status]" value="0" /><?php echo lang('text_disabled'); ?></label>';
+	html += '		<label class="btn btn-success active"><input type="radio" name="holidays[' + table_row + '][holiday_status]" value="1" checked="checked" /><?php echo lang('text_enabled'); ?></label>';
+	html += '	</div></td>';
+	html += '</tr>';
+
+	$('.table-holidays tbody').append(html);
+
+	$('#table-row' + table_row + ' .date').datepicker({format: "yyyy-mm-dd"});
+
+	table_row++;
 }
 
 function initializeMap() {

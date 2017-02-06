@@ -23,6 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Orders_model extends TI_Model {
 
     public function getCount($filter = array()) {
+
         if (APPDIR === ADMINDIR) {
             if ( ! empty($filter['filter_search'])) {
                 $this->db->like('order_id', $filter['filter_search']);
@@ -45,6 +46,11 @@ class Orders_model extends TI_Model {
 
             if (isset($filter['filter_status']) AND is_numeric($filter['filter_status'])) {
                 $this->db->where('orders.status_id', $filter['filter_status']);
+            }
+
+            if (!empty($filter['filter_start_date']) AND !empty($filter['filter_end_date'])) {
+                $this->db->where('order_date >=', $filter['filter_start_date']);
+                $this->db->where('order_date <=', $filter['filter_end_date']);
             }
 
             if ( ! empty($filter['filter_date'])) {
@@ -120,13 +126,17 @@ class Orders_model extends TI_Model {
                 $this->db->where('MONTH(date_added)', $date[1]);
             }
 
+            if (!empty($filter['filter_start_date']) AND !empty($filter['filter_end_date'])) {
+                $this->db->where('order_date >=', $filter['filter_start_date']);
+                $this->db->where('order_date <=', $filter['filter_end_date']);
+            }
+
             $query = $this->db->get();
             $result = array();
 
             if ($query->num_rows() > 0) {
                 $result = $query->result_array();
             }
-
             return $result;
         }
     }
@@ -276,6 +286,18 @@ class Orders_model extends TI_Model {
         return $result;
     }
 
+    public function getTaxdetails() {
+        $this->db->select('tax_details');
+        $this->db->from('orders');
+
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
+    }
+
     public function isOrderPlaced($order_id) {
         $this->db->from('orders');
         $this->db->where('order_id', $order_id);
@@ -376,12 +398,34 @@ class Orders_model extends TI_Model {
 		return FALSE;
 	}
 	
-	public function Select_status_count() {
+	public function Select_status_count($filter) {
 		$this->db->select('status_id, count(*) as count');
 		$this->db->from('orders');
 		$this->db->group_by('status_id');
+
+        if ( ! empty($filter['filter_location'])) {
+            $this->db->where('orders.location_id', $filter['filter_location']);
+        }
+
+        if (isset($filter['filter_type']) AND is_numeric($filter['filter_type'])) {
+            $this->db->where('order_type', $filter['filter_type']);
+        }
+
+        if ( ! empty($filter['filter_payment'])) {
+            $this->db->where('payment', $filter['filter_payment']);
+        }
+
+        if (isset($filter['filter_status']) AND is_numeric($filter['filter_status'])) {
+            $this->db->where('orders.status_id', $filter['filter_status']);
+        }
+
+        if (!empty($filter['filter_start_date']) AND !empty($filter['filter_end_date'])) {
+            $this->db->where('order_date >=', $filter['filter_start_date']);
+            $this->db->where('order_date <=', $filter['filter_end_date']);
+        }
+
 		$query = $this->db->get();
-		$result = json_encode($query->result_array());
+		$result = $query->result_array();
 		return $result;
 	}
 
@@ -486,6 +530,16 @@ class Orders_model extends TI_Model {
 
         if (isset($cart_contents['total_items'])) {
             $this->db->set('total_items', $cart_contents['total_items']);
+        }
+
+        if (isset($cart_contents['totals']['taxes'])) {
+            foreach ($cart_contents['totals']['taxes'] as $tax_details) {
+                $tax_detail[] = array(
+                    'title' => $tax_details['title'],
+                    'amount' =>$tax_details['amount'],
+                );
+            }
+            $this->db->set('tax_details', serialize($tax_detail));
         }
 
         if ( ! empty($order_info)) {
@@ -622,6 +676,7 @@ class Orders_model extends TI_Model {
     }
 
     public function addOrderTotals($order_id, $cart_contents) {
+
         if (is_numeric($order_id) AND ! empty($cart_contents['totals'])) {
             $this->db->where('order_id', $order_id);
             $this->db->delete('order_totals');
@@ -637,14 +692,12 @@ class Orders_model extends TI_Model {
                 foreach ($order_totals as $total_name => $order_total) {
                     if ($name === $total_name AND is_numeric($total['amount'])) {
                         $total['title'] = empty($total['title']) ? $order_total['title'] : $total['title'];
-
                         if (isset($total['code'])) {
                             $total['title'] = str_replace('{coupon}', $total['code'], $total['title']);
-                        } else if (isset($total['tax'])) {
-                            $total['title'] = str_replace('{tax}', $total['tax'], $total['title']);
                         }else if (isset($total['points'])) {
                             $total['title'] = str_replace('{loyalty}', $total['points'], $total['title']);
                         }
+
 
                         $this->db->set('order_id', $order_id);
                         $this->db->set('code', $name);
@@ -658,6 +711,24 @@ class Orders_model extends TI_Model {
                         }
 
                         $this->db->insert('order_totals');
+                    }
+                    if ($name === $total_name AND is_numeric($total['0']['amount'])) {
+
+                        $i = 0;
+                        foreach ($total as $totals) {
+                            $total['title'.$i] = $totals['title'];
+                            $total['amount'.$i] = $totals['amount'];
+
+                        $this->db->set('order_id', $order_id);
+                        $this->db->set('code', $name);
+                        $this->db->set('value', $total['amount'.$i]);
+                        $this->db->set('title', $total['title'.$i]);
+                        $this->db->set('priority', $order_total['priority']);
+
+                        $this->db->insert('order_totals');
+
+                        $i++;
+                        }
                     }
                 }
             }

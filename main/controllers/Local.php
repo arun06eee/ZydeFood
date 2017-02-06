@@ -95,6 +95,7 @@ class Local extends Main_Controller {
 		$data['opening_status']		= $this->location->workingStatus('opening');
 		$data['delivery_status']	= $this->location->workingStatus('delivery');
 		$data['collection_status']	= $this->location->workingStatus('collection');
+		$data['holiday_status']		= $this->location->workingStatus('close');
 		$data['last_order_time']    = mdate($time_format, strtotime($this->location->lastOrderTime()));
 		$data['local_description']  = $this->location->getDescription();
 		$data['map_address']        = $this->location->getAddress();                                        // retrieve local location data
@@ -268,7 +269,6 @@ class Local extends Main_Controller {
 			'info'  => $this->pagination->create_infos(),
 			'links' => $this->pagination->create_links()
 		);
-
 		return $data;
 	}
 
@@ -322,6 +322,7 @@ class Local extends Main_Controller {
 
 		$data['locations'] = array();
 		$locations = $this->Locations_model->getList($filter);
+
 		if ($locations) {
 			foreach ($locations as $location) {
 				$this->location->setLocation($location['location_id'], FALSE);
@@ -329,6 +330,7 @@ class Local extends Main_Controller {
 				$opening_status = $this->location->workingStatus('opening');
 				$delivery_status = $this->location->workingStatus('delivery');
 				$collection_status = $this->location->workingStatus('collection');
+				$holiday_status = $this->location->workingStatus('close');
 
 				$delivery_time = $this->location->deliveryTime();
 				if ($delivery_status === 'closed') {
@@ -342,6 +344,16 @@ class Local extends Main_Controller {
 					$collection_time = 'closed';
 				} else if ($collection_status === 'opening') {
 					$collection_time = $this->location->workingTime('collection', 'open');
+				}
+
+				$holidays = unserialize($location['holiday']);
+				foreach($holidays as $holiday) {
+					if ($holiday['holiday_date'] == date("Y-m-d") AND $holiday['holiday_status'] == '1') {
+						$delivery_status = 'closed';
+						$collection_status = 'closed';
+						$opening_status = 'closed';
+						$data['holiday']['reason'] = $holiday['reason'];
+					}
 				}
 
 				$review_totals = isset($review_totals[$location['location_id']]) ? $review_totals[$location['location_id']] : 0;
@@ -358,6 +370,7 @@ class Local extends Main_Controller {
 					'opening_status'    => $opening_status,
 					'delivery_status'   => $delivery_status,
 					'collection_status' => $collection_status,
+					'holiday_status'	=> $holiday_status,
 					'delivery_time'     => $delivery_time,
 					'collection_time'   => $collection_time,
 					'opening_time'      => $this->location->openingTime(),

@@ -75,7 +75,7 @@ class TI_Cart extends CI_Cart {
 		$this->_cart_totals['delivery'] = NULL;
 
 		if ($charge > 0) {
-			$this->_cart_totals['delivery']['priority'] = '2';
+			$this->_cart_totals['delivery']['priority'] = '3';
 			$this->_cart_totals['delivery']['amount'] = $charge;
 			$this->_cart_totals['delivery']['action'] = 'add';
 			$save_cart = TRUE;
@@ -209,22 +209,19 @@ class TI_Cart extends CI_Cart {
 				$total -= $this->_cart_totals['delivery']['amount'];
 			}
 
+			$overtotal = $total + $this->_cart_totals['delivery']['amount'];
+
 			if (! empty ($gettax)) {
+				$ignore = 'add';
 				foreach ($gettax as $gettaxes){
-					$tax_title .= ' (' . $gettaxes['name'] .'- '.$gettaxes['percentage']. '% included)';
-					$ignore = 'add';					
+					$this->_cart_totals['taxes'][] = array(
+					'title' => $gettaxes['name'] .' - '.$gettaxes['percentage']. '%',
+					'amount' => ($overtotal * ($gettaxes['percentage'] / 100)),
+					'priority' => '4',
+					'action' => $ignore
+					);
 				}
-				$overtotal = $total + $this->_cart_totals['delivery']['amount'];
-				// calculate tax amount based on percentage
-				$tax_amount = ($overtotal * ($tax_percent / 100));
 			}
-
-			$this->_cart_totals['taxes']['priority'] = '3';
-			$this->_cart_totals['taxes']['amount'] = $tax_amount;
-			$this->_cart_totals['taxes']['action'] = $ignore;
-			$this->_cart_totals['taxes']['tax'] = $tax_title;
-			$this->_cart_totals['taxes']['percent'] = $tax_percent;
-
 			$this->_save_cart();
 
 		return $this->_cart_totals['taxes'];
@@ -304,8 +301,8 @@ class TI_Cart extends CI_Cart {
 		}
 
 		$total = $this->_cart_contents['cart_total'];
-
 		$this->_cart_contents['totals'] = sort_array($this->_cart_totals);
+
 		foreach ($this->_cart_contents['totals'] as $key => $val) {
 			if ( ! is_array($val) OR ! isset($val['amount'], $val['action'], $val['priority'])) {
 				continue;
@@ -315,6 +312,16 @@ class TI_Cart extends CI_Cart {
 				$total += $val['amount'];
 			} else if ($val['action'] === 'subtract') {
 				$total -= $val['amount'];
+			}
+		}
+
+		if ($this->_cart_contents['totals']['taxes']) {
+			foreach ($this->_cart_contents['totals']['taxes'] as $key => $val) {
+				if ($val['action'] === 'add') {
+					$total += $val['amount'];
+				} else if ($val['action'] === 'subtract') {
+					$total -= $val['amount'];
+				}
 			}
 		}
 
@@ -332,7 +339,6 @@ class TI_Cart extends CI_Cart {
 		// If we made it this far it means that our cart has data.
 		// Let's pass it to the Session class so it can be stored
 		$this->CI->session->set_userdata(array('cart_contents' => $this->_cart_contents));
-
 		// Woot!
 		return TRUE;
 	}
@@ -372,6 +378,7 @@ class TI_Cart extends CI_Cart {
 		unset($cart['totals']);
 		unset($cart['taxes']);
 		unset($cart['loyalty']);
+		unset($cart['coupon']);
 
 		// Backward compatibility
 		if (isset($cart['delivery'])) unset($cart['delivery']);
@@ -398,6 +405,7 @@ class TI_Cart extends CI_Cart {
 		$cart_totals['cart_total']['amount'] = $this->total();
 		$cart_totals['order_total']['amount'] = $this->order_total();
 		$cart_totals['net_total']['amount'] = $this->net_total();
+		$cart_totals['delivery']['amount'] = $this->delivery();
 		$cart_totals['taxs']['amount'] = $this->tax_array();
 
 		return $cart_totals;
@@ -569,7 +577,10 @@ class TI_Cart extends CI_Cart {
 	 */
 	public function tax_title() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['tax']) ? $taxes['tax'] : NULL;
+		foreach ($taxes as $tax) {
+			$tax_title[] = $tax['title'];
+		}
+		return !empty($tax_title) ? $tax_title : NULL;
 	}
 
 	// --------------------------------------------------------------------
@@ -584,7 +595,10 @@ class TI_Cart extends CI_Cart {
 	 */
 	public function tax_percent() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['percent']) ? $taxes['percent'] : NULL;
+		foreach ($taxes as $tax) {
+			$tax_percent[] = $tax['title'];
+		}
+		return !empty($tax_percent) ? $tax_percent : NULL;
 	}
 
 	// --------------------------------------------------------------------
@@ -599,7 +613,10 @@ class TI_Cart extends CI_Cart {
 	 */
  	public function tax_amount() {
 		$taxes = $this->tax_array();
-		return !empty($taxes['amount']) ? $taxes['amount'] : NULL;
+		foreach ($taxes as $tax) {
+			$tax_amount[] = $tax['amount'];
+		}
+		return !empty($tax_amount) ? $tax_amount : NULL;
 	}
 
 	// --------------------------------------------------------------------

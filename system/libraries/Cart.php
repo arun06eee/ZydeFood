@@ -263,6 +263,14 @@ class CI_Cart {
 		// grab quantity if it's already there and add it on
 		$old_quantity = isset($this->_cart_contents[$rowid]['qty']) ? (int) $this->_cart_contents[$rowid]['qty'] : 0;
 
+		foreach ($this->_cart_contents as  $rwid) {
+			if (isset($rwid['location'])){
+				if ($rwid['location'] != $this->CI->location->getId()) {
+					unset($this->_cart_contents);
+				}
+			}
+		}
+
 		// Re-create the entry, just to make sure our index contains only the data from this submission
 		$items['rowid'] = $rowid;
 		$items['qty'] += $old_quantity;

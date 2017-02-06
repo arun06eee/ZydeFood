@@ -53,6 +53,7 @@
 														<dt class="text-muted"><?php echo sprintf(lang('text_opening_time'), $location['opening_time']); ?></dt>
 													<?php } else { ?>
 														<dt class="text-muted"><?php echo lang('text_closed'); ?></dt>
+														<dt class="text-muted">DUE TO: <?php echo $holiday['reason'] ?></dt>
 													<?php } ?>
 													<dd class="text-muted">
 														<?php if ($location['has_delivery']) { ?>
@@ -65,7 +66,7 @@
 															<?php } ?>
 														<?php } ?>
 													</dd>
-													<dd class="text-muted">
+													<dd class="text-muted">	
 														<?php if ($location['has_collection']) { ?>
 															<?php if ($location['collection_status'] === 'open') { ?>
 																<?php echo sprintf(lang('text_collection_time_info'), sprintf(lang('text_in_minutes'), $location['collection_time'])); ?>

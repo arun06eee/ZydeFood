@@ -283,6 +283,7 @@ class Locations_model extends TI_Model {
 	}
 
 	public function saveLocation($location_id, $save = array()) {
+
 		if (empty($save)) return FALSE;
 
 		if (isset($save['location_name'])) {
@@ -348,6 +349,13 @@ class Locations_model extends TI_Model {
 		} else {
 			$this->db->set('offer_collection', '0');
 		}
+
+		$holiday_details = array(); 
+		if(isset($save['holidays'])) {
+			$holiday_details = $save['holidays'];
+		}
+
+		$this->db->set('holiday', serialize($holiday_details));
 
 		if (isset($save['delivery_time'])) {
 			$this->db->set('delivery_time', $save['delivery_time']);
@@ -479,6 +487,20 @@ class Locations_model extends TI_Model {
 
 			return $location_id;
 		}
+	}
+
+	public function getholiday($location_id) {
+		$this->db->select('holiday');
+		$this->db->where('location_id', $location_id);
+		$this->db->from('locations');
+		
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+		}
+
+		return $result;;
 	}
 
 	public function addOpeningHours($location_id, $data = array()) {

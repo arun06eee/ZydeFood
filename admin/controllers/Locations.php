@@ -172,6 +172,8 @@ class Locations extends Admin_Controller {
 		$this->template->setButton($this->lang->line('button_save_close'), array('class' => 'btn btn-default', 'onclick' => 'saveClose();'));
 		$this->template->setButton($this->lang->line('button_icon_back'), array('class' => 'btn btn-default', 'href' => site_url('locations')));
 
+		$this->template->setStyleTag(assets_url('js/datepicker/datepicker.css'), 'datepicker-css');
+		$this->template->setScriptTag(assets_url("js/datepicker/bootstrap-datepicker.js"), 'bootstrap-datepicker-js');
 		$this->template->setStyleTag(assets_url('js/datepicker/bootstrap-timepicker.css'), 'bootstrap-timepicker-css');
 		$this->template->setScriptTag(assets_url("js/datepicker/bootstrap-timepicker.js"), 'bootstrap-timepicker-js');
 		$this->template->setScriptTag(assets_url("js/jquery-sortable.js"), 'jquery-sortable-js');
@@ -241,6 +243,22 @@ class Locations extends Admin_Controller {
 		$data['weekdays_abbr'] = $weekdays_abbr = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 		$data['weekdays'] = $weekdays = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
 
+		$holiday_details = array();
+		if(!empty($location_info['holiday'])) {
+			$holiday_details = unserialize($location_info['holiday']);
+		}
+
+		if (isset($holiday_details) AND is_array($holiday_details)) {
+			$data['holidays'] = array();
+			foreach ($holiday_details as $holiday_detail) {
+				$data['holidays'][] = array (
+					'holiday_date'  => $holiday_detail['holiday_date'],
+					'reason'		=> $holiday_detail['reason'],
+					'holiday_status'=> $holiday_detail['holiday_status']
+				);
+			}
+		}
+
 		$options = array();
 		if (!empty($location_info['options'])) {
 			$options = unserialize($location_info['options']);
@@ -295,7 +313,7 @@ class Locations extends Admin_Controller {
 				);
 			}
 		} else {
-			$data['flexible_hours'] = array(
+			$data['flexible_hours'] = array(	
 				array('day' => '0', 'open' => '12:00 AM', 'close' => '11:59 PM', 'status' => '1'),
 				array('day' => '1', 'open' => '12:00 AM', 'close' => '11:59 PM', 'status' => '1'),
 				array('day' => '2', 'open' => '12:00 AM', 'close' => '11:59 PM', 'status' => '1'),

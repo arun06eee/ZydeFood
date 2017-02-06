@@ -25,7 +25,18 @@ class Cart_module extends Main_Controller {
 	}
 
 	public function index($module = array(), $data = array()) {
-		$this->getCart($module, $data);
+		$holiday = $this->Locations_model->getholiday($this->location->getId());
+		$status =(unserialize($holiday['0']['holiday']));
+		$check_holiday = 1;
+
+		foreach ($status as $holiday_status) {
+			if($holiday_status['holiday_date'] == date("Y-m-d") AND $holiday_status['holiday_status']){
+				$check_holiday = 0;
+			}
+		}
+		if ($check_holiday == 1) {
+			$this->getCart($module, $data);
+		}
 	}
 
 	public function add() {																		// add() method to add item to cart
@@ -70,14 +81,16 @@ class Cart_module extends Main_Controller {
 
 			$price = (!empty($menu_data['special_status']) AND $menu_data['is_special'] === '1') ? $menu_data['special_price'] : $menu_data['menu_price'];
 
+			$current_location = $this->location->getId();
 			$cart_data = array(																// create an array of item to be added to cart with id, name, qty, price and options as keys
-				'rowid'         => !empty($cart_item['rowid']) ? $cart_item['rowid'] : NULL,
-				'id'     		=> $menu_data['menu_id'],
-				'name'   		=> $menu_data['menu_name'],
-				'qty'    		=> $quantity,
-				'price'  		=> $price,
-				'comment'       => $this->input->post('comment') ? substr(htmlspecialchars(trim($this->input->post('comment'))), 0, 50) : '',
-				'options' 		=> $cart_options
+				'location'		=> $this->location->getId(),
+				'rowid'			=> !empty($cart_item['rowid']) ? $cart_item['rowid'] : NULL,
+				'id'			=> $menu_data['menu_id'],
+				'name'			=> $menu_data['menu_name'],
+				'qty'			=> $quantity,
+				'price'			=> $price,
+				'comment'		=> $this->input->post('comment') ? substr(htmlspecialchars(trim($this->input->post('comment'))), 0, 50) : '',
+				'options'		=> $cart_options
 			);
 		}
 
@@ -194,6 +207,7 @@ class Cart_module extends Main_Controller {
 
                 case 'add':
                     if (($response = $this->cart_module_lib->validateCoupon($this->input->post('code'))) === TRUE) {
+                        $code = $this->input->post('code');
                         $json['success'] = $this->lang->line('alert_coupon_applied');						// display success message
                     } else {
                         $json['error'] = $response;
@@ -204,7 +218,6 @@ class Cart_module extends Main_Controller {
                     break;
             }
         }
-
         $this->output->set_output(json_encode($json));											// encode the json array and set final out to be sent to jQuery AJAX
     }
 
@@ -264,6 +277,12 @@ class Cart_module extends Main_Controller {
 			};
 		}
 
+		if (empty($this->customer->getId())) {
+			$data['no_loyalty'] = 'hidden';
+		}
+
+		$loyal = $this->cart_module_lib->customer_loyaltypoints();
+
 		$this->template->setStyleTag(extension_url('cart_module/views/stylesheet.css'), 'cart-module-css', '144000');
 
 		$data['is_opened']                  = $this->location->isOpened();
@@ -277,6 +296,8 @@ class Cart_module extends Main_Controller {
 		$data['show_cart_images'] 	        = isset($ext_data['show_cart_images']) ? $ext_data['show_cart_images'] : '';
 		$data['cart_images_h'] 		        = isset($ext_data['cart_images_h']) ? $ext_data['cart_images_h'] : '';
 		$data['cart_images_w'] 		        = isset($ext_data['cart_images_w']) ? $ext_data['cart_images_w'] :'';
+		$data['customer_loyaltypoints']		= '<i class="fa fa-bullhorn" style="color: #e64d64"></i> You have '.$loyal['loyaltypoints_to_show'].' Loyalty points';
+		$data['points_to_bill']				= '<i class="fa fa-money" style="color: #e64d64"></i>&nbsp;&nbspYou can use maximum of '.$loyal['points_to_apply'].' points for this bill.';
 
 		$data['delivery_time'] = $this->location->deliveryTime();
 		if ($data['delivery_status'] === 'closed') {
@@ -327,26 +348,29 @@ class Cart_module extends Main_Controller {
 						$cart_image = $this->Image_tool_model->resize($menu_photo, $data['cart_images_h'], $data['cart_images_w']);
 					}
 
-					// load menu data into array
-					$data['cart_items'][] = array(
-						'rowid'				=> $cart_item['rowid'],
-						'menu_id' 			=> $cart_item['id'],
-						'name' 				=> (strlen($cart_item['name']) > 25) ? strtolower(substr($cart_item['name'], 0, 25)) .'...' : strtolower($cart_item['name']),
-						//add currency symbol and format item price to two decimal places
-						'price' 			=> $this->currency->format($cart_item['price']),
-						'tax'				=> 15,
-						'qty' 				=> $cart_item['qty'],
-						'image' 			=> $cart_image,
-						//add currency symbol and format item subtotal to two decimal places
-						'sub_total' 		=> $this->currency->format($cart_item['subtotal']),
-						'comment'           => isset($cart_item['comment']) ? $cart_item['comment'] : '',
-						'options' 			=> ($this->cart->has_options($row_id) == TRUE) ? $this->cart->product_options_string($row_id) : ''
-					);
-
+					if ($cart_item['location'] == $this->location->getId()){
+						// load menu data into array
+						$data['cart_items'][] = array(
+							'location'			=> $cart_item['location'],
+							'rowid'				=> $cart_item['rowid'],
+							'menu_id' 			=> $cart_item['id'],
+							'name' 				=> (strlen($cart_item['name']) > 25) ? strtolower(substr($cart_item['name'], 0, 25)) .'...' : strtolower($cart_item['name']),
+							//add currency symbol and format item price to two decimal places
+							'price' 			=> $this->currency->format($cart_item['price']),
+							'tax'				=> '',
+							'qty' 				=> $cart_item['qty'],
+							'image' 			=> $cart_image,
+							//add currency symbol and format item subtotal to two decimal places
+							'sub_total' 		=> $this->currency->format($cart_item['subtotal']),
+							'comment'           => isset($cart_item['comment']) ? $cart_item['comment'] : '',
+							'options' 			=> ($this->cart->has_options($row_id) == TRUE) ? $this->cart->product_options_string($row_id) : ''
+						);
+					}
 				} else {
 					$this->alert->set('custom_now', $alert_msg, 'cart_module');
 					$this->cart->update(array('rowid' => $cart_item['rowid'], 'qty' => '0'));										// pass the cart_data array to add item to cart, if successful
 				}
+
 			}
 
 			if (($response = $this->cart_module_lib->validateOrderType()) !== TRUE) {

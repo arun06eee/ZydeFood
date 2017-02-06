@@ -218,7 +218,7 @@ class Cart_model extends TI_Model {
 
         return $result;
     }
-	
+
 	public function checkLoyaltyPoints($customer_id) {
 		$this->db->select('current_points');
 		$this->db->where('customer_id', $customer_id);
@@ -252,6 +252,18 @@ class Cart_model extends TI_Model {
         $this->db->update('customers');
 
         return TRUE;
+    }
+
+    public function used_points($usedpoints,$order_id) {
+        $this->db->where('order_id', $order_id);
+        $this->db->set('redeem_points',$usedpoints);
+        $this->db->update('orders');
+    }
+
+    public function points_provide($pointsprovide, $order_id) {
+        $this->db->where('order_id', $order_id);
+        $this->db->set('redeem_points_provide', $pointsprovide);
+        $this->db->update('orders');
     }
 
     public function checkCouponHistory($coupon_id) {
