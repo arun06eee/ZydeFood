@@ -13,9 +13,21 @@ class Local extends Main_Controller {
 		$this->load->library('currency'); 														// load the currency library
 
 		$this->lang->load('local');
+
+		if ($this->input->get('cmd') == 'getStores') {
+			$this->getLocationApi();
+			exit;
+		}
+
+		if ($this->input->get('cmd') == 'getMenu') {
+			$this->getMenuAPI();
+			exit;
+		}
+		
 	}
 
 	public function index() {
+		
 		if (!($location = $this->Locations_model->getLocation($this->input->get('location_id')))) {
 			redirect('local/all');
 		}
@@ -76,7 +88,7 @@ class Local extends Main_Controller {
 			$map_key = '';
 		}
 
-		$this->template->setScriptTag('https://maps.googleapis.com/maps/api/js?v=3' . $map_key .'&sensor=false&region=GB&libraries=geometry', 'google-maps-js', '104330');
+		$this->template->setScriptTag('https://maps.googleapis.com/maps/api/js?v=3' . $map_key .'&sensor=false&region=GB&libraries=geometry,places', 'google-maps-js', '104330');
 
 		$data['has_delivery']       = $this->location->hasDelivery();
 		$data['has_collection']     = $this->location->hasCollection();
@@ -267,6 +279,7 @@ class Local extends Main_Controller {
 		$this->load->model('Image_tool_model');
 
 		$url = '?';
+
 		$filter = array();
 		if ($this->input->get('page')) {
 			$filter['page'] = (int) $this->input->get('page');
@@ -431,6 +444,90 @@ class Local extends Main_Controller {
 		$data['search_action'] = site_url('local/all'.$url);
 
 		return $data;
+	}
+	
+	public function getLocationApi(){
+
+		$review_totals = $this->Reviews_model->getTotalsbyId();                                    // retrieve all customer reviews from getMainList method in Reviews model
+
+		$data['locations'] = array();
+		$locations = $this->Locations_model->getList($filter);
+		if ($locations) {
+			foreach ($locations as $location) {
+				$this->location->setLocation($location['location_id'], FALSE);
+
+				$opening_status = $this->location->workingStatus('opening');
+				$delivery_status = $this->location->workingStatus('delivery');
+				$collection_status = $this->location->workingStatus('collection');
+
+				$delivery_time = $this->location->deliveryTime();
+				if ($delivery_status === 'closed') {
+					$delivery_time = 'closed';
+				} else if ($delivery_status === 'opening') {
+					$delivery_time = $this->location->workingTime('delivery', 'open');
+				}
+
+				$collection_time = $this->location->collectionTime();
+				if ($collection_status === 'closed') {
+					$collection_time = 'closed';
+				} else if ($collection_status === 'opening') {
+					$collection_time = $this->location->workingTime('collection', 'open');
+				}
+
+				$review_totals = isset($review_totals[$location['location_id']]) ? $review_totals[$location['location_id']] : 0;
+
+				
+				$data['locations'][] = array(                                                            // create array of menu data to be sent to view
+					'location_id'       => $location['location_id'],
+					'location_name'     => $location['location_name'],
+					'description'       => (strlen($location['description']) > 120) ? substr($location['description'], 0, 120) . '...' : $location['description'],
+					'address'           => strip_tags($this->location->getAddress(TRUE)),
+					'total_reviews'     => $review_totals,
+					'location_image'    => $this->location->getImage(),
+					'is_opened'         => $this->location->isOpened(),
+					'is_closed'         => $this->location->isClosed(),
+					'opening_status'    => $opening_status,
+					'delivery_status'   => $delivery_status,
+					'collection_status' => $collection_status,
+					'delivery_time'     => $delivery_time,
+					'collection_time'   => $collection_time,
+					'opening_time'      => $this->location->openingTime(),
+					'closing_time'      => $this->location->closingTime(),
+					'min_total'         => $this->location->minimumOrder($this->cart->total()),
+					'delivery_charge'   => $this->location->deliveryCharge($this->cart->total()),
+					'has_delivery'      => $this->location->hasDelivery(),
+					'has_collection'    => $this->location->hasCollection(),
+					'last_order_time'   => $this->location->lastOrderTime(),
+					'distance'   		=> round($this->location->checkDistance()),
+					'distance_unit'   	=> $this->config->item('distance_unit') === 'km' ? $this->lang->line('text_kilometers') : $this->lang->line('text_miles'),
+					'href'              => site_url('local?location_id=' . $location['location_id']),
+				);
+			}
+		}
+
+		if (!empty($sort_by) AND $sort_by === 'distance') {
+			$data['locations'] = sort_array($data['locations'], 'distance');
+		} else if (!empty($sort_by) AND $sort_by === 'rating') {
+			$data['locations'] = sort_array($data['locations'], 'total_reviews');
+		}
+
+		$data['status'] = 1;
+
+		$this->location->initialize();
+
+		print_r(json_encode($data));
+	}
+
+	public function getMenuAPI() {
+
+		$data['status'] = 1;
+		$this->load->module('menus');
+		$data['menu_count']	= $this->Menus_model->getCount();
+		$data['categories_count'] = $this->Categories_model->getCount();
+		$data['menu_list'] = $this->menus->getListAPI();
+		$data['menu_option_count'] = count($data['menu_list']['option_values']);
+
+		print_r(json_encode($data));
 	}
 }
 
