@@ -224,7 +224,6 @@ class Settings extends Admin_Controller {
 				'name'			=>	$result['name'],
 			);
 		}
-
 		$this->template->render('settings', $data);
 	}
 

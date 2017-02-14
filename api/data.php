@@ -14,7 +14,7 @@ if($con) {
 		$arr[] = $row;
 	}
 	$data = json_encode($arr);
-	print_r($data);
+	echo $data;
 }else{
 		echo "could not connect";
 	}

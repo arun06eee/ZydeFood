@@ -830,9 +830,12 @@
 									<?php } ?>
 								</td>
 								<td>
-									<input type="text" name="holidays[<?php echo $table_row; ?>][holiday_date]" class="form-control date" value="<?php echo set_value('holidays['.$table_row.'][holiday_date]', $holiday['holiday_date']); ?>" />
-									<?php echo form_error('holidays['.$table_row.'][id]', '<span class="text-danger">', '</span>'); ?>
-									<?php echo form_error('holidays['.$table_row.'][holiday_date]', '<span class="text-danger">', '</span>'); ?>
+									<div class="input-group">
+										<input type="text" name="holidays[<?php echo $table_row; ?>][holiday_date]" class="form-control date" value="<?php echo set_value('holidays['.$table_row.'][holiday_date]', $holiday['holiday_date']); ?>" />
+										<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+										<?php echo form_error('holidays['.$table_row.'][id]', '<span class="text-danger">', '</span>'); ?>
+										<?php echo form_error('holidays['.$table_row.'][holiday_date]', '<span class="text-danger">', '</span>'); ?>
+									</div>
 								</td>
 								<td>
 									<input type="text" name="holidays[<?php echo $table_row; ?>][reason]" class="form-control" value="<?php echo set_value('holidays['.$table_row.'][reason]', $holiday['reason']); ?>" />
@@ -1030,7 +1033,11 @@ function addholidays() {
 	var html  = '<tr id="table-row' + table_row + '">';
 	html += '	<td class="action action-one"><a class="btn btn-danger" onclick="confirm(\'<?php echo lang('alert_warning_confirm'); ?>\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></td>';
 	html += '	<td>';
-	html += '		<input type="text" name="holidays[' + table_row + '][holiday_date]" class="form-control date" value="" /></td>';
+	html += '	<div class="input-group">';
+	html += '		<input type="text" name="holidays[' + table_row + '][holiday_date]" class="form-control date" value="" />';
+	html += 		'<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
+	html += '	</div>';
+	html += '	</td>';
 	html += '	<td>';
 	html += '	<input type="text" name="holidays[' + table_row + '][reason]" class="form-control" value="" />';
 	html += '	</td>';

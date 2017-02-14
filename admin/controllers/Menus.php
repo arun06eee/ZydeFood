@@ -85,7 +85,7 @@ class Menus extends Admin_Controller {
 		$this->load->model('Image_tool_model');
 
 		$data['menus'] = array();
-		$results = $this->Menus_model->getList($filter);
+		$results = $this->Menus_model->getList($filter, '');
 
 		foreach ($results as $result) {
 
@@ -195,7 +195,7 @@ class Menus extends Admin_Controller {
 		$data['menu_description'] = $menu_info['menu_description'];
 		$data['menu_price'] = $menu_info['menu_price'];
 		$data['menu_category'] = $menu_info['category_id'];
-		$data['available_location'] = $menu_info['Locations_id'];
+		$data['available_location'] = explode(",", $menu_info['Locations_id']);
 		$data['stock_qty'] = $menu_info['stock_qty'];
 		$data['minimum_qty'] = (isset($menu_info['minimum_qty'])) ? $menu_info['minimum_qty'] : '1';
 		$data['subtract_stock'] = $menu_info['subtract_stock'];

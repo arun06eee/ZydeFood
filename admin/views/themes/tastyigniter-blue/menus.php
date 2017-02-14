@@ -122,7 +122,6 @@
                         </table>
                     </div>
                 </form>
-
                 <div class="pagination-bar clearfix">
                     <div class="links"><?php echo $pagination['links']; ?></div>
                     <div class="info"><?php echo $pagination['info']; ?></div>

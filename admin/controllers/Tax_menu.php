@@ -82,7 +82,7 @@ class Tax_menu extends Admin_Controller {
 						'date'			=> day_elapsed($result['order_date']),
 					);
 					$data['total'] += round($tax_datas['amount']);
-				} else 
+				} else
 					if (!($this->input->get('filter_by_titles'))) {
 					$data['tax_menus'][] = array(
 						'order_id'		=> $result['order_id'],
@@ -97,6 +97,7 @@ class Tax_menu extends Admin_Controller {
 		}
 
 		$config['base_url'] 	= site_url('tax_menu'.$url);
+		$config['per_page'] 	= $filter['limit'];
 
 		$this->pagination->initialize($config);
 

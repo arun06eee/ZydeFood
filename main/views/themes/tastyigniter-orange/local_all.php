@@ -53,7 +53,7 @@
 														<dt class="text-muted"><?php echo sprintf(lang('text_opening_time'), $location['opening_time']); ?></dt>
 													<?php } else { ?>
 														<dt class="text-muted"><?php echo lang('text_closed'); ?></dt>
-														<dt class="text-muted">DUE TO: <?php echo $holiday['reason'] ?></dt>
+														<dt class="text-muted"><?php echo 'DUE TO: '.$holiday['reason'] ?></dt>
 													<?php } ?>
 													<dd class="text-muted">
 														<?php if ($location['has_delivery']) { ?>
