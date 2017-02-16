@@ -14,16 +14,19 @@ class Local extends Main_Controller {
 
 		$this->lang->load('local');
 
-		if ($this->input->get('cmd') == 'getStores') {
+		if ($this->input->post('cmd') == 'getStores') {
 			$this->getLocationApi();
 			exit;
 		}
 
-		if ($this->input->get('cmd') == 'getMenu') {
-			$this->getMenuAPI();
+		if ($this->input->post('cmd') == 'getMenu'){
+			if(!empty($this->input->post('storeid'))) {
+				$this->getMenuAPI();
+			}else {
+				print_r("page not found");
+			}
 			exit;
 		}
-		
 	}
 
 	public function index() {
@@ -519,17 +522,15 @@ class Local extends Main_Controller {
 	}
 
 	public function getMenuAPI() {
-
 		$data['status'] = 1;
+		$data['err_msg'] = "";
 		$this->load->module('menus');
 		$data['menu_count']	= $this->Menus_model->getCount();
 		$data['categories_count'] = $this->Categories_model->getCount();
 		$data['menu_list'] = $this->menus->getListAPI();
 		$data['menu_option_count'] = count($data['menu_list']['option_values']);
-
 		print_r(json_encode($data));
 	}
 }
-
 /* End of file local.php */
 /* Location: ./main/controllers/local.php */
