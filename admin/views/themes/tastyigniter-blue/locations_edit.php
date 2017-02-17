@@ -906,7 +906,7 @@
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('.date').datepicker({
-		format: 'yyyy-mm-dd'
+		format: 'yy-mm-dd'
 	});
 	$('#delivery-areas select.form-control').select2({
 		minimumResultsForSearch: Infinity

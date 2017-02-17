@@ -308,7 +308,6 @@ class Menus extends Admin_Controller {
 	private function _saveMenu() {
 		if ($this->validateForm() === TRUE) {
 			$save_type = ( ! is_numeric($this->input->get('id'))) ? $this->lang->line('text_added') : $this->lang->line('text_updated');
-
 			if ($menu_id = $this->Menus_model->saveMenu($this->input->get('id'), $this->input->post())) {
 				log_activity($this->user->getStaffId(), $save_type, 'menus', get_activity_message('activity_custom',
 					array('{staff}', '{action}', '{context}', '{link}', '{item}'),

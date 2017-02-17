@@ -36,6 +36,19 @@ class tax_model extends TI_Model {
 
 		return $result;
 	}
+
+	public function getTaxApi() {
+		$this->db->select('name, percentage');
+		$this->db->where('status','1');
+		$this->db->from('tax');
+
+		$query = $this->db->get();
+		$result = array();
+
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		}
+	}
 	
 	public function getEditTax($tax_id) {
 		$this->db->from('tax');

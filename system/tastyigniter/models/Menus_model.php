@@ -324,7 +324,10 @@ class Menus_model extends TI_Model {
 		}
 
 		if ($query === TRUE AND is_numeric($menu_id)) {
-			if ( ! empty($save['menu_options'])) {
+			if (! empty($save['menu_options'])) {
+				$this->load->model('Menu_options_model');
+				$this->Menu_options_model->addMenuOption($menu_id, $save['menu_options']);
+			} else if (empty($save['menu_options'])) {
 				$this->load->model('Menu_options_model');
 				$this->Menu_options_model->addMenuOption($menu_id, $save['menu_options']);
 			}
@@ -481,7 +484,7 @@ class Menus_model extends TI_Model {
 					}
 				}
 
-				$optionID = "";	
+				$optionID = "";
 				foreach ($options as $key => $value) {
 					foreach ($value as $values) {
 						if ($key == $row['menu_id']){
