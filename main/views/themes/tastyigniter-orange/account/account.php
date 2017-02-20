@@ -228,8 +228,7 @@
 										</tr>
 									</thead>
 									<tbody>
-									<?php if(!empty($points_histories)){ ?>
-										
+									<?php if(!empty($points_history)){ ?>
 										<?php foreach ($points_history as $points_histories) { ?>
 											<tr>
 												<td><?php echo $points_histories['email']; ?></td>
