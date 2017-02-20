@@ -31,7 +31,7 @@ class Local extends Main_Controller {
 	}
 
 	public function index() {
-		
+
 		if (!($location = $this->Locations_model->getLocation($this->input->get('location_id')))) {
 			redirect('local/all');
 		}
@@ -452,49 +452,82 @@ class Local extends Main_Controller {
 
 		return $data;
 	}
-	
+
 	public function getLocationApi(){
-date_default_timezone_set("Asia/Kolkata");
-		$ordertype = $this->input->post('ordertype');
-		$timestamp = $this->input->post('timestamp');
-		if (!empty($timestamp)) {
-			$date = date("y-m-d",($timestamp/1000));
-			$time = date('h:i A', strtotime($timestamp));
-		}
+		$address = json_decode($this->input->post('address'),true);
+		$getaddress = $this->location->searchRestaurant($address['zipcode']);
 
-		$loyalty = $this->Customers_model->getCustomerByEmail($this->input->post('useremail'));
-		$data['loyalty'] = $loyalty['current_points'];
+		if (is_array($getaddress)) {
+			$ordertype = $this->input->post('ordertype');
+			$timestamp = $this->input->post('timestamp');
+			if (!empty($timestamp)) {
+				$date = date("y-m-d",($timestamp/1000));
+				$time = date('h:i A', strtotime($timestamp));
+			}
 
-		$data['tax'] = array();
-		$this->load->model('Tax_model');
-		$tax = $this->Tax_model->getTaxApi();
-		foreach ($tax as $taxes) {
-			$data['tax'][] = array(
-				'name' 		 => $taxes['name'],
-				'percentage' => $taxes['percentage']
-			);
-		}
+			$loyalty = $this->Customers_model->getCustomerByEmail($this->input->post('useremail'));
+			$data['loyalty'] = $loyalty['current_points'];
 
-		$review_totals = $this->Reviews_model->getTotalsbyId();                                    // retrieve all customer reviews from getMainList method in Reviews model
-		
-		$data['locations'] = array();
-		$locations = $this->Locations_model->getList($filter);
-		if ($locations) {
-			foreach ($locations as $location) {
-				$this->location->setLocation($location['location_id'], FALSE);
+			$data['tax'] = array();
+			$this->load->model('Tax_model');
+			$tax = $this->Tax_model->getTaxApi();
+			foreach ($tax as $taxes) {
+				$data['tax'][] = array(
+					'name' 		 => $taxes['name'],
+					'percentage' => $taxes['percentage']
+				);
+			}
 
-				$holiday = unserialize($location['holiday']);
-				foreach ($holiday as $holidays) {
-					if ($holidays['holiday_date'] == $date AND $holidays['holiday_status'] == 1){
-						$opening_status = $this->location->workingStatus('closed');
-						$delivery_status = $this->location->workingStatus('closed');
-						$collection_status = $this->location->workingStatus('closed');
-						$reason = $holidays['reason'];
-					} else {
-						$opening_status = $this->location->workingStatus('opening');
-						$delivery_status = $this->location->workingStatus('delivery');
-						$collection_status = $this->location->workingStatus('collection');
-						$reason = '';
+			$review_totals = $this->Reviews_model->getTotalsbyId();                                    // retrieve all customer reviews from getMainList method in Reviews model
+
+			$data['locations'] = array();
+			$locations = $this->Locations_model->getListApi($getaddress['location_id']);
+			if ($locations) {
+				foreach ($locations as $location) {
+					$this->location->setLocation($location['location_id'], FALSE);
+
+					$holiday = unserialize($location['holiday']);
+					if (! empty($holiday)) {	
+						foreach ($holiday as $holidays) {
+							if ($holidays['holiday_date'] == $date AND $holidays['holiday_status'] == 1){
+								$opening_status = $this->location->workingStatus('closed');
+								$delivery_status = $this->location->workingStatus('closed');
+								$collection_status = $this->location->workingStatus('closed');
+								$reason = $holidays['reason'];
+							} else {
+								$opening_status = $this->location->workingStatus('opening');
+								$delivery_status = $this->location->workingStatus('delivery');
+								$collection_status = $this->location->workingStatus('collection');
+								$reason = '';
+							}
+
+							$delivery_time = $this->location->deliveryTime();
+							if ($delivery_status === 'closed') {
+								$delivery_time = 'closed';
+							} else if ($delivery_status === 'opening') {
+								$delivery_time = $this->location->workingTime('delivery', 'open');
+							}
+
+							$collection_time = $this->location->collectionTime();
+							if ($collection_status === 'closed') {
+								$collection_time = 'closed';
+							} else if ($collection_status === 'opening') {
+								$collection_time = $this->location->workingTime('collection', 'open');
+							}
+						}
+					}
+
+					$lastordertime = $this->location->lastOrderTime();
+					$closingtime = $this->location->closingTime();
+
+					if ($location['offer_delivery'] OR $location['offer_collection'] == 1 ) {
+						if ($ordertype == 'delivery' AND $lastordertime < $time) {
+							$delivery_status = 'closed';
+						} else 
+						if ($ordertype == 'pickup' AND $closingtime < $time) {
+							$collection_status = 'closed';
+							$delivery_status = 'closed';
+						} 
 					}
 
 					$delivery_time = $this->location->deliveryTime();
@@ -510,72 +543,49 @@ date_default_timezone_set("Asia/Kolkata");
 					} else if ($collection_status === 'opening') {
 						$collection_time = $this->location->workingTime('collection', 'open');
 					}
-				}
 
-				$lastordertime = $this->location->lastOrderTime();
-				$closingtime = $this->location->closingTime();
-				if ($location['offer_delivery'] OR $location['offer_collection'] == 1 ) {
-					if ($ordertype == 'delivery' AND $lastordertime < $time) {
-						$delivery_status = 'closed';
-					} else 
-					if ($ordertype == 'pickup' AND $closingtime < $time) {
-						$collection_status = 'closed';
-						$delivery_status = 'closed';
-					} 
-				}
-				$delivery_time = $this->location->deliveryTime();
-				if ($delivery_status === 'closed') {
-					$delivery_time = 'closed';
-				} else if ($delivery_status === 'opening') {
-					$delivery_time = $this->location->workingTime('delivery', 'open');
-				}
+					$review_totals = isset($review_totals[$location['location_id']]) ? $review_totals[$location['location_id']] : 0;
 
-				$collection_time = $this->location->collectionTime();
-				if ($collection_status === 'closed') {
-					$collection_time = 'closed';
-				} else if ($collection_status === 'opening') {
-					$collection_time = $this->location->workingTime('collection', 'open');
+					$data['locations'][] = array(                                                            // create array of menu data to be sent to view
+						'location_id'       => $location['location_id'],
+						'location_name'     => $location['location_name'],
+						'description'       => (strlen($location['description']) > 120) ? substr($location['description'], 0, 120) . '...' : $location['description'],
+						'address'           => strip_tags($this->location->getAddress(TRUE)),
+						'total_reviews'     => $review_totals,
+						'location_image'    => $this->location->getImage(),
+						'is_opened'         => $this->location->isOpened(),
+						'is_closed'         => $this->location->isClosed(),
+						'opening_status'    => $opening_status,
+						'delivery_status'   => $delivery_status,
+						'collection_status' => $collection_status,
+						'delivery_time'     => $delivery_time,
+						'collection_time'   => $collection_time,
+						'reason'			=> $reason,
+						'opening_time'      => $this->location->openingTime(),
+						'closing_time'      => $this->location->closingTime(),
+						'min_total'         => utf8_encode($this->location->minimumOrder($this->cart->total())),
+						'delivery_charge'   => utf8_encode($this->location->deliveryCharge($this->cart->total())),
+						'has_delivery'      => $this->location->hasDelivery(),
+						'has_collection'    => $this->location->hasCollection(),
+						'last_order_time'   => $this->location->lastOrderTime(),
+						'distance'   		=> round($this->location->checkDistance()),
+						'distance_unit'   	=> $this->config->item('distance_unit') === 'km' ? $this->lang->line('text_kilometers') : $this->lang->line('text_miles'),
+						'href'              => site_url('local?location_id=' . $location['location_id']),
+					);
 				}
-
-				$review_totals = isset($review_totals[$location['location_id']]) ? $review_totals[$location['location_id']] : 0;
-
-				$data['locations'][] = array(                                                            // create array of menu data to be sent to view
-					'location_id'       => $location['location_id'],
-					'location_name'     => $location['location_name'],
-					'description'       => (strlen($location['description']) > 120) ? substr($location['description'], 0, 120) . '...' : $location['description'],
-					'address'           => strip_tags($this->location->getAddress(TRUE)),
-					'total_reviews'     => $review_totals,
-					'location_image'    => $this->location->getImage(),
-					'is_opened'         => $this->location->isOpened(),
-					'is_closed'         => $this->location->isClosed(),
-					'opening_status'    => $opening_status,
-					'delivery_status'   => $delivery_status,
-					'collection_status' => $collection_status,
-					'delivery_time'     => $delivery_time,
-					'collection_time'   => $collection_time,
-					'reason'			=> $reason,
-					'opening_time'      => $this->location->openingTime(),
-					'closing_time'      => $this->location->closingTime(),
-					'min_total'         => utf8_encode($this->location->minimumOrder($this->cart->total())),
-					'delivery_charge'   => utf8_encode($this->location->deliveryCharge($this->cart->total())),
-					'has_delivery'      => $this->location->hasDelivery(),
-					'has_collection'    => $this->location->hasCollection(),
-					'last_order_time'   => $this->location->lastOrderTime(),
-					'distance'   		=> round($this->location->checkDistance()),
-					'distance_unit'   	=> $this->config->item('distance_unit') === 'km' ? $this->lang->line('text_kilometers') : $this->lang->line('text_miles'),
-					'href'              => site_url('local?location_id=' . $location['location_id']),
-				);
 			}
+
+			if (!empty($sort_by) AND $sort_by === 'distance') {
+				$data['locations'] = sort_array($data['locations'], 'distance');
+			} else if (!empty($sort_by) AND $sort_by === 'rating') {
+				$data['locations'] = sort_array($data['locations'], 'total_reviews');
+			}
+
+			$data['status'] = 0;
+		} else {
+			$data['status'] = 1;
+			$data['err_msg'] = utf8_encode($getaddress);
 		}
-
-		if (!empty($sort_by) AND $sort_by === 'distance') {
-			$data['locations'] = sort_array($data['locations'], 'distance');
-		} else if (!empty($sort_by) AND $sort_by === 'rating') {
-			$data['locations'] = sort_array($data['locations'], 'total_reviews');
-		}
-
-		$data['status'] = 0;
-
 		$this->location->initialize();
 
 		print_r(json_encode($data));

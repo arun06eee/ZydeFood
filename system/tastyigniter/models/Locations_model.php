@@ -618,6 +618,23 @@ class Locations_model extends TI_Model {
 
 		return $working_hours;
 	}
+
+	public function getListApi($location) {
+
+		if (! empty($location)) {
+			$this->db->from('locations');
+			$this->db->where('location_id', $location);
+
+			$query = $this->db->get();
+			$result = array();
+
+			if ($query->num_rows() > 0) {
+				$result = $query->result_array();
+			}
+
+			return $result;
+		}
+	}
 }
 
 /* End of file locations_model.php */
