@@ -350,13 +350,16 @@ class Local extends Main_Controller {
 					$collection_time = $this->location->workingTime('collection', 'open');
 				}
 
-				$holidays = unserialize($location['holiday']);
-				foreach($holidays as $holiday) {
-					if ($holiday['holiday_date'] == date("Y-m-d") AND $holiday['holiday_status'] == '1') {
-						$delivery_status = 'closed';
-						$collection_status = 'closed';
-						$opening_status = 'closed';
-						$data['holiday']['reason'] = $holiday['reason'];
+				
+				if(!empty($location['holiday'])){					
+					$holidays = unserialize($location['holiday']);
+					foreach($holidays as $holiday) {
+						if ($holiday['holiday_date'] == date("Y-m-d") AND $holiday['holiday_status'] == '1') {
+							$delivery_status = 'closed';
+							$collection_status = 'closed';
+							$opening_status = 'closed';
+							$data['holiday']['reason'] = $holiday['reason'];
+						}
 					}
 				}
 

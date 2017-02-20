@@ -284,10 +284,16 @@ class Orders extends Admin_Controller {
 		$data['check_order_type'] 	= $order_info['order_type'];
 
 		$data['paypal_details'] = array();
+		$data['pay_u_money_details'] = array();
 		if ($payment = $this->extension->getPayment($order_info['payment'])) {
 			if ($payment['name'] === 'paypal_express') {
 				$this->load->model('paypal_express/Paypal_model');
 				$data['paypal_details'] = (isset($this->Paypal_model)) ? $this->Paypal_model->getPaypalDetails($order_info['order_id'], $order_info['customer_id']) : array();
+			}
+
+			if ($payment['name'] === 'pay_u_money') {
+				$this->load->model('pay_u_money/Pay_u_money_model');
+				$data['pay_u_money_details'] = (isset($this->Pay_u_money_model)) ? $this->Pay_u_money_model->getPayUMoneyDetails($order_info['order_id'], $order_info['customer_id']) : array();
 			}
 
 			$data['payment'] = !empty($payment['ext_data']['title']) ? $payment['ext_data']['title']: $payment['title'];

@@ -338,10 +338,6 @@
 										</div>
 									<?php } ?>
 
-									<div class="col-sm-12 form-group">
-										<label for=""><?php echo lang('label_ip'); ?></label>
-										<?php echo $ip_address; ?><br /><small><?php echo lang('text_ip_warning'); ?></small>
-									</div>
 								</div>
 							</div>
 						</form>

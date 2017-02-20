@@ -34,6 +34,7 @@ class Cart_module extends Main_Controller {
 				$check_holiday = 0;
 			}
 		}
+
 		if ($check_holiday == 1) {
 			$this->getCart($module, $data);
 		}
