@@ -9,6 +9,7 @@ class Local extends Main_Controller {
 		$this->load->model('Pages_model');
 		$this->load->model('Reviews_model');
 		$this->load->model('Customers_model');
+		$this->load->model('Addresses_model');
 
 		$this->load->library('location'); 														// load the location library
 		$this->load->library('currency'); 														// load the currency library
@@ -454,41 +455,46 @@ class Local extends Main_Controller {
 	}
 
 	public function getLocationApi(){
-		$address = json_decode($this->input->post('address'),true);
-		$getaddress = $this->location->searchRestaurant($address['zipcode']);
+		$customer_detail = $this->Customers_model->getCustomerByEmail($this->input->post('useremail'));			//get customers details
+		$data['loyalty'] = $customer_detail['current_points'];													//get loyalty points of customer
+
+		$data['tax'] = array();
+		$this->load->model('Tax_model');																		//get available tax details
+		$tax = $this->Tax_model->getTaxApi();
+		foreach ($tax as $taxes) {
+			$data['tax'][] = array(
+				'name' 		 => $taxes['name'],
+				'percentage' => $taxes['percentage']
+			);
+		}
+		
+		$address = json_decode($this->input->post('address'),true);												//get address from request
+		
+		$getaddress = $this->location->searchRestaurant($address['postcode']);										//search restaurant by zipcode
 
 		if (is_array($getaddress)) {
+			if ($this->input->post('newaddress') == 'y') {
+				$this->Addresses_model->saveAddress($customer_detail['customer_id'], $address_id=FALSE,$address);		//if it's new address save to DB
+			}
 			$ordertype = $this->input->post('ordertype');
 			$timestamp = $this->input->post('timestamp');
 			if (!empty($timestamp)) {
-				$date = date("y-m-d",($timestamp/1000));
+				$date = date("y-m-d",($timestamp/1000));															//get time and date from timestamp
 				$time = date('h:i A', strtotime($timestamp));
 			}
 
-			$loyalty = $this->Customers_model->getCustomerByEmail($this->input->post('useremail'));
-			$data['loyalty'] = $loyalty['current_points'];
-
-			$data['tax'] = array();
-			$this->load->model('Tax_model');
-			$tax = $this->Tax_model->getTaxApi();
-			foreach ($tax as $taxes) {
-				$data['tax'][] = array(
-					'name' 		 => $taxes['name'],
-					'percentage' => $taxes['percentage']
-				);
-			}
 
 			$review_totals = $this->Reviews_model->getTotalsbyId();                                    // retrieve all customer reviews from getMainList method in Reviews model
 
 			$data['locations'] = array();
-			$locations = $this->Locations_model->getListApi($getaddress['location_id']);
+			$locations = $this->Locations_model->getListApi($getaddress['location_id']);				//get available locations details
 			if ($locations) {
 				foreach ($locations as $location) {
 					$this->location->setLocation($location['location_id'], FALSE);
 
 					$holiday = unserialize($location['holiday']);
-					if (! empty($holiday)) {	
-						foreach ($holiday as $holidays) {
+					if (! empty($holiday)) {
+						foreach ($holiday as $holidays) {													//check for holidays to the restaurant
 							if ($holidays['holiday_date'] == $date AND $holidays['holiday_status'] == 1){
 								$opening_status = $this->location->workingStatus('closed');
 								$delivery_status = $this->location->workingStatus('closed');
@@ -520,7 +526,7 @@ class Local extends Main_Controller {
 					$lastordertime = $this->location->lastOrderTime();
 					$closingtime = $this->location->closingTime();
 
-					if ($location['offer_delivery'] OR $location['offer_collection'] == 1 ) {
+					if ($location['offer_delivery'] OR $location['offer_collection'] == 1 ) {				//check delivery or pickup available in restaurant
 						if ($ordertype == 'delivery' AND $lastordertime < $time) {
 							$delivery_status = 'closed';
 						} else 
@@ -550,7 +556,7 @@ class Local extends Main_Controller {
 						'location_id'       => $location['location_id'],
 						'location_name'     => $location['location_name'],
 						'description'       => (strlen($location['description']) > 120) ? substr($location['description'], 0, 120) . '...' : $location['description'],
-						'address'           => strip_tags($this->location->getAddress(TRUE)),
+						'address'           => $this->location->getAddressApi(TRUE),
 						'total_reviews'     => $review_totals,
 						'location_image'    => $this->location->getImage(),
 						'is_opened'         => $this->location->isOpened(),

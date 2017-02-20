@@ -180,6 +180,22 @@ class Location {
 		return $address;
 	}
 
+	public function getAddressApi($format = TRUE) {
+		$location_address = array(
+			'address_1'      => $this->local_info['location_address_1'],
+			'address_2'      => $this->local_info['location_address_2'],
+			'city'           => $this->local_info['location_city'],
+			'state'          => $this->local_info['location_state'],
+			'postcode'       => $this->local_info['location_postcode']
+		);
+
+		if ($format === FALSE) {
+			$address = str_replace('<br />', ', ', $address);
+		}
+
+		return $location_address;		
+	}
+
 	public function getDefaultLocal() {
 		$main_address = $this->CI->config->item('main_address');
 

@@ -28,7 +28,7 @@ class Addresses_model extends TI_Model {
 
 			$this->db->from('addresses');
 
-			return $this->db->count_all_results();
+			return 2;//$this->db->count_all_results();
 		}
 	}
 
@@ -43,6 +43,8 @@ class Addresses_model extends TI_Model {
 				$this->db->join('countries', 'countries.country_id = addresses.country_id', 'left');
 
 				$this->db->where('customer_id', $filter['customer_id']);
+				$this->db->order_by('customer_id','DESC');
+				$this->db->limit('2');
 
 				$query = $this->db->get();
 
