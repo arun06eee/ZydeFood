@@ -479,10 +479,9 @@ class Local extends Main_Controller {
 			$ordertype = $this->input->post('ordertype');
 			$timestamp = $this->input->post('timestamp');
 			if (!empty($timestamp)) {
-				$date = date("y-m-d",($timestamp/1000));															//get time and date from timestamp
-				$time = date('h:i A', strtotime($timestamp));
+				$date = date("y-m-d", $timestamp);															//get time and date from timestamp
+				$time = date('h:i A', $timestamp);
 			}
-
 
 			$review_totals = $this->Reviews_model->getTotalsbyId();                                    // retrieve all customer reviews from getMainList method in Reviews model
 
