@@ -21,18 +21,32 @@ class Local extends Main_Controller {
 			$this->getLocationApi();
 			exit;
 		}
-
 		if ($this->input->post('cmd') == 'getMenu'){
 			if(!empty($this->input->post('storeid'))) {
-				$this->getMenuAPI();
+				$this->getMenuApi();
 			}else {
 				print_r("page not found");
 			}
 			exit;
 		}
-
 		if ($this->input->post('cmd') == 'getLoyalty') {
-			$this->getLoyalty();
+			$this->getLoyaltyApi();
+			exit;
+		}
+		if ($this->input->post('cmd') == 'getOrderHistory') {
+			$this->getOrderHistoryApi();
+			exit;
+		}
+		if ($this->input->post('cmd') == 'getAddress') {
+			$this->getAddressApi();
+			exit;
+		}
+		if ($this->input->post('cmd') == 'applyCoupons') {
+			$this->applyCouponsApi();
+			exit;
+		}
+		if ($this->input->post('cmd') == 'applyLoyalty') {
+			$this->applyLoyaltyApi();
 			exit;
 		}
 	}
@@ -551,7 +565,7 @@ class Local extends Main_Controller {
 						'location_id'       => $location['location_id'],
 						'location_name'     => $location['location_name'],
 						'description'       => (strlen($location['description']) > 120) ? substr($location['description'], 0, 120) . '...' : $location['description'],
-						'address'           => $this->location->getAddressApi(TRUE),
+						'address'           => $this->location->AddressApi(TRUE),
 						'total_reviews'     => $review_totals,
 						'location_image'    => utf8_encode($this->location->getImage()),
 						'is_opened'         => $this->location->isOpened(),
@@ -592,7 +606,7 @@ class Local extends Main_Controller {
 		print_r(json_encode($data));
 	}
 
-	public function getMenuAPI() {
+	public function getMenuApi() {
 		$data['status'] = 1;
 		$this->load->module('menus');
 		$data['menu_count']	= $this->Menus_model->getCount();
@@ -608,8 +622,9 @@ class Local extends Main_Controller {
 		print_r(json_encode($data));
 	}
 
-	public function getLoyalty() {
-		$customer_detail = $this->Customers_model->getCustomerByEmail($this->input->post('useremail'));
+	public function getLoyaltyApi() {
+		$email = $this->input->post('useremail');
+		$customer_detail = $this->Customers_model->getCustomerByEmail($email);
 		if (! empty($customer_detail)) {
 			$data['status'] = 1;
 			$data['err_msg'] = '';
@@ -617,10 +632,11 @@ class Local extends Main_Controller {
 			$data['user_name'] = $customer_detail['first_name'].' '.$customer_detail['last_name'];
 
 			$data['history'] = '';
-			$history = $this->Orders_model->getList();
+			$filter = array('email' => $email);
+			$history = $this->Orders_model->getList($filter);
 
 			foreach ($history as $histories) {
-				if (! empty ($histories['redeem_points_provide'])) {	
+				if (! empty ($histories['redeem_points_provide'])) {
 					$data['history'][] = array(
 						'location'  => $histories['location_name'],
 						'date'		=> $histories['order_date'],
@@ -637,8 +653,103 @@ class Local extends Main_Controller {
 					);
 				}
 			}
+		} else {
+			$data['status'] = 0;
+			$data['err_msg'] = 'FAILED';
 		}
 		print_r(json_encode($data));
+	}
+
+	public function getOrderHistoryApi() {
+		$data['status'] = 1;
+		$data['err_msg'] = '';
+		$email = $this->input->post('useremail');
+		$customer_detail = $this->Customers_model->getCustomerByEmail($email);
+		if (! empty($customer_detail)){
+			$filter = array('email' =>$email);
+			$data['orderhistory'] = array();
+			$result = $this->Orders_model->getList($filter);
+			foreach ($result as $results) {
+				if ($results['order_type'] == 1) $ordertype = 'delivery';
+				if ($results['order_type'] == 2) $ordertype = 'pickup';
+
+				$data['orderhistory'][] = array(
+					'location'		=> $results['location_name'],
+					'date'			=> $results['order_date'].' '.$results['order_time'],
+					'order_number'	=> $results['order_id'],
+					'order_type'	=> $ordertype,
+					'order_status'	=> $results['status_name'],
+					'price'			=> $results['net_total']
+				);
+			}
+		}else {
+			$data['status'] = 0;
+			$data['err_msg'] = 'Failure while getting Order History.';
+		}
+	print_r(json_encode($data));
+	}
+
+	public function getAddressApi() {
+		$email = $this->input->post('useremail');
+		$customer_detail = $this->Customers_model->getCustomerByEmail($email);
+		
+		if (! empty($customer_detail)) {
+			$data['status'] = 1;
+			$data['err_msg'] = '';
+			$data['address'] = array();
+			$result = $this->Addresses_model->getList($filter = array('customer_id' => $customer_detail['customer_id']));
+			foreach ($result as $results) {
+				$data['address'][] = array(
+					'Nickname'		=> '',
+					'addr'			=> $results['address_1'],
+					'suite'			=> '',
+					'city'			=> $results['city'],
+					'state'			=> $results['state'],
+					'zipcode'		=> $results['postcode']
+				);
+			}
+		} else {
+			$data['status'] = 0;
+			$data['err_msg'] = 'The userEmail sent is not available or invalid.';
+		}
+	print_r(json_encode($data));
+	}
+
+	public function applyCouponsApi() {
+		$this->load->module('cart_module');
+		$apply = $this->cart_module->couponApi();
+
+		if ($apply['type'] == 'P' OR $apply['type'] == 'F') {
+			if ($apply['type'] == 'P') $apply['type'] = 'percentage';
+			if ($apply['type'] == 'F') $apply['type'] = 'Fixedvalue';
+
+			$data['status'] = 1;
+			$data['err_msg'] = '';
+			$data['type'] = $apply['type'];
+			$data['value'] = $apply['value'];
+		} else if ($apply == 'removed') {
+			$data['status'] = 1;
+			$data['err_msg'] = '';
+		}else {
+			$data['status'] = 0;
+			$data['err_msg'] = $apply;
+		}
+	print_r(json_encode($data));
+	}
+
+	public function applyLoyaltyApi() {
+		$this->load->module('cart_module');
+		$apply = $this->cart_module->loyaltyApi();
+		if (is_array ($apply)) {
+			$data['status'] = 1;
+			$data['err_msg'] = '';
+			$data['used_points'] = $apply['used_points'];
+			$data['amount'] = $apply['amount'];
+		}else {
+			$data['status'] = 0;
+			$data['err_msg'] = $apply;
+		}
+	print_r(json_encode($data));
 	}
 }
 /* End of file local.php */

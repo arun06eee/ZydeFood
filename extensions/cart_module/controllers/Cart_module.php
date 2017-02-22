@@ -222,6 +222,26 @@ class Cart_module extends Main_Controller {
         $this->output->set_output(json_encode($json));											// encode the json array and set final out to be sent to jQuery AJAX
     }
 
+    public function couponApi() {
+    	$json = '';
+
+        //if (!$json AND $this->cart->contents() AND is_string($this->input->post('code'))) {
+            switch ($this->input->post('action')) {
+                case 'remove':
+                    $this->cart->remove_coupon($this->input->post('code'));
+                    $json = 'removed';
+                    break;
+
+                case 'add':
+                    if (! empty($response = $this->cart_module_lib->validateCouponApi($this->input->post('code')))) {
+                    	$json = $response;
+                    }
+                break;
+            }
+       // }
+        return $json;
+    }
+
 	public function loyaltyPoints() {
 		$json = array();
 
@@ -246,6 +266,27 @@ class Cart_module extends Main_Controller {
 		}
 
 		$this->output->set_output(json_encode($json));
+	}
+
+	public function loyaltyApi() {
+		$json = '';
+		$loyalty = array('points'=> $this->input->post('points'), 'email' => $this->input->post('useremail'));
+
+		//if (!$json AND $this->cart->contents() AND is_string($this->input->post('points'))) {
+			switch ($this->input->post('action')) {
+				case 'remove':
+					$this->cart->remove_points($this->input->post('points'));
+					$json = 'removed';
+					break;
+
+				case 'add';
+					if(! empty ($response = $this->cart_module_lib->validateLoyaltyApi($loyalty))) {
+						$json = $response;
+					}
+				break;
+			}
+		//}
+		return $json;
 	}
 
 	public function remove() {																	// remove() method to update cart

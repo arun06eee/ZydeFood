@@ -180,7 +180,7 @@ class Location {
 		return $address;
 	}
 
-	public function getAddressApi($format = TRUE) {
+	public function AddressApi($format = TRUE) {
 		$location_address = array(
 			'address_1'      => $this->local_info['location_address_1'],
 			'address_2'      => $this->local_info['location_address_2'],

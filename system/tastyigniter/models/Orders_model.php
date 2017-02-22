@@ -91,6 +91,10 @@ class Orders_model extends TI_Model {
                 $this->db->where('customer_id', $filter['customer_id']);
             }
 
+            if (! empty($filter['email'])) {
+                $this->db->where('email', $filter['email']);
+            }
+
             if ( ! empty($filter['filter_location'])) {
                 $this->db->where('orders.location_id', $filter['filter_location']);
             }

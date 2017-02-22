@@ -232,6 +232,20 @@ class Cart_model extends TI_Model {
 
 		return $result;
 	}
+
+    public function checkLoyaltyPointsApi($email) {
+        $this->db->select('current_points');
+        $this->db->where('email', $email);
+        $this->db->from('customers');
+        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+
+        return $result;
+    }
 	
 	public function getloyaltyPrice() {
 		$this->db->select('discount');

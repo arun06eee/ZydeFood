@@ -241,6 +241,53 @@ class Cart_module_lib {
         return $error;
     }
 
+    public function validateCouponApi($code='') {
+        $error = '';
+
+        if ($code === NULL) {
+            return TRUE;
+        } else if (empty($code)) {
+            $error = 'coupon_invalid';
+        } else if (!$coupon = $this->CI->Cart_model->checkCoupon($code)) {
+            $error = 'coupon_expired';
+        } else {
+            if (!empty($coupon['order_restriction']) AND $coupon['order_restriction'] !== $this->CI->location->orderType()) {
+                $order_type = ($coupon['order_restriction'] === '1') ? $this->CI->lang->line('text_delivery') : $this->CI->lang->line('text_collection');
+                $error = 'Your coupon can ONLY be applied to '.$order_type.' orders';
+            }
+
+            if ($coupon['min_total'] > $this->CI->cart->total()) {
+                $error = 'Your coupon can not be applied to orders below '.$this->CI->currency->format($coupon['min_total']);
+            }
+
+            $used = $this->CI->Cart_model->checkCouponHistory($coupon['coupon_id']);
+
+            if (!empty($coupon['redemptions']) AND ($coupon['redemptions']) <= ($used)) {
+                $error = 'Maximum number of redemption for the coupon has been reached.';
+            }
+
+            if ($coupon['customer_redemptions'] === '1' AND $this->CI->customer->getId()) {
+                $customer_used = $this->CI->Cart_model->checkCustomerCouponHistory($coupon['coupon_id'], $this->CI->customer->getId());
+
+                if ($coupon['customer_redemptions'] <= $customer_used) {
+                    $error = 'Maximum number of redemption for the coupon has been reached';
+                }
+            }
+
+            if ($error === '') {
+                $this->CI->cart->add_coupon(array('code' => $coupon['code'], 'type' => $coupon['type'], 'discount' => $coupon['discount']));
+                $data = array('type'=>$coupon['type'], 'value'=>$coupon['discount']);
+                return $data;
+            }
+        }
+
+        if (!empty($code)) {
+            $this->CI->cart->remove_coupon($code);
+        }
+
+        return $error;
+    }
+
 	public function validateLoyaltyPoints($Loyalty_points = '') {
         $error = '';
 		$loyaltypoints = $this->CI->Cart_model->checkLoyaltyPoints($this->CI->customer->getId());
@@ -262,6 +309,33 @@ class Cart_module_lib {
 
         if (!empty($Loyalty_points)) {
             $this->CI->cart->remove_points($Loyalty_points);
+        }
+
+        return $error;
+    }
+
+    public function validateLoyaltyApi($loyalty) {
+        $error = '';
+        $loyaltypoints = $this->CI->Cart_model->checkLoyaltyPointsApi($loyalty['email']);
+        $loyaltyPrice = $this->CI->Cart_model->getloyaltyPrice();
+
+        if (empty($loyalty['points']) OR !is_numeric($loyalty['points'])) {
+            $error = 'loyaltyPoints_invalid';                      // display error message
+        } else 
+        if ($loyaltypoints['0']['current_points'] === NULL) {
+            $error = 'No Points';                             // display error message
+        } else 
+        if ( ($loyaltypoints['0']['current_points'] < $loyalty['points'])) {
+            $error = 'high points applied';
+        }
+
+        if ($error === '') {
+            $data = array('used_points'=> $loyalty['points'], 'amount'=> $loyalty['points']*$loyaltyPrice[0]['discount']);
+            return $data;
+        }
+
+        if (!empty($loyalty['points'])) {
+           // $this->CI->cart->remove_points($Loyalty_points);
         }
 
         return $error;
