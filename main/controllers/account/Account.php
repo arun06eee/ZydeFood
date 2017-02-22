@@ -99,7 +99,7 @@ class Account extends Main_Controller {
 			);
 		}
 
-		$data['loyalty_points_history'] = array();
+		$data['points_history'] = array();
 		$results = $this->Orders_model->getList($filter + array('sort_by' => 'order_id'));
 
 		foreach ($results as $result) {

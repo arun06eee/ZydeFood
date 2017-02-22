@@ -623,6 +623,7 @@ class Locations_model extends TI_Model {
 
 		if (! empty($location)) {
 			$this->db->from('locations');
+			$this->db->where('location_status', '1');
 			$this->db->where('location_id', $location);
 
 			$query = $this->db->get();

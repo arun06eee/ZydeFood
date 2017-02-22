@@ -381,7 +381,6 @@ class Location {
 			} else {
 				$working_time = mdate('%D ' . $this->timeFormat, $this->working_hour[$type][$hour]);
 			}
-
 			$working_time = (!$format) ? strtotime($working_time) : $working_time;
 		}
 
@@ -401,7 +400,7 @@ class Location {
 			$open = $hours['open'];
 			$close = $hours['close'];
 
-			if ($type === 'delivery' OR $type === 'collection') {
+			if ($type === 'delivery' /*OR $type === 'collection'*/) {
 				$close = $close - $last_order_time;
 			}
 

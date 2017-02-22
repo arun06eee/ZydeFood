@@ -10,6 +10,7 @@ class Local extends Main_Controller {
 		$this->load->model('Reviews_model');
 		$this->load->model('Customers_model');
 		$this->load->model('Addresses_model');
+		$this->load->model('Orders_model');
 
 		$this->load->library('location'); 														// load the location library
 		$this->load->library('currency'); 														// load the currency library
@@ -27,6 +28,11 @@ class Local extends Main_Controller {
 			}else {
 				print_r("page not found");
 			}
+			exit;
+		}
+
+		if ($this->input->post('cmd') == 'getLoyalty') {
+			$this->getLoyalty();
 			exit;
 		}
 	}
@@ -350,7 +356,6 @@ class Local extends Main_Controller {
 				} else if ($collection_status === 'opening') {
 					$collection_time = $this->location->workingTime('collection', 'open');
 				}
-
 				
 				if(!empty($location['holiday'])){					
 					$holidays = unserialize($location['holiday']);
@@ -477,10 +482,10 @@ class Local extends Main_Controller {
 				$this->Addresses_model->saveAddress($customer_detail['customer_id'], $address_id=FALSE,$address);		//if it's new address save to DB
 			}
 			$ordertype = $this->input->post('ordertype');
-			$timestamp = $this->input->post('timestamp');
+			$timestamp = $this->input->post('timestamp')/1000;
 			if (!empty($timestamp)) {
 				$date = date("y-m-d", $timestamp);															//get time and date from timestamp
-				$time = date('h:i A', $timestamp);
+				$time = date('G:i', $timestamp);
 			}
 
 			$review_totals = $this->Reviews_model->getTotalsbyId();                                    // retrieve all customer reviews from getMainList method in Reviews model
@@ -490,64 +495,55 @@ class Local extends Main_Controller {
 			if ($locations) {
 				foreach ($locations as $location) {
 					$this->location->setLocation($location['location_id'], FALSE);
+					$lastordertime = date("G:i", strtotime($this->location->lastOrderTime()));
+					$closingtime = date("G:i", strtotime($this->location->closingTime()));
 
+					$opening_status = $this->location->workingStatus('opening');
+					$delivery_status = $this->location->workingStatus('delivery');
+					$collection_status = $this->location->workingStatus('collection');
 					$holiday = unserialize($location['holiday']);
 					if (! empty($holiday)) {
-						foreach ($holiday as $holidays) {													//check for holidays to the restaurant
-							if ($holidays['holiday_date'] == $date AND $holidays['holiday_status'] == 1){
-								$opening_status = $this->location->workingStatus('closed');
-								$delivery_status = $this->location->workingStatus('closed');
-								$collection_status = $this->location->workingStatus('closed');
-								$reason = $holidays['reason'];
-							} else {
-								$opening_status = $this->location->workingStatus('opening');
-								$delivery_status = $this->location->workingStatus('delivery');
-								$collection_status = $this->location->workingStatus('collection');
-								$reason = '';
-							}
-
-							$delivery_time = $this->location->deliveryTime();
-							if ($delivery_status === 'closed') {
-								$delivery_time = 'closed';
-							} else if ($delivery_status === 'opening') {
-								$delivery_time = $this->location->workingTime('delivery', 'open');
-							}
-
-							$collection_time = $this->location->collectionTime();
-							if ($collection_status === 'closed') {
-								$collection_time = 'closed';
-							} else if ($collection_status === 'opening') {
-								$collection_time = $this->location->workingTime('collection', 'open');
+						if ($location['offer_delivery'] == '1' OR $location['offer_collection'] == '1' ) {				//check delivery or pickup available in restaurant
+							foreach ($holiday as $holidays) {													//check for holidays to the restaurant
+								if ($holidays['holiday_date'] == $date AND $holidays['holiday_status'] == 1){
+									$opening_status = 'closed';
+									$delivery_status = 'closed';
+									$collection_status = 'closed';
+									$reason = $holidays['reason'];
+								}else if ($ordertype == 'delivery' AND $lastordertime <= $time) {
+									$delivery_status = 'closed';
+								} else if ($ordertype == 'pickup'){
+									if($lastordertime <= $time AND $closingtime <= $time) {
+										$collection_status = 'closed';
+										$delivery_status = 'closed';
+										$opening_status = 'closed';
+									} else if ($closingtime >= $time AND $lastordertime <= $time) {
+										$collection_status = 'open';
+										$opening_status = 'open';
+										$delivery_status = 'closed';
+									}
+								}
 							}
 						}
-					}
-
-					$lastordertime = $this->location->lastOrderTime();
-					$closingtime = $this->location->closingTime();
-
-					if ($location['offer_delivery'] OR $location['offer_collection'] == 1 ) {				//check delivery or pickup available in restaurant
-						if ($ordertype == 'delivery' AND $lastordertime < $time) {
-							$delivery_status = 'closed';
-						} else 
-						if ($ordertype == 'pickup' AND $closingtime < $time) {
-							$collection_status = 'closed';
-							$delivery_status = 'closed';
-						} 
 					}
 
 					$delivery_time = $this->location->deliveryTime();
 					if ($delivery_status === 'closed') {
 						$delivery_time = 'closed';
-					} else if ($delivery_status === 'opening') {
+					} else if ($delivery_status === 'open') {
 						$delivery_time = $this->location->workingTime('delivery', 'open');
 					}
 
 					$collection_time = $this->location->collectionTime();
 					if ($collection_status === 'closed') {
 						$collection_time = 'closed';
-					} else if ($collection_status === 'opening') {
+					} else if ($collection_status === 'open') {
 						$collection_time = $this->location->workingTime('collection', 'open');
 					}
+					
+					if($opening_status == 'opening') $opening_status = 'closed';
+					if($delivery_status == 'opening') $delivery_status = 'closed';
+					if($collection_status == 'opening') $collection_status = 'closed';
 
 					$review_totals = isset($review_totals[$location['location_id']]) ? $review_totals[$location['location_id']] : 0;
 
@@ -557,15 +553,15 @@ class Local extends Main_Controller {
 						'description'       => (strlen($location['description']) > 120) ? substr($location['description'], 0, 120) . '...' : $location['description'],
 						'address'           => $this->location->getAddressApi(TRUE),
 						'total_reviews'     => $review_totals,
-						'location_image'    => $this->location->getImage(),
+						'location_image'    => utf8_encode($this->location->getImage()),
 						'is_opened'         => $this->location->isOpened(),
 						'is_closed'         => $this->location->isClosed(),
-						'opening_status'    => $opening_status,
-						'delivery_status'   => $delivery_status,
-						'collection_status' => $collection_status,
+						'opening_status'    => utf8_encode($opening_status),
+						'delivery_status'   => utf8_encode($delivery_status),
+						'collection_status' => utf8_encode($collection_status),
 						'delivery_time'     => $delivery_time,
 						'collection_time'   => $collection_time,
-						'reason'			=> $reason,
+						'reason'			=> utf8_encode($reason),
 						'opening_time'      => $this->location->openingTime(),
 						'closing_time'      => $this->location->closingTime(),
 						'min_total'         => utf8_encode($this->location->minimumOrder($this->cart->total())),
@@ -586,9 +582,9 @@ class Local extends Main_Controller {
 				$data['locations'] = sort_array($data['locations'], 'total_reviews');
 			}
 
-			$data['status'] = 0;
-		} else {
 			$data['status'] = 1;
+		} else {
+			$data['status'] = 0;
 			$data['err_msg'] = utf8_encode($getaddress);
 		}
 		$this->location->initialize();
@@ -608,6 +604,39 @@ class Local extends Main_Controller {
 			$data['err_msg'] = "";
 		}else {
 			$data['err_msg'] = "No menus available";
+		}
+		print_r(json_encode($data));
+	}
+
+	public function getLoyalty() {
+		$customer_detail = $this->Customers_model->getCustomerByEmail($this->input->post('useremail'));
+		if (! empty($customer_detail)) {
+			$data['status'] = 1;
+			$data['err_msg'] = '';
+			$data['total_points'] = $customer_detail['current_points'];
+			$data['user_name'] = $customer_detail['first_name'].' '.$customer_detail['last_name'];
+
+			$data['history'] = '';
+			$history = $this->Orders_model->getList();
+
+			foreach ($history as $histories) {
+				if (! empty ($histories['redeem_points_provide'])) {	
+					$data['history'][] = array(
+						'location'  => $histories['location_name'],
+						'date'		=> $histories['order_date'],
+						'points'	=> $histories['redeem_points_provide'],
+						'operation' => 'add'
+					);
+				}
+				if (! empty($histories['redeem_points'])) {
+					$data['history'][] = array(
+						'location'  => $histories['location_name'],
+						'date'		=> $histories['order_date'],
+						'points'	=> $histories['redeem_points'],
+						'operation' => 'redeem'
+					);
+				}
+			}
 		}
 		print_r(json_encode($data));
 	}
