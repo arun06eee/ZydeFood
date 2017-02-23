@@ -270,12 +270,12 @@ class Cart_module extends Main_Controller {
 
 	public function loyaltyApi() {
 		$json = '';
-		$loyalty = array('points'=> $this->input->post('points'), 'email' => $this->input->post('useremail'));
+		$loyalty = array('loyalty_points'=> $this->input->post('loyalty_points'), 'email' => $this->input->post('useremail'), 'purchased_amount'=> $this->input->post('purchased_amount'));
 
 		//if (!$json AND $this->cart->contents() AND is_string($this->input->post('points'))) {
 			switch ($this->input->post('action')) {
 				case 'remove':
-					$this->cart->remove_points($this->input->post('points'));
+					$this->cart->remove_points($this->input->post('loyalty_points'));
 					$json = 'removed';
 					break;
 

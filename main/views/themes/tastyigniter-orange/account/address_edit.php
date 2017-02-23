@@ -21,6 +21,12 @@
 						<?php if ($address) { ?>
 							<div class="col-md-12">
 								<div class="form-group">
+									<label for=""><?php echo 'Nickname'; ?></label>
+									<input type="text" name="address[nickname]" class="form-control" value="<?php echo set_value('address[nickname]', $address['nickname']); ?>" />
+									<?php echo form_error('address[nickname]', '<span class="text-danger">', '</span>'); ?>
+								</div>
+
+								<div class="form-group">
 									<label for=""><?php echo lang('label_address_1'); ?></label>
 									<input type="text" name="address[address_1]" class="form-control" value="<?php echo set_value('address[address_1]', $address['address_1']); ?>" />
 									<?php echo form_error('address[address_1]', '<span class="text-danger">', '</span>'); ?>

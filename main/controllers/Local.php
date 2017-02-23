@@ -744,7 +744,7 @@ class Local extends Main_Controller {
 			$data['status'] = 1;
 			$data['err_msg'] = '';
 			$data['used_points'] = $apply['used_points'];
-			$data['amount'] = $apply['amount'];
+			$data['amount'] = round($apply['amount']);
 		}else {
 			$data['status'] = 0;
 			$data['err_msg'] = $apply;

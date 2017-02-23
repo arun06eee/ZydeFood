@@ -98,6 +98,7 @@ class Address extends Main_Controller {
 		if ($result = $this->Addresses_model->getAddress($this->customer->getId(), $address_id)) {
 			$data['address'] = array(														// create array of customer address data to pass to view
 				'address_id'	=> $result['address_id'],
+				'nickname'		=> $result['nickname'],
 				'address_1' 	=> $result['address_1'],
 				'address_2' 	=> $result['address_2'],
 				'city' 			=> $result['city'],

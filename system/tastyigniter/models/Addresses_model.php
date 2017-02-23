@@ -43,7 +43,7 @@ class Addresses_model extends TI_Model {
 				$this->db->join('countries', 'countries.country_id = addresses.country_id', 'left');
 
 				$this->db->where('customer_id', $filter['customer_id']);
-				$this->db->order_by('customer_id','DESC');
+				$this->db->order_by('address_id','ASC');
 				$this->db->limit('2');
 
 				$query = $this->db->get();
@@ -55,6 +55,7 @@ class Addresses_model extends TI_Model {
 
 						$address_data[$result['address_id']] = array(
 							'address_id' => $result['address_id'],
+							'nickname'	 => $result['nickname'],
 							'address_1'  => $result['address_1'],
 							'address_2'  => $result['address_2'],
 							'city'       => $result['city'],
@@ -128,6 +129,7 @@ class Addresses_model extends TI_Model {
 
 				$address_data = array(
 					'address_id' => $row['address_id'],
+					'nickname'	 => $row['nickname'],
 					'address_1'  => $row['address_1'],
 					'address_2'  => $row['address_2'],
 					'city'       => $row['city'],
@@ -217,6 +219,10 @@ class Addresses_model extends TI_Model {
 
 		if (empty($address_id) AND isset($address['address_id'])) {
 			$this->db->set('address_id', $address['address_id']);
+		}
+
+		if (isset($address['nickname'])) {
+			$this->db->set('nickname', $address['nickname']);
 		}
 
 		if (isset($address['address_1'])) {

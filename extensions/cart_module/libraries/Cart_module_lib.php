@@ -318,23 +318,24 @@ class Cart_module_lib {
         $error = '';
         $loyaltypoints = $this->CI->Cart_model->checkLoyaltyPointsApi($loyalty['email']);
         $loyaltyPrice = $this->CI->Cart_model->getloyaltyPrice();
+        $amount = $loyalty['purchased_amount'] - ($loyalty['loyalty_points']*$loyaltyPrice[0]['discount']);
 
-        if (empty($loyalty['points']) OR !is_numeric($loyalty['points'])) {
+        if (empty($loyalty['loyalty_points']) OR !is_numeric($loyalty['loyalty_points'])) {
             $error = 'loyaltyPoints_invalid';                      // display error message
         } else 
         if ($loyaltypoints['0']['current_points'] === NULL) {
             $error = 'No Points';                             // display error message
         } else 
-        if ( ($loyaltypoints['0']['current_points'] < $loyalty['points'])) {
+        if ( ($loyaltypoints['0']['current_points'] < $loyalty['loyalty_points']) OR ($amount <  0)) {
             $error = 'high points applied';
         }
 
         if ($error === '') {
-            $data = array('used_points'=> $loyalty['points'], 'amount'=> $loyalty['points']*$loyaltyPrice[0]['discount']);
+            $data = array('used_points'=> $loyalty['loyalty_points'], 'amount'=> $amount);
             return $data;
         }
 
-        if (!empty($loyalty['points'])) {
+        if (!empty($loyalty['loyalty_points'])) {
            // $this->CI->cart->remove_points($Loyalty_points);
         }
 

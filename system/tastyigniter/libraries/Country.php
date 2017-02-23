@@ -28,10 +28,11 @@ class Country {
 			if (!empty($address['format'])) {
 				$format = $address['format'];
 			} else {
-				$format = '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{state}' . "\n" . '{country}';
+				$format = '{nickname}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{state}' . "\n" . '{country}';
 			}
 
 			$find = array(
+				'{nickname}',
 				'{address_1}',
 				'{address_2}',
 				'{city}',
@@ -41,6 +42,7 @@ class Country {
 			);
 
 			$replace = array(
+				'nickname'		=> (isset($address['nickname'])) ? $address['nickname'] : '',
 				'address_1' 	=> (isset($address['address_1'])) ? $address['address_1'] : '',
 				'address_2' 	=> (isset($address['address_2'])) ? $address['address_2'] : '',
 				'city'      	=> (isset($address['city'])) ? $address['city'] : '',
