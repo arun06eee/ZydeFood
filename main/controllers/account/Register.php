@@ -5,8 +5,13 @@ class Register extends Main_Controller {
 
 	public function __construct() {
 		parent::__construct(); 																	//  calls the constructor
-				$this->load->model('Pages_model');
+		$this->load->model('Pages_model');
 		$this->lang->load('account/login_register');
+
+		if ($this->input->post('cmd') == 'register') {
+			$this->registerApi();
+			exit;
+		}
 	}
 
 	public function index() {
@@ -125,6 +130,39 @@ class Register extends Main_Controller {
         $captcha = create_captcha();
         $this->session->set_tempdata('captcha', array('word' => $captcha['word'], 'image' => $captcha['time'].'.jpg'), '120'); //set data to session for compare
         return $captcha;
+    }
+
+    public function registerApi() {
+        $this->load->model('Customers_model');													// load the customers model
+        $this->load->model('Customer_groups_model');
+
+        $emailCheck = $this->Customers_model->getCustomerByEmail($this->input->post('email'));
+        if (empty($emailCheck)) {	
+			
+			$add = array();
+			$add['first_name'] 				= $this->input->post('first_name');
+			$add['last_name'] 				= $this->input->post('last_name');
+			$add['email'] 					= $this->input->post('email');
+			$add['password'] 				= $this->input->post('password');
+			$add['telephone'] 				= $this->input->post('telephone');
+			$add['status']					= '1';
+			$add['date_added'] 				= mdate('%Y-%m-%d', time());
+
+			if (!empty($add) AND $customer_id = $this->Customers_model->saveCustomer(NULL, $add)) {								// pass add array data to saveCustomer method in Customers model then return TRUE
+	            log_activity($customer_id, 'registered', 'customers', get_activity_message('activity_registered_account',
+	                array('{customer}', '{link}'),
+	                array($this->input->post('first_name').' '.$this->input->post('last_name'), admin_url('customers/edit?id='.$customer_id))
+	            ));
+	            $data['code'] = 1;
+	            $data['status'] = 'success';
+	            $data['message'] = 'Registration is successful, Now you could login with your email';
+	        }
+		} else {
+			$data['code'] = 0;
+			$data['status'] = 'fail';
+			$data['message'] = 'Your Email is already present in our database, please try with some other email.';
+		}
+		print_r(json_encode($data));
     }
 }
 
