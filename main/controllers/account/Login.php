@@ -2,8 +2,16 @@
 
 class Login extends Main_Controller {
 
-
-
+	public function __construct() {
+		parent::__construct();
+		$this->load->model('Pages_model');
+		$this->lang->load('account/login_register');
+		
+		if ($this->input->post('cmd') == 'login') {
+			$this->loginApi();
+			exit;
+		}
+	}
 
 	public function index() {
 
@@ -11,9 +19,6 @@ class Login extends Main_Controller {
 			if ($this->customer->islogged()) { 														// checks if customer is logged in then redirect to account page.
 				redirect('account/account');
 			}
-
-			$this->load->model('Pages_model');
-			$this->lang->load('account/login_register');
 
 			$this->template->setTitle($this->lang->line('text_heading'));
 
@@ -75,6 +80,22 @@ class Login extends Main_Controller {
 		} else {
 			return FALSE;
 		}
+	}
+
+	public function loginApi() {
+		$email = $this->input->post('email');
+		$password = $this->input->post('password');
+
+		if ($this->customer->login($email, $password) === FALSE) { 
+			$data['code'] = 0;
+			$data['status'] = 'fail';
+			$data['message'] = 'Invalid Email or password';
+		} else {
+			$data['code'] = 1;
+			$data['status'] = 'success';
+			$data['message'] = '';
+		}
+		print_r(json_encode($data));
 	}
 }
 
