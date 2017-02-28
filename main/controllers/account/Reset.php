@@ -5,9 +5,9 @@ class Reset extends Main_Controller {
 	public function __construct() {
 		parent::__construct(); 																	// calls the constructor
 
-      /*  if ($this->customer->islogged()) { 														// checks if customer is logged in then redirect to account page.
+        if ($this->customer->islogged()) { 														// checks if customer is logged in then redirect to account page.
             redirect('account/account');
-        }*/
+        }
 
         $this->load->model('Customers_model');													// load the customers model
         $this->load->model('Security_questions_model');											// load the security questions model
@@ -94,12 +94,16 @@ class Reset extends Main_Controller {
 
     private function resetPasswordApi() {
         $reset['email'] = $this->input->post('email');
+        $customer_id = $this->Customers_model->getCustomerByEmail($reset['email']);
 
-        if ($this->Customers_model->resetPassword($this->input->post('customer_id'), $reset) == TRUE) {
-            $data['code'] = '1';
-            $data['status'] = 'success';
-            $data['message'] = 'Reset Password Code has been sent to Mail';
-        }else {
+        if (! empty($customer_id['customer_id'])) {
+            if ($this->Customers_model->resetPassword($customer_id['customer_id'], $reset) == TRUE) {
+                $data['code'] = '1';
+                $data['status'] = 'success';
+                $data['message'] = 'Reset Password Code has been sent to Mail';
+            }
+        }
+        else{
             $data['code'] = '0';
             $data['status'] = 'fail';
             $data['message'] = 'invalid email';
