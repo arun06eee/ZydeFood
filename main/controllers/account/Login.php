@@ -11,11 +11,6 @@ class Login extends Main_Controller {
 			$this->loginApi();
 			exit;
 		}
-
-		if ($this->input->post('cmd') == 'forgotpassword') {
-			$this->forgotpasswordApi();
-			exit;
-		}
 	}
 
 	public function index() {
@@ -101,11 +96,6 @@ class Login extends Main_Controller {
 			$data['message'] = '';
 		}
 		print_r(json_encode($data));
-	}
-
-	public function forgotpasswordApi() {
-		$this->load->module('reset');
-		$reset = $this->reset->resetPasswordApi();
 	}
 }
 
